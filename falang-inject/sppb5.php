@@ -465,6 +465,14 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : inspecter structure table locations
+if ($action === 'inspect_location') {
+    $cols = $pdo->query("SHOW COLUMNS FROM bwhwo_rseventspro_locations")->fetchAll(PDO::FETCH_ASSOC);
+    $row = $pdo->query("SELECT * FROM bwhwo_rseventspro_locations WHERE id=2")->fetch(PDO::FETCH_ASSOC);
+    echo json_encode(['columns'=>array_column($cols,'Field'),'row'=>$row], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Action : inspecter falang_tableinfo
 if ($action === 'falang_tableinfo') {
     try {
