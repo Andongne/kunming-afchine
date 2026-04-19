@@ -12,12 +12,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GANDI_SSH_KEY }}" > ~/.ssh/gandi_key
+          chmod 600 ~/.ssh/gandi_key
+          ssh-keyscan -H ${{ secrets.GANDI_SFTP_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
       - name: Deploy via SFTP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: sftp.sd6.gpaas.net
-          username: ${{ secrets.GANDI_SFTP_USER }}
-          key: ${{ secrets.GANDI_SSH_KEY }}
-          source: "templates/shaper_languageschool/index.php,falang-inject/sppb5.php,robots.txt"
-          target: /lamp0/web/vhosts/kunming-afchine.org/htdocs/
-          strip_components: 0
+        run: |
+          REMOTE_ROOT="/lamp0/web/vhosts/kunming-afchine.org/htdocs"
+          SFTP_OPTS="-i ~/.ssh/gandi_key -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
+
+          sftp $SFTP_OPTS ${{ secrets.GANDI_SFTP_USER }}@${{ secrets.GANDI_SFTP_HOST }} <<EOF
+          put templates/shaper_languageschool/index.php $REMOTE_ROOT/templates/shaper_languageschool/index.php
+          put falang-inject/sppb5.php $REMOTE_ROOT/falang-inject/sppb5.php
+          put robots.txt $REMOTE_ROOT/robots.txt
+          bye
+          EOF
