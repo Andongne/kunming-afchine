@@ -315,17 +315,18 @@ if ($action === 'insert_falang') {
         try {
             $orig_value = md5($r['original_source'] ?? $r['original_text']);
             $stmt = $pdo->prepare(
-                "INSERT INTO {$table} (language_id, reference_table, reference_id, reference_field, original_text, original_value, published, modified, modified_by) "
-               ."VALUES (?, ?, ?, ?, ?, ?, 1, NOW(), ?) "
-               ."ON DUPLICATE KEY UPDATE original_text=VALUES(original_text), original_value=VALUES(original_value), modified=NOW()"
+                "INSERT INTO {$table} (language_id, reference_table, reference_id, reference_field, value, original_text, original_value, published, modified, modified_by) "
+               ."VALUES (?, ?, ?, ?, ?, ?, ?, 1, NOW(), ?) "
+               ."ON DUPLICATE KEY UPDATE value=VALUES(value), original_text=VALUES(original_text), original_value=VALUES(original_value), modified=NOW()"
             );
             $stmt->execute([
                 (int)$r['language_id'],
                 $r['reference_table'],
                 (int)$r['reference_id'],
                 $r['reference_field'],
-                $r['original_text'],
-                $orig_value,
+                $r['original_text'],   // value = texte traduit
+                $r['original_source'] ?? '', // original_text = source FR
+                $orig_value,           // original_value = md5(source)
                 (int)($r['modified_by'] ?? 898),
             ]);
             $done++;
