@@ -465,6 +465,14 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : lire les noms des événements RSEvents!
+if ($action === 'get_rse_event_names') {
+    $stmt = $pdo->prepare("SELECT id, name FROM bwhwo_rseventspro_events WHERE id BETWEEN 4 AND 31 ORDER BY id");
+    $stmt->execute();
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Action : corriger les événements RSEvents! — assigner catégories + localisation
 if ($action === 'fix_rse_events') {
     $evtTable = 'bwhwo_rseventspro_events';
