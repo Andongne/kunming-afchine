@@ -6,7 +6,8 @@ function afk_localize_date($date_str) {
     $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     if (strpos($lang, 'zh') !== false) {
         $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-        return str_replace($en, $zh, $date_str);
+        $r = str_replace($en, $zh, $date_str);
+        return preg_replace('/^(\d+)/', '$1日', $r);
     }
     $fr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
     return str_replace($en, $fr, $date_str);
