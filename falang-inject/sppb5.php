@@ -465,4 +465,60 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : corriger les événements RSEvents! — assigner catégories + localisation
+if ($action === 'fix_rse_events') {
+    $evtTable = 'bwhwo_rseventspro_events';
+    $taxTable = 'bwhwo_rseventspro_taxonomy';
+    $locTable = 'bwhwo_rseventspro_locations';
+
+    // Désactiver strict mode
+    $pdo->exec("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
+
+    // 1. Créer ou retrouver la localisation
+    $stmt = $pdo->prepare("SELECT id FROM {$locTable} WHERE name=? LIMIT 1");
+    $stmt->execute(['Alliance Française de Kunming']);
+    $loc = $stmt->fetchColumn();
+    if (!$loc) {
+        $stmt = $pdo->prepare("INSERT INTO {$locTable} (name, published) VALUES (?, 1)");
+        $stmt->execute(['Alliance Française de Kunming']);
+        $loc = (int)$pdo->lastInsertId();
+    } else {
+        $loc = (int)$loc;
+    }
+
+    // 2. Récupérer les événements 4-31
+    $stmt = $pdo->prepare("SELECT id, name FROM {$evtTable} WHERE id BETWEEN 4 AND 31");
+    $stmt->execute();
+    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $results = [];
+    foreach ($events as $ev) {
+        $eid = (int)$ev['id'];
+        $name = $ev['name'];
+
+        // Déterminer la catégorie selon le nom
+        if (stripos($name, 'TEFAQ') !== false) {
+            $cat_id = 48;
+        } elseif (stripos($name, 'TEF Canada') !== false) {
+            $cat_id = 47;
+        } else {
+            $cat_id = 45; // TCF Canada par défaut
+        }
+
+        // Supprimer anciens liens catégorie et localisation pour cet événement
+        $pdo->prepare("DELETE FROM {$taxTable} WHERE ide=? AND type IN ('category','location')")->execute([$eid]);
+
+        // Insérer catégorie
+        $pdo->prepare("INSERT INTO {$taxTable} (ide, type, extra) VALUES (?, 'category', ?)")->execute([$eid, $cat_id]);
+
+        // Insérer localisation
+        $pdo->prepare("INSERT INTO {$taxTable} (ide, type, extra) VALUES (?, 'location', ?)")->execute([$eid, $loc]);
+
+        $results[] = ['id'=>$eid, 'name'=>$name, 'cat_id'=>$cat_id, 'loc_id'=>$loc];
+    }
+
+    echo json_encode(['ok'=>true, 'location_id'=>$loc, 'events'=>$results]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
