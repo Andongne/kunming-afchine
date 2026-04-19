@@ -7,13 +7,12 @@ function afk_falang_translate($table, $id, $field, $default) {
     if ($db === null) {
         $db = JFactory::getDbo();
         $lang = JFactory::getLanguage()->getTag();
-        // Trouver le language_id Falang pour la langue courante
-        $q = $db->getQuery(true)
-            ->select('id')
-            ->from('#__falang_languages')
-            ->where($db->quoteName('iso') . ' = ' . $db->quote($lang));
-        $db->setQuery($q);
-        $lang_id = (int)$db->loadResult();
+        // Mapping connu : zh-CN = 4, fr-FR = 1 (Falang site AF Kunming)
+        $map = ['zh-CN' => 4, 'fr-FR' => 1];
+        $lang_id = 0;
+        foreach ($map as $k => $v) {
+            if (strpos($lang, $k) === 0) { $lang_id = $v; break; }
+        }
     }
     if (!$lang_id) return $default;
     $q = $db->getQuery(true)
