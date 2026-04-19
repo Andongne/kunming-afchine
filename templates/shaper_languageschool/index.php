@@ -436,10 +436,9 @@ if ($custom_js = $this->params->get('custom_js'))
 
         $theme->head();
         // CSS files
-        $theme->add_css('font-awesome.min.css');
+        // font-awesome.min.css supprimé : doublon avec SP Page Builder (font-awesome-6.min.css)
+        // fa-v4-shims.css supprimé : doublon avec SP Page Builder (font-awesome-v4-shims.css)
         $theme->add_css('custom');
-        // Fontawesome 4 to 5 compatible CSS file
-        $theme->add_css('fa-v4-shims.css');
 
         // Scss files
         $theme->add_scss('master', $scssVars, 'template');
@@ -458,7 +457,21 @@ if ($custom_js = $this->params->get('custom_js'))
             echo $before_head . "\n";
         }
         ?>
-        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />         
+        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />
+        <!-- Defer animate.min.css (non critique au rendu initial) -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('link[rel="stylesheet"]').forEach(function(link) {
+                if (link.href && link.href.indexOf('animate.min.css') !== -1) {
+                    var deferred = link.cloneNode();
+                    link.parentNode.removeChild(link);
+                    deferred.media = 'print';
+                    deferred.onload = function() { this.media = 'all'; };
+                    document.head.appendChild(deferred);
+                }
+            });
+        });
+        </script>         
           <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
