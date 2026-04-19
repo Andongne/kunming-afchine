@@ -457,21 +457,7 @@ if ($custom_js = $this->params->get('custom_js'))
             echo $before_head . "\n";
         }
         ?>
-        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />
-        <!-- Defer animate.min.css (non critique au rendu initial) -->
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('link[rel="stylesheet"]').forEach(function(link) {
-                if (link.href && link.href.indexOf('animate.min.css') !== -1) {
-                    var deferred = link.cloneNode();
-                    link.parentNode.removeChild(link);
-                    deferred.media = 'print';
-                    deferred.onload = function() { this.media = 'all'; };
-                    document.head.appendChild(deferred);
-                }
-            });
-        });
-        </script>         
+        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />         
           <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
