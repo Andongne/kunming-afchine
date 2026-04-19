@@ -468,7 +468,9 @@ if ($action === 'set_template_style_params') {
 // Action : inspecter falang_tableinfo
 if ($action === 'falang_tableinfo') {
     try {
-        $rows = $pdo->query("SELECT id, tablename, fields FROM {$pfx}falang_tableinfo LIMIT 50")->fetchAll(PDO::FETCH_ASSOC);
+        $cols = $pdo->query("SHOW COLUMNS FROM {$pfx}falang_tableinfo")->fetchAll(PDO::FETCH_COLUMN);
+        $rows = $pdo->query("SELECT * FROM {$pfx}falang_tableinfo LIMIT 50")->fetchAll(PDO::FETCH_ASSOC);
+        $rows = ['columns'=>$cols,'rows'=>$rows];
         echo json_encode(['count'=>count($rows),'rows'=>$rows], JSON_UNESCAPED_UNICODE);
     } catch (Exception $e) {
         echo json_encode(['error'=>$e->getMessage()]);
