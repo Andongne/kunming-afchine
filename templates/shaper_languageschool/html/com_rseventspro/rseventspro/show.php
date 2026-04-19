@@ -496,7 +496,7 @@ rseventsproMapHelper::loadMap($mapParams);
 		</div>
 	</div>
 	
-	<?php if (!empty($this->options['sharing'])) { ?>
+	<?php if (false) /* AFK: hidden */ { ?>
 	<div id="rsepro-event-sharing" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 			
