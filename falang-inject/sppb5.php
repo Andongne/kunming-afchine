@@ -468,9 +468,9 @@ if ($action === 'set_template_style_params') {
 // Action : inspecter falang_tableinfo
 if ($action === 'falang_tableinfo') {
     try {
-        $plugins = $pdo->query("SELECT element, enabled FROM {$pfx}extensions WHERE type='plugin' AND folder='falang' ORDER BY element")->fetchAll(PDO::FETCH_ASSOC);
-        $distinct_fields = $pdo->query("SELECT DISTINCT reference_table, reference_field FROM {$pfx}falang_content WHERE reference_table LIKE '%rsevents%'")->fetchAll(PDO::FETCH_ASSOC);
-        $rows = ['falang_plugins'=>$plugins,'rse_fields_in_db'=>$distinct_fields];
+        $plugins = $pdo->query("SELECT folder, element, enabled FROM {$pfx}extensions WHERE type='plugin' AND (element LIKE '%falang%' OR folder LIKE '%falang%') ORDER BY folder,element")->fetchAll(PDO::FETCH_ASSOC);
+        $sys_falang = $pdo->query("SELECT folder, element, enabled, params FROM {$pfx}extensions WHERE type='plugin' AND element='falang' LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+        $rows = ['falang_plugins'=>$plugins,'sys_falang'=>$sys_falang];
         echo json_encode(['count'=>count($rows),'rows'=>$rows], JSON_UNESCAPED_UNICODE);
     } catch (Exception $e) {
         echo json_encode(['error'=>$e->getMessage()]);
