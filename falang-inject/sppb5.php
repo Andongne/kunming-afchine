@@ -315,15 +315,22 @@ if ($action === 'insert_rsevents') {
     $taxTable = 'bwhwo_rseventspro_taxonomy';
     foreach ($events as $ev) {
         try {
+            $endDt = $ev['end'];
             $stmt = $pdo->prepare(
-                "INSERT INTO {$evtTable} (name, start, end, end_registration, published, disable_registration, language, owner, created, sid, small_description, description, metadescription, metakeywords) "
-               ."VALUES (?, ?, ?, ?, 1, 1, '*', ?, NOW(), ?, ?, ?, ?, ?)"
+                "INSERT INTO {$evtTable} (name, start, end, end_registration, repeat_end, early_fee_end, late_fee_start, unsubscribe_date, rsvp_start, rsvp_end, published, disable_registration, language, owner, created, sid, small_description, description, metadescription, metakeywords) "
+               ."VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, '*', ?, NOW(), ?, ?, ?, ?, ?)"
             );
             $stmt->execute([
                 $ev['name'],
                 $ev['start'],
-                $ev['end'],
+                $endDt,
                 $ev['deadline'],
+                $endDt, // repeat_end
+                $endDt, // early_fee_end
+                $endDt, // late_fee_start
+                $endDt, // unsubscribe_date
+                $ev['start'], // rsvp_start
+                $endDt, // rsvp_end
                 (int)($ev['owner'] ?? 898),
                 $ev['sid'],
                 $ev['small_desc'] ?? '',
