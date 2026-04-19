@@ -1,5 +1,34 @@
 <?php
 
+// AFK: traduction manuelle via Falang (pour les champs non interceptes par le driver)
+function afk_falang_translate($table, $id, $field, $default) {
+    static $db = null;
+    static $lang_id = null;
+    if ($db === null) {
+        $db = JFactory::getDbo();
+        $lang = JFactory::getLanguage()->getTag();
+        // Trouver le language_id Falang pour la langue courante
+        $q = $db->getQuery(true)
+            ->select('id')
+            ->from('#__falang_languages')
+            ->where($db->quoteName('iso') . ' = ' . $db->quote($lang));
+        $db->setQuery($q);
+        $lang_id = (int)$db->loadResult();
+    }
+    if (!$lang_id) return $default;
+    $q = $db->getQuery(true)
+        ->select('value')
+        ->from('#__falang_content')
+        ->where($db->quoteName('reference_table') . ' = ' . $db->quote($table))
+        ->where($db->quoteName('reference_id') . ' = ' . (int)$id)
+        ->where($db->quoteName('reference_field') . ' = ' . $db->quote($field))
+        ->where($db->quoteName('language_id') . ' = ' . $lang_id)
+        ->where($db->quoteName('published') . ' = 1');
+    $db->setQuery($q);
+    $val = $db->loadResult();
+    return $val ?: $default;
+}
+
 // AFK: mois localises selon langue
 function afk_localize_date($date_str) {
     $lang = JFactory::getLanguage()->getTag();
@@ -42,6 +71,9 @@ $itinerary	= $details['itinerary'];
 $full		= rseventsproHelper::eventisfull($this->event->id);
 $ongoing	= rseventsproHelper::ongoing($this->event->id); 
 $featured 	= $event->featured ? ' rs_featured_event' : ''; 
+// AFK: appliquer traductions Falang manuellement (driver n'intercepte pas RSEvents! Pro)
+$event->name = afk_falang_translate('rseventspro_events', $event->id, 'name', $event->name);
+$event->small_description = afk_falang_translate('rseventspro_events', $event->id, 'small_description', $event->small_description);
 $description= empty($event->description) ? $event->small_description : $event->description;
 $links		= rseventsproHelper::getConfig('modal','int');
 $modal		= rseventsproHelper::getConfig('modaltype','int');
