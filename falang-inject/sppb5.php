@@ -465,6 +465,22 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : inspecter les entrées Falang pour RSEvents!
+if ($action === 'falang_inspect') {
+    $table = $pfx . 'falang_content';
+    $ref_table = $_GET['ref_table'] ?? 'rseventspro_events';
+    $ref_id = isset($_GET['ref_id']) ? (int)$_GET['ref_id'] : null;
+    if ($ref_id) {
+        $stmt = $pdo->prepare("SELECT id, language_id, reference_table, reference_field, reference_id, value FROM {$table} WHERE reference_table=? AND reference_id=? LIMIT 20");
+        $stmt->execute([$ref_table, $ref_id]);
+    } else {
+        $stmt = $pdo->prepare("SELECT DISTINCT reference_table, reference_field FROM {$table} WHERE reference_table LIKE '%rseventspro%' LIMIT 50");
+        $stmt->execute();
+    }
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Action : lire les noms des événements RSEvents!
 if ($action === 'get_rse_event_names') {
     $stmt = $pdo->prepare("SELECT id, name FROM bwhwo_rseventspro_events WHERE id BETWEEN 4 AND 31 ORDER BY id");
