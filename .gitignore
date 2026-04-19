@@ -6,6 +6,11 @@ cli/
 components/
 images/
 includes/
+# modules/ — exclu sauf custom AFK
+!modules/
+!modules/mod_afk_upcoming_exams/
+!modules/mod_afk_upcoming_exams/**
+
 # language/ — exclu sauf overrides RSEvents!
 !language/
 !language/fr-FR/

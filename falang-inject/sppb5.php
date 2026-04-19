@@ -304,6 +304,34 @@ if ($action === 'write_query') {
     exit;
 }
 
+// Action : enregistrer un module Joomla
+if ($action === 'register_module') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $pdo->exec("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
+    $t = $pfx . 'modules';
+    $stmt = $pdo->prepare(
+        "INSERT INTO {$t} (title, note, content, ordering, position, checked_out, checked_out_time, published, module, access, showtitle, params, client_id, language, publish_up, publish_down) "
+       ."VALUES (?, '', '', ?, ?, 0, '0000-00-00 00:00:00', 1, ?, 1, 1, ?, 0, '*', '0000-00-00 00:00:00', '0000-00-00 00:00:00') "
+       ."ON DUPLICATE KEY UPDATE title=VALUES(title)"
+    );
+    $stmt->execute([
+        $body['title'] ?? 'Module',
+        (int)($body['ordering'] ?? 1),
+        $body['position'] ?? 'pagebuilder',
+        $body['module'],
+        json_encode($body['params'] ?? new stdClass()),
+    ]);
+    $id = $pdo->lastInsertId();
+    // Assigner à toutes les pages
+    if ($id) {
+        $t2 = $pfx . 'modules_menu';
+        $stmt2 = $pdo->prepare("INSERT IGNORE INTO {$t2} (moduleid, menuid) VALUES (?, 0)");
+        $stmt2->execute([$id]);
+    }
+    echo json_encode(['ok'=>true,'id'=>$id]);
+    exit;
+}
+
 // Action : insérer des traductions Falang en masse
 if ($action === 'insert_falang') {
     $body = json_decode(file_get_contents('php://input'), true);

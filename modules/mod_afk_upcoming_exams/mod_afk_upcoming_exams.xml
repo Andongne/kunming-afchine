@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" version="4.0" client="site" method="upgrade">
+    <name>Prochaines sessions d'examen</name>
+    <author>Alliance Française de Kunming</author>
+    <version>1.0.0</version>
+    <description>Affiche les prochaines sessions d'examen RSEvents! Pro sur la homepage.</description>
+    <files>
+        <filename module="mod_afk_upcoming_exams">mod_afk_upcoming_exams.php</filename>
+        <folder>tmpl</folder>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="count" type="text" default="6" label="Nombre de sessions" description="Nombre maximum de sessions à afficher" />
+                <field name="show_deadline" type="radio" default="1" label="Afficher date limite" description="Afficher la date limite d'inscription">
+                    <option value="0">Non</option>
+                    <option value="1">Oui</option>
+                </field>
+                <field name="cat_ids" type="text" default="" label="IDs catégories" description="IDs RSEvents! séparés par virgule (vide = toutes)" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>
