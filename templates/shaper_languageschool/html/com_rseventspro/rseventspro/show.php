@@ -299,7 +299,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					</li>
 					<?php } ?>
 					
-					<?php if (!empty($this->options['show_export'])) { ?>
+					<?php if (false) /* AFK: hidden */ { ?>
 					<li>
 						<a class="dropdown-item" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&task=rseventspro.export&id='.rseventsproHelper::sef($event->id,$event->name)); ?>">
 							<i class="fa fa-calendar fa-fw"></i> <?php echo Text::_('COM_RSEVENTSPRO_EXPORT_EVENT'); ?>
@@ -343,7 +343,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if (!empty($this->options['enable_rating'])) { ?>
+			<?php if (false) /* AFK: hidden */ { ?>
 			<?php echo rseventsproHelper::rating($event->id); ?>
 			<?php } ?>
 		</div>
@@ -392,7 +392,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-calendar fa-fw"></i> 
 						<?php if ($event->allday) { ?>
-						<?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_ON'); ?> <?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
+						<?php echo 'le'; ?> <?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
 						<?php } else { ?>
 						<?php if (!empty($this->options['start_date']) || !empty($this->options['start_time'])) { ?>
 						<?php if ((!empty($this->options['start_date']) || !empty($this->options['start_time'])) && empty($this->options['end_date']) && empty($this->options['end_time'])) { ?>
