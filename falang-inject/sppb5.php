@@ -465,6 +465,13 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : inspecter falang_tableinfo
+if ($action === 'falang_tableinfo') {
+    $stmt = $pdo->query("SELECT * FROM {$pfx}falang_tableinfo WHERE tablename LIKE '%rseventspro%'");
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Action : inspecter les entrées Falang pour RSEvents!
 if ($action === 'falang_inspect') {
     $table = $pfx . 'falang_content';
