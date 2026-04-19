@@ -367,6 +367,16 @@
     display: none !important;
 }
 
+/* Taille de police et espacement des événements */
+#rsepro-upcoming-module ul.rsepro_upcoming {
+    margin-bottom: 8px !important;
+}
+
+#rsepro-upcoming-module ul.rsepro_upcoming li a {
+    font-size: 1.05rem !important;
+    line-height: 1.5;
+}
+
 /* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
 .formContainer,
 .formContainer * {
