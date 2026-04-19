@@ -313,6 +313,8 @@ if ($action === 'insert_rsevents') {
     $errors = [];
     $evtTable = 'bwhwo_rseventspro_events';
     $taxTable = 'bwhwo_rseventspro_taxonomy';
+    // Desactiver strict mode pour accepter 0000-00-00 datetime defaults
+    $pdo->exec("SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'");
     foreach ($events as $ev) {
         try {
             $endDt = $ev['end'];
