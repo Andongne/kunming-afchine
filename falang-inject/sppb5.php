@@ -304,6 +304,39 @@ if ($action === 'write_query') {
     exit;
 }
 
+// Action : insérer des traductions Falang en masse
+if ($action === 'insert_falang') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $rows = isset($body['rows']) ? $body['rows'] : [];
+    if (empty($rows)) { echo json_encode(['error'=>'rows required']); exit; }
+    $table = 'bwhwo_falang_content';
+    $done = 0; $errors = [];
+    foreach ($rows as $r) {
+        try {
+            $orig_value = md5($r['original_source'] ?? $r['original_text']);
+            $stmt = $pdo->prepare(
+                "INSERT INTO {$table} (language_id, reference_table, reference_id, reference_field, original_text, original_value, published, modified, modified_by) "
+               ."VALUES (?, ?, ?, ?, ?, ?, 1, NOW(), ?) "
+               ."ON DUPLICATE KEY UPDATE original_text=VALUES(original_text), original_value=VALUES(original_value), modified=NOW()"
+            );
+            $stmt->execute([
+                (int)$r['language_id'],
+                $r['reference_table'],
+                (int)$r['reference_id'],
+                $r['reference_field'],
+                $r['original_text'],
+                $orig_value,
+                (int)($r['modified_by'] ?? 898),
+            ]);
+            $done++;
+        } catch (Exception $e) {
+            $errors[] = ['ref' => $r['reference_id'].':'.$r['reference_field'], 'error' => $e->getMessage()];
+        }
+    }
+    echo json_encode(['ok'=>true,'inserted'=>$done,'errors'=>$errors]);
+    exit;
+}
+
 // Action : renommer des événements RSEvents! en masse
 if ($action === 'rename_rsevents') {
     $body = json_decode(file_get_contents('php://input'), true);
