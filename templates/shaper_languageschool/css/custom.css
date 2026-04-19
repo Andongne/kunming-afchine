@@ -362,8 +362,9 @@
    RSEvents! Pro — Module Upcoming Events
    ========================================================================== */
 /* Suppression de la date rédondante en parenthèses */
-#rsepro-upcoming-module ul.rsepro_upcoming li small {
-    display: none;
+#rsepro-upcoming-module ul.rsepro_upcoming li small,
+.rsepro_upcoming li small {
+    display: none !important;
 }
 
 /* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
