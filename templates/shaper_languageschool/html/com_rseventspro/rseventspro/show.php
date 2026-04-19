@@ -95,7 +95,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	
 	<div id="rsepro-event-controls" class="<?php echo RSEventsproAdapterGrid::styles(array('row')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
-			<?php if ($this->admin || $event->owner == $this->user || $event->sid == $this->user) { ?>
+			<?php if (false) /* AFK: hidden */ { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_ADMIN_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
