@@ -255,7 +255,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if ((!$this->eventended && !empty($this->options['show_invite'])) || $this->report || !empty($this->options['show_print']) || !empty($this->options['show_export']) || ($event->owner && !empty($this->options['contact'])) || $this->config->timezone || ($this->eventended && $event->feedback)) { ?>
+			<?php if (false) /* AFK: hidden */ { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_USER_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
@@ -392,7 +392,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-calendar fa-fw"></i> 
 						<?php if ($event->allday) { ?>
-						<?php echo 'le'; ?> <?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
+						<?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
 						<?php } else { ?>
 						<?php if (!empty($this->options['start_date']) || !empty($this->options['start_time'])) { ?>
 						<?php if ((!empty($this->options['start_date']) || !empty($this->options['start_time'])) && empty($this->options['end_date']) && empty($this->options['end_time'])) { ?>
