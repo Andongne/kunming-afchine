@@ -6,7 +6,12 @@ cli/
 components/
 images/
 includes/
-language/
+# language/ — exclu sauf overrides RSEvents!
+!language/
+!language/fr-FR/
+!language/fr-FR/fr-FR.com_rseventspro.ini
+!language/zh-CN/
+!language/zh-CN/zh-CN.com_rseventspro.ini
 layouts/
 libraries/
 logs/
