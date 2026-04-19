@@ -1,15 +1,14 @@
 <?php
 
-// AFK: traduction des mois en langue active
+// AFK: mois localises selon langue
 function afk_localize_date($date_str) {
     $lang = JFactory::getLanguage()->getTag();
+    $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     if (strpos($lang, 'zh') !== false) {
-        $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-        $zh = ['1æ','2æ','3æ','4æ','5æ','6æ','7æ','8æ','9æ','10æ','11æ','12æ'];
+        $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
         return str_replace($en, $zh, $date_str);
     }
-    $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    $fr = ['janvier','f\xe9vrier','mars','avril','mai','juin','juillet','ao\xfbt','septembre','octobre','novembre','d\xe9cembre'];
+    $fr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
     return str_replace($en, $fr, $date_str);
 }
 /**
@@ -108,7 +107,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	
 	<div id="rsepro-event-controls" class="<?php echo RSEventsproAdapterGrid::styles(array('row')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
-			<?php if (false) /* AFK: hidden */ { ?>
+			<?php if (false) /* AFK */ { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_ADMIN_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
@@ -268,7 +267,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if (false) /* AFK: hidden */ { ?>
+			<?php if (false) /* AFK */ { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_USER_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
@@ -312,7 +311,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					</li>
 					<?php } ?>
 					
-					<?php if (false) /* AFK: hidden */ { ?>
+					<?php if (false) /* AFK */ { ?>
 					<li>
 						<a class="dropdown-item" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&task=rseventspro.export&id='.rseventsproHelper::sef($event->id,$event->name)); ?>">
 							<i class="fa fa-calendar fa-fw"></i> <?php echo Text::_('COM_RSEVENTSPRO_EXPORT_EVENT'); ?>
@@ -356,7 +355,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if (false) /* AFK: hidden */ { ?>
+			<?php if (false) /* AFK */ { ?>
 			<?php echo rseventsproHelper::rating($event->id); ?>
 			<?php } ?>
 		</div>
@@ -438,7 +437,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				</div>
 				<?php } ?>
 				
-				<?php if (false) /* AFK: hidden */ { ?>
+				<?php if (false) /* AFK */ { ?>
 				<div id="rsepro-event-owner" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-user fa-fw"></i> 
@@ -497,7 +496,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				</div>
 				<?php } ?>
 				
-				<?php if (false) /* AFK: hidden */ { ?>
+				<?php if (false) /* AFK */ { ?>
 				<div id="rsepro-event-hits" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-eye fa-fw"></i> 
@@ -509,7 +508,7 @@ rseventsproMapHelper::loadMap($mapParams);
 		</div>
 	</div>
 	
-	<?php if (false) /* AFK: hidden */ { ?>
+	<?php if (false) /* AFK */ { ?>
 	<div id="rsepro-event-sharing" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 			
