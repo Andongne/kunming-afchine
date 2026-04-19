@@ -31,6 +31,7 @@ jobs:
           put templates/shaper_languageschool/css/presets/preset1.css $REMOTE_ROOT/templates/shaper_languageschool/css/presets/preset1.css
           put falang-inject/sppb5.php $REMOTE_ROOT/falang-inject/sppb5.php
           put templates/shaper_languageschool/html/com_rseventspro/rseventspro/show.php $REMOTE_ROOT/templates/shaper_languageschool/html/com_rseventspro/rseventspro/show.php
+          -mkdir $REMOTE_ROOT/templates/shaper_languageschool/html/mod_rseventspro_upcoming
           put templates/shaper_languageschool/html/mod_rseventspro_upcoming/default.php $REMOTE_ROOT/templates/shaper_languageschool/html/mod_rseventspro_upcoming/default.php
           put language/fr-FR/fr-FR.com_rseventspro.ini $REMOTE_ROOT/language/fr-FR/fr-FR.com_rseventspro.ini
           put language/zh-CN/zh-CN.com_rseventspro.ini $REMOTE_ROOT/language/zh-CN/zh-CN.com_rseventspro.ini
