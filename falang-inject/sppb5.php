@@ -304,6 +304,48 @@ if ($action === 'write_query') {
     exit;
 }
 
+// Action : insérer des événements RSEvents! Pro en masse
+if ($action === 'insert_rsevents') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $events = isset($body['events']) ? $body['events'] : [];
+    if (empty($events)) { echo json_encode(['error'=>'events array required']); exit; }
+    $inserted = [];
+    $errors = [];
+    $evtTable = 'bwhwo_rseventspro_events';
+    $taxTable = 'bwhwo_rseventspro_taxonomy';
+    foreach ($events as $ev) {
+        try {
+            $stmt = $pdo->prepare(
+                "INSERT INTO {$evtTable} (name, start, end, end_registration, published, disable_registration, language, owner, created, sid, small_description, description, metadescription, metakeywords) "
+               ."VALUES (?, ?, ?, ?, 1, 1, '*', ?, NOW(), ?, ?, ?, ?, ?)"
+            );
+            $stmt->execute([
+                $ev['name'],
+                $ev['start'],
+                $ev['end'],
+                $ev['deadline'],
+                (int)($ev['owner'] ?? 898),
+                $ev['sid'],
+                $ev['small_desc'] ?? '',
+                $ev['description'] ?? '',
+                $ev['metadescription'] ?? '',
+                $ev['metakeywords'] ?? '',
+            ]);
+            $event_id = $pdo->lastInsertId();
+            // Lier à la catégorie
+            if (!empty($ev['cat_id'])) {
+                $stmtTax = $pdo->prepare("INSERT INTO {$taxTable} (ide, type, extra) VALUES (?, 'category', ?)");
+                $stmtTax->execute([$event_id, (int)$ev['cat_id']]);
+            }
+            $inserted[] = ['id' => $event_id, 'name' => $ev['name']];
+        } catch (Exception $e) {
+            $errors[] = ['name' => $ev['name'], 'error' => $e->getMessage()];
+        }
+    }
+    echo json_encode(['ok' => true, 'inserted' => $inserted, 'errors' => $errors]);
+    exit;
+}
+
 // Action : mettre à jour les params d'un template style
 if ($action === 'set_template_style_params') {
     $body = json_decode(file_get_contents('php://input'), true);
