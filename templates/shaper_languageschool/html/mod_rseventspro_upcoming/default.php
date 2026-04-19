@@ -11,6 +11,7 @@ use Joomla\CMS\Language\Text;
 $open = !$links ? 'target="_blank"' : ''; ?>
 
 <?php if ($items) { ?>
+<style>#rsepro-upcoming-module ul.rsepro_upcoming{margin-bottom:10px!important}#rsepro-upcoming-module ul.rsepro_upcoming li a{font-size:1.05rem!important;line-height:1.6}</style>
 <div id="rsepro-upcoming-module">
 	<?php foreach ($items as $block => $events) { ?>
 	<ul class="rsepro_upcoming<?php echo $suffix; ?> <?php echo RSEventsproAdapterGrid::row(); ?>">
