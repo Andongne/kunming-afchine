@@ -467,7 +467,13 @@ if ($action === 'set_template_style_params') {
 
 // Action : inspecter falang_tableinfo
 if ($action === 'falang_tableinfo') {
-    $stmt = $pdo->query("SELECT * FROM {$pfx}falang_tableinfo WHERE tablename LIKE '%rseventspro%'");
+    $filter = $_GET['q'] ?? '';
+    if ($filter) {
+        $stmt = $pdo->prepare("SELECT * FROM {$pfx}falang_tableinfo WHERE tablename LIKE ?");
+        $stmt->execute(['%'.$filter.'%']);
+    } else {
+        $stmt = $pdo->query("SELECT id, tablename, fields FROM {$pfx}falang_tableinfo LIMIT 30");
+    }
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_UNICODE);
     exit;
 }
