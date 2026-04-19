@@ -465,6 +465,16 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : lire un fichier PHP du serveur
+if ($action === 'read_file') {
+    $path = $_GET['path'] ?? '';
+    if (!$path || strpos($path,'..') !== false) { echo json_encode(['error'=>'invalid']); exit; }
+    $full = dirname(__DIR__) . '/' . ltrim($path,'/');
+    if (!file_exists($full)) { echo json_encode(['error'=>'not found','path'=>$full]); exit; }
+    echo json_encode(['content'=>file_get_contents($full)], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Action : inspecter structure table locations
 if ($action === 'inspect_location') {
     $cols = $pdo->query("SHOW COLUMNS FROM bwhwo_rseventspro_locations")->fetchAll(PDO::FETCH_ASSOC);
