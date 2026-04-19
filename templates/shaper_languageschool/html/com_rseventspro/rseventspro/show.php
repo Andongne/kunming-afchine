@@ -1,4 +1,17 @@
 <?php
+
+// AFK: traduction des mois en langue active
+function afk_localize_date($date_str) {
+    $lang = JFactory::getLanguage()->getTag();
+    if (strpos($lang, 'zh') !== false) {
+        $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        $zh = ['1æ','2æ','3æ','4æ','5æ','6æ','7æ','8æ','9æ','10æ','11æ','12æ'];
+        return str_replace($en, $zh, $date_str);
+    }
+    $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    $fr = ['janvier','f\xe9vrier','mars','avril','mai','juin','juillet','ao\xfbt','septembre','octobre','novembre','d\xe9cembre'];
+    return str_replace($en, $fr, $date_str);
+}
 /**
 * @package RSEvents!Pro
 * @copyright (C) 2020 www.rsjoomla.com
@@ -392,7 +405,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-calendar fa-fw"></i> 
 						<?php if ($event->allday) { ?>
-						<?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
+						<?php echo afk_localize_date(rseventsproHelper::showdate($event->start,$this->config->global_date,true)); ?>
 						<?php } else { ?>
 						<?php if (!empty($this->options['start_date']) || !empty($this->options['start_time'])) { ?>
 						<?php if ((!empty($this->options['start_date']) || !empty($this->options['start_time'])) && empty($this->options['end_date']) && empty($this->options['end_time'])) { ?>
