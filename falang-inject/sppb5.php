@@ -304,6 +304,26 @@ if ($action === 'write_query') {
     exit;
 }
 
+// Action : renommer des événements RSEvents! en masse
+if ($action === 'rename_rsevents') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $updates = isset($body['updates']) ? $body['updates'] : [];
+    if (empty($updates)) { echo json_encode(['error'=>'updates array required']); exit; }
+    $table = 'bwhwo_rseventspro_events';
+    $done = []; $errors = [];
+    foreach ($updates as $u) {
+        try {
+            $stmt = $pdo->prepare("UPDATE {$table} SET name=? WHERE id=?");
+            $stmt->execute([$u['name'], (int)$u['id']]);
+            $done[] = ['id' => $u['id'], 'name' => $u['name']];
+        } catch (Exception $e) {
+            $errors[] = ['id' => $u['id'], 'error' => $e->getMessage()];
+        }
+    }
+    echo json_encode(['ok'=>true,'updated'=>$done,'errors'=>$errors]);
+    exit;
+}
+
 // Action : insérer des événements RSEvents! Pro en masse
 if ($action === 'insert_rsevents') {
     $body = json_decode(file_get_contents('php://input'), true);
