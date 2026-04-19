@@ -87,7 +87,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	<div id="rsepro-event-title" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mb-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 			<h1 class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?><?php echo $featured; ?>">
-				<?php echo $this->escape($event->name); ?>
+				<?php $afk_t = explode(' — ', $event->name, 2); echo $this->escape($afk_t[0]); ?>
 				<?php if ($event->published == 3) { ?><small class="text-danger">(<?php echo Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT'); ?>)</small><?php } ?>
 			</h1>
 		</div>
@@ -388,7 +388,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			
 			<div id="rsepro-event-details-left">
 				<?php if (($event->allday && !empty($this->options['start_date'])) || (!$event->allday && (!empty($this->options['start_date']) || !empty($this->options['start_time']) || !empty($this->options['end_date']) || !empty($this->options['end_time'])))) { ?>
-				<div id="rsepro-event-date" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
+				<div id="rsepro-event-date" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>" style="font-size:1.6em;font-weight:700;margin-bottom:0.4em;">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-calendar fa-fw"></i> 
 						<?php if ($event->allday) { ?>
@@ -568,7 +568,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	<?php } ?>
 	
 	<?php if (!empty($this->options['show_description']) && !empty($description)) { ?>
-	<div id="rsepro-event-description" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>">
+	<div id="rsepro-event-description" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>" style="font-size:1.4em;font-weight:600;">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?> description">
 			<?php echo $description; ?>
 		</div>
