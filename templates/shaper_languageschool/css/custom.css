@@ -358,6 +358,14 @@
     background-color: #98111f;
 }
 
+/* ==========================================================================
+   RSEvents! Pro — Module Upcoming Events
+   ========================================================================== */
+/* Suppression de la date rédondante en parenthèses */
+#rsepro-upcoming-module ul.rsepro_upcoming li small {
+    display: none;
+}
+
 /* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
 .formContainer,
 .formContainer * {
