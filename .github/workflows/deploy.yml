@@ -26,6 +26,9 @@ jobs:
 
           sftp $SFTP_OPTS ${{ secrets.GANDI_SFTP_USER }}@${{ secrets.GANDI_SFTP_HOST }} <<EOF
           put templates/shaper_languageschool/index.php $REMOTE_ROOT/templates/shaper_languageschool/index.php
+          put templates/shaper_languageschool/css/custom.css $REMOTE_ROOT/templates/shaper_languageschool/css/custom.css
+          put templates/shaper_languageschool/css/template.css $REMOTE_ROOT/templates/shaper_languageschool/css/template.css
+          put templates/shaper_languageschool/css/presets/preset1.css $REMOTE_ROOT/templates/shaper_languageschool/css/presets/preset1.css
           put falang-inject/sppb5.php $REMOTE_ROOT/falang-inject/sppb5.php
           put robots.txt $REMOTE_ROOT/robots.txt
           put .htaccess $REMOTE_ROOT/.htaccess

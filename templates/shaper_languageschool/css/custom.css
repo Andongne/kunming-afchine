@@ -1,0 +1,238 @@
+/* ==========================================================================
+   TCF - Cartes interactives
+   ========================================================================== */
+.tcf-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.tcf-card {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #da002e;
+  border-radius: 5px;
+  padding: 15px;
+  background-color: #fbe6ea;
+  min-height: 180px;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.3s;
+}
+
+.tcf-card.alt {
+  background-color: #fff5f6;
+}
+
+.tcf-card:hover {
+  background-color: #f6d7de;
+}
+
+.tcf-card.alt:hover {
+  background-color: #f2cfd8;
+}
+
+.tcf-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tcf-card-header i {
+  font-size: 26px;
+  color: #da002e;
+  margin-right: 10px;
+}
+
+.tcf-card-header span {
+  font-weight: bold;
+  font-size: 16px;
+  color: #000;
+}
+
+.tcf-card-content {
+  flex-grow: 1;
+  margin-top: 5px;
+}
+
+.tcf-card-content strong {
+  display: inline-block;
+  min-width: 90px;
+}
+
+.tcf-link {
+  margin-top: auto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #da002e;
+  text-align: right;
+}
+
+.tcf-card:hover .tcf-link,
+.tcf-card.alt:hover .tcf-link {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Section des partenaires
+   ========================================================================== */
+.partners-section {
+    text-align: center;
+    padding: 20px;
+    overflow-x: visible;
+    white-space: normal;
+}
+
+.partners-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.partners-logos a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 120px;
+}
+
+.partners-logos img {
+    width: 100px;
+    height: auto;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Appliquer un filtre blanc à tous les logos sauf celui de l’Ambassade */
+.partners-logos img.filtered-logo {
+    filter: brightness(0) invert(1);
+}
+
+.partners-logos .ambassade-logo {
+    filter: none !important;
+}
+
+.partners-logos a:hover img {
+    opacity: 0.7;
+}
+
+/* Responsive : multi-lignes sur mobile */
+@media screen and (max-width: 768px) {
+    .partners-logos a {
+        flex: 1 1 30%;
+        max-width: 33%;
+        padding: 10px 0;
+    }
+
+    .partners-logos img {
+        width: 80px;
+    }
+}
+
+/* ==========================================================================
+   RSForm!Pro - Mise en forme globale des champs
+   ========================================================================== */
+.rsform-block {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    /*color: #f9f9f9;*/    
+    border-radius: 8px;
+}
+
+/* Labels */
+.rsform-block label.formControlLabel,
+.rsform-block span.formControlLabel {
+    font-weight: 600;
+    color: #333;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+/* Champs : input, select, textarea */
+.rsform-block .formBody select,
+.rsform-block .formBody input[type="text"],
+.rsform-block .formBody input[type="email"],
+.rsform-block .formBody textarea {
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+}
+
+.rsform-block .formBody input:focus,
+.rsform-block .formBody select:focus {
+    border-color: #da002e;
+    outline: none;
+}
+
+/* Description et messages d'erreur */
+.rsform-block .formDescription {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 0.3rem;
+}
+
+.rsform-block .formValidation {
+    color: #d9534f;
+    font-size: 0.85rem;
+}
+
+
+/* ==========================================================================
+   RSForm!Pro - Grille responsive
+   ========================================================================== */
+.formRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.formSpan6,
+.formSpan12 {
+    flex: 1 1 100%;
+}
+
+@media (min-width: 768px) {
+    .formSpan6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    .formSpan12 {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* ==========================================================================
+   RSForm!Pro - Bouton de soumission
+   ========================================================================== */
+.rsform-block-soumettre .formBody button,
+.rsform-block-soumettre .formBody input[type="submit"] {
+    background-color: #da002e;
+    color: #fff;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rsform-block-soumettre .formBody button:hover {
+    background-color: #98111f;
+}
+
+/* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
+.formContainer,
+.formContainer * {
+    background-color: transparent !important;
+    background-image: none !important;
+}
