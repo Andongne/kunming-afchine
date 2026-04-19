@@ -1,0 +1,335 @@
+<?php
+ini_set('memory_limit','128M');
+ini_set('max_execution_time','30');
+header('Cache-Control: no-store, no-cache');
+$token = $_SERVER['HTTP_X_FALANG_TOKEN'] ?? '';
+if ($token !== 'FALANG_SECRET_TOKEN_AFK_2026') { die('Forbidden'); }
+header('Content-Type: application/json; charset=utf-8');
+$c = file_get_contents(dirname(__DIR__).'/configuration.php');
+preg_match('/public \$host\s*=\s*\'([^\']+)\'/', $c, $mh);
+preg_match('/public \$db\s*=\s*\'([^\']+)\'/', $c, $md);
+preg_match('/public \$user\s*=\s*\'([^\']+)\'/', $c, $mu);
+preg_match('/public \$password\s*=\s*\'([^\']+)\'/', $c, $mp);
+preg_match('/public \$dbprefix\s*=\s*\'([^\']+)\'/', $c, $mx);
+$pdo = new PDO("mysql:host={$mh[1]};dbname={$md[1]};charset=utf8mb4",$mu[1],$mp[1],[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+$pfx = $mx[1];
+$action = $_GET['action'] ?? '';
+
+if ($action === 'slice') {
+    $id = (int)($_GET['id'] ?? 173);
+    $from = (int)($_GET['from'] ?? 0);
+    $len = (int)($_GET['len'] ?? 3000);
+    $stmt = $pdo->prepare("SELECT SUBSTRING(content, ?, ?) as slice FROM {$pfx}sppagebuilder WHERE id=?");
+    $stmt->execute([$from+1, $len, $id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo json_encode(['slice'=>$row['slice']], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+if ($action === 'find_all') {
+    $id = (int)($_GET['id'] ?? 173);
+    $q = $_GET['q'] ?? 'Prochaines';
+    $stmt = $pdo->prepare("SELECT content FROM {$pfx}sppagebuilder WHERE id=?");
+    $stmt->execute([$id]);
+    $content = $stmt->fetchColumn();
+    $positions = [];
+    $offset = 0;
+    while (($pos = strpos($content, $q, $offset)) !== false) {
+        $positions[] = $pos;
+        $offset = $pos + 1;
+    }
+    echo json_encode(['count'=>count($positions),'positions'=>$positions]);
+    exit;
+}
+
+if ($action === 'replace_text_field') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    if (!$body) { echo json_encode(['error'=>'invalid json','raw_len'=>strlen($raw),'raw_start'=>substr($raw,0,100)]); exit; }
+
+    $id = (int)($body['id'] ?? 173);
+    $uid = $body['uid'] ?? '';
+    $new_text = $body['new_text'] ?? '';
+    $search_from = (int)($body['search_from'] ?? 0);
+
+    $stmt = $pdo->prepare("SELECT content FROM {$pfx}sppagebuilder WHERE id=?");
+    $stmt->execute([$id]);
+    $content = $stmt->fetchColumn();
+    if (!$content) { echo json_encode(['error'=>'record not found']); exit; }
+
+    $uid_pos = strpos($content, $uid, $search_from);
+    if ($uid_pos === false) { echo json_encode(['error'=>"uid not found after pos $search_from",'uid'=>$uid]); exit; }
+
+    $text_key = '"text":"';
+    $text_key_pos = strpos($content, $text_key, $uid_pos);
+    if ($text_key_pos === false) { echo json_encode(['error'=>'text field not found after uid']); exit; }
+
+    $val_start = $text_key_pos + strlen($text_key);
+    $pos_end = $val_start;
+    $max = strlen($content);
+    while ($pos_end < $max) {
+        if ($content[$pos_end] === '\\') { $pos_end += 2; continue; }
+        if ($content[$pos_end] === '"') break;
+        $pos_end++;
+    }
+
+    $old_val = substr($content, $val_start, $pos_end - $val_start);
+    $new_val = str_replace(['\\','/','"',"\n","\r","\t"], ['\\\\','\\/','\"','\\n','\\r','\\t'], $new_text);
+    $new_content = substr($content, 0, $val_start) . $new_val . substr($content, $pos_end);
+
+    $stmt2 = $pdo->prepare("UPDATE {$pfx}sppagebuilder SET content=?, modified=NOW(), modified_by=898 WHERE id=?");
+    $stmt2->execute([$new_content, $id]);
+
+    echo json_encode([
+        'ok'=>true,
+        'uid_pos'=>$uid_pos,
+        'old_preview'=>substr(strip_tags(stripcslashes($old_val)),0,150),
+        'new_preview'=>substr(strip_tags($new_text),0,150),
+        'rows'=>$stmt2->rowCount()
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+if ($action === 'purge_cache') {
+    $root = dirname(__DIR__);
+    $cleared = [];
+    $errors  = [];
+
+    // Dossiers de cache Joomla à purger
+    $cache_dirs = [
+        $root . '/cache',
+        $root . '/administrator/cache',
+    ];
+
+    foreach ($cache_dirs as $dir) {
+        if (!is_dir($dir)) continue;
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($it as $file) {
+            if ($file->isFile() && $file->getFilename() !== 'index.html') {
+                if (@unlink($file->getPathname())) {
+                    $cleared[]= $file->getPathname();
+                } else {
+                    $errors[] = $file->getPathname();
+                }
+            }
+        }
+    }
+
+    echo json_encode([
+        'ok'      => true,
+        'cleared' => count($cleared),
+        'errors'  => count($errors),
+    ]);
+    exit;
+}
+
+
+if ($action === 'ext_params') {
+    $ext_id = (int)($_GET['ext_id'] ?? 0);
+    if (!$ext_id) { echo json_encode(['error'=>'ext_id required']); exit; }
+    $stmt = $pdo->prepare("SELECT params FROM {$pfx}extensions WHERE extension_id=?");
+    $stmt->execute([$ext_id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) { echo json_encode(['error'=>'not found']); exit; }
+    echo json_encode(['ok'=>true,'params'=>$row['params']], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    exit;
+}
+
+if ($action === 'set_ext_params') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    if (!$body) { echo json_encode(['error'=>'invalid json']); exit; }
+    $ext_id = (int)($body['ext_id'] ?? 0);
+    $params = $body['params'] ?? null;
+    if (!$ext_id || $params === null) { echo json_encode(['error'=>'ext_id and params required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}extensions SET params=? WHERE extension_id=?");
+    $stmt->execute([$params, $ext_id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+
+if ($action === 'select_query') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $sql = $body['sql'] ?? '';
+    if (!$sql || !preg_match('/^\s*SELECT/i', $sql)) { echo json_encode(['error'=>'SELECT only']); exit; }
+    $sql = str_replace('##', $pfx, $sql);
+    $stmt = $pdo->query($sql);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode(['ok'=>true,'rows'=>$rows], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+
+if ($action === 'update_jmap_source') {
+    $id = (int)($_GET['id'] ?? 0);
+    $published = (int)($_GET['published'] ?? 0);
+    if (!$id) { echo json_encode(['error'=>'id required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}jmap SET published=? WHERE id=?");
+    $stmt->execute([$published, $id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+
+if ($action === 'update_jmap_source_params') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $id = (int)($body['id'] ?? 0);
+    $params = $body['params'] ?? null;
+    if (!$id || $params === null) { echo json_encode(['error'=>'id and params required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}jmap SET params=? WHERE id=?");
+    $stmt->execute([$params, $id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+
+if ($action === 'patch_config') {
+    // Applique des remplacements regex dans configuration.php
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    if (!$body || !isset($body['patches'])) { echo json_encode(['error'=>'patches required']); exit; }
+    $config_path = dirname(__DIR__) . '/configuration.php';
+    $config = file_get_contents($config_path);
+    if (!$config) { echo json_encode(['error'=>'cannot read configuration.php']); exit; }
+    $applied = [];
+    foreach ($body['patches'] as $patch) {
+        $new = preg_replace($patch['pattern'], $patch['replacement'], $config, 1, $count);
+        if ($count > 0) {
+            $config = $new;
+            $applied[] = $patch['label'] ?? $patch['pattern'];
+        }
+    }
+    if (file_put_contents($config_path, $config) === false) {
+        echo json_encode(['error'=>'cannot write configuration.php']);
+        exit;
+    }
+    echo json_encode(['ok'=>true,'applied'=>$applied]);
+    exit;
+}
+
+
+if ($action === 'set_plugin_enabled') {
+    $ext_id = (int)($_GET['ext_id'] ?? 0);
+    $enabled = (int)($_GET['enabled'] ?? 0);
+    if (!$ext_id) { echo json_encode(['error'=>'ext_id required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}extensions SET enabled=? WHERE extension_id=?");
+    $stmt->execute([$enabled, $ext_id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+if ($action === 'set_falang_qacache') {
+    $ext_id = (int)($_GET['ext_id'] ?? 10140);
+    $stmt = $pdo->prepare("SELECT params FROM {$pfx}extensions WHERE extension_id=?");
+    $stmt->execute([$ext_id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) { echo json_encode(['error'=>'not found']); exit; }
+    $params = json_decode($row['params'], true) ?: [];
+    $params['qacaching'] = '1';
+    $params['update_caching'] = '1';
+    $new_params = json_encode($params, JSON_UNESCAPED_UNICODE);
+    $stmt2 = $pdo->prepare("UPDATE {$pfx}extensions SET params=? WHERE extension_id=?");
+    $stmt2->execute([$new_params, $ext_id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt2->rowCount(),'params_preview'=>array_intersect_key($params, array_flip(['qacaching','update_caching']))]);
+    exit;
+}
+
+
+if ($action === 'update_menu_params') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $id = (int)($body['id'] ?? 0);
+    $params = $body['params'] ?? null;
+    if (!$id || $params === null) { echo json_encode(['error'=>'id and params required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}menu SET params=? WHERE id=?");
+    $stmt->execute([$params, $id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+
+if ($action === 'update_sppb_page') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $id = (int)($body['id'] ?? 0);
+    if (!$id) { echo json_encode(['error'=>'id required']); exit; }
+    $stmt = $pdo->prepare("SELECT og_title, attribs FROM {$pfx}sppagebuilder WHERE id=?");
+    $stmt->execute([$id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) { echo json_encode(['error'=>'not found']); exit; }
+    $attribs = json_decode($row['attribs'] ?: '{}', true);
+    // Appliquer les patches
+    if (isset($body['og_title'])) {
+        $og_title = $body['og_title'];
+    } else {
+        $og_title = $row['og_title'];
+    }
+    if (isset($body['attribs'])) {
+        foreach ($body['attribs'] as $k => $v) {
+            $attribs[$k] = $v;
+        }
+    }
+    $new_attribs = json_encode($attribs, JSON_UNESCAPED_UNICODE);
+    $stmt2 = $pdo->prepare("UPDATE {$pfx}sppagebuilder SET og_title=?, attribs=?, modified=NOW() WHERE id=?");
+    $stmt2->execute([$og_title, $new_attribs, $id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt2->rowCount(),'og_title'=>$og_title,'attribs'=>$attribs]);
+    exit;
+}
+
+// Action : exécuter une requête UPDATE/INSERT/DELETE
+if ($action === 'write_query') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $sql = isset($body['sql']) ? $body['sql'] : '';
+    if (empty($sql)) {
+        echo json_encode(['error'=>'sql required']);
+        exit;
+    }
+    // Sécurité : n'autoriser que UPDATE, INSERT, DELETE
+    $sqlTrim = ltrim($sql);
+    if (!preg_match('/^(UPDATE|INSERT|DELETE|REPLACE)\b/i', $sqlTrim)) {
+        echo json_encode(['error'=>'Only UPDATE/INSERT/DELETE/REPLACE allowed']);
+        exit;
+    }
+    // Remplacer ## par le préfixe
+    $sqlReady = str_replace('##', $pfx, $sql);
+    $stmt = $pdo->prepare($sqlReady);
+    $stmt->execute();
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+// Action : mettre à jour les params d'un template style
+if ($action === 'set_template_style_params') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $style_id = isset($body['style_id']) ? (int)$body['style_id'] : 0;
+    $params_patch = isset($body['params']) ? $body['params'] : [];
+    if (!$style_id || empty($params_patch)) {
+        echo json_encode(['error'=>'style_id and params required']);
+        exit;
+    }
+    // Lire les params actuels
+    $stmt = $pdo->prepare("SELECT params FROM {$pfx}template_styles WHERE id=?");
+    $stmt->execute([$style_id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) {
+        echo json_encode(['error'=>'style not found']);
+        exit;
+    }
+    $current = json_decode($row['params'] ?: '{}', true);
+    foreach ($params_patch as $k => $v) {
+        $current[$k] = $v;
+    }
+    $new_params = json_encode($current, JSON_UNESCAPED_UNICODE);
+    $stmt2 = $pdo->prepare("UPDATE {$pfx}template_styles SET params=? WHERE id=?");
+    $stmt2->execute([$new_params, $style_id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt2->rowCount(),'updated_keys'=>array_keys($params_patch)]);
+    exit;
+}
+
+echo json_encode(['error'=>'unknown action']);

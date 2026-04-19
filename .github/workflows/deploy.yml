@@ -1,0 +1,23 @@
+name: Deploy to Gandi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via SFTP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: sftp.sd6.gpaas.net
+          username: ${{ secrets.GANDI_SFTP_USER }}
+          key: ${{ secrets.GANDI_SSH_KEY }}
+          source: "templates/shaper_languageschool/index.php,falang-inject/sppb5.php,robots.txt"
+          target: /lamp0/web/vhosts/kunming-afchine.org/htdocs/
+          strip_components: 0
