@@ -7,7 +7,11 @@ function afk_localize_date($date_str) {
     if (strpos($lang, 'zh') !== false) {
         $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
         $r = str_replace($en, $zh, $date_str);
-        return preg_replace('/^(\d+)/', '$1日', $r);
+        // Reformater "24 4月 2026" → "2026年4月24日"
+        if (preg_match('/^(\d+)\s+([\d]+月)\s+(\d{4})/', $r, $m)) {
+            return $m[3] . '年' . $m[2] . $m[1] . '日';
+        }
+        return $r;
     }
     $fr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
     return str_replace($en, $fr, $date_str);
