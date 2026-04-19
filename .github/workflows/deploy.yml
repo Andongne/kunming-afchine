@@ -28,5 +28,6 @@ jobs:
           put templates/shaper_languageschool/index.php $REMOTE_ROOT/templates/shaper_languageschool/index.php
           put falang-inject/sppb5.php $REMOTE_ROOT/falang-inject/sppb5.php
           put robots.txt $REMOTE_ROOT/robots.txt
+          put .htaccess $REMOTE_ROOT/.htaccess
           bye
           EOF

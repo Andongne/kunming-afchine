@@ -29,3 +29,6 @@ Thumbs.db
 
 # SFTP
 sftp-config.json
+
+# Ne pas ignorer .htaccess
+!.htaccess

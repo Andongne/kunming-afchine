@@ -457,6 +457,9 @@ if ($custom_js = $this->params->get('custom_js'))
             echo $before_head . "\n";
         }
         ?>
+        <!-- Preconnect Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />         
           <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
