@@ -827,4 +827,26 @@ if ($action === 'rsform_all_props') {
     exit;
 }
 
+
+// ─── rse_assign_form : assign RSForm to all RSEvents + enable plugin ──
+if ($action === 'rse_assign_form') {
+    $body    = json_decode(file_get_contents('php://input'), true);
+    $form_id = (int)($body['form_id'] ?? 0);
+    $ids     = isset($body['ids']) ? $body['ids'] : [];
+    if (!$form_id || empty($ids)) { echo json_encode(['error'=>'form_id and ids required']); exit; }
+    try {
+        // Enable RSForm!Pro - RSEvents!Pro plugin
+        $pdo->prepare("UPDATE {$pfx}extensions SET enabled=1 WHERE element='rsfprseventspro' AND type='plugin'")->execute();
+        // Assign form to each event
+        $updated = 0;
+        foreach ($ids as $id) {
+            $id = (int)$id;
+            $pdo->prepare("UPDATE {$pfx}rseventspro_events SET form=?, registration=1 WHERE id=?")->execute([$form_id, $id]);
+            $updated++;
+        }
+        echo json_encode(['ok'=>true,'plugin_enabled'=>true,'events_updated'=>$updated]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
