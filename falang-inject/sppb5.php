@@ -705,4 +705,16 @@ if ($action === 'rse_set_register_by') {
     exit;
 }
 
+
+// ─── rse_describe : describe RSEvents table structure ─────────────────
+if ($action === 'rse_describe') {
+    try {
+        $table = $_GET['table'] ?? 'rseventspro_events';
+        $stmt = $pdo->query("DESCRIBE {$pfx}" . preg_replace('/[^a-z_]/','', $table));
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'columns'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
