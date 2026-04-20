@@ -37,6 +37,9 @@ jobs:
           put language/zh-CN/zh-CN.com_rseventspro.ini $REMOTE_ROOT/language/zh-CN/zh-CN.com_rseventspro.ini
           put language/fr-FR/fr-FR.tpl_shaper_languageschool.ini $REMOTE_ROOT/language/fr-FR/fr-FR.tpl_shaper_languageschool.ini
           put language/zh-CN/zh-CN.tpl_shaper_languageschool.ini $REMOTE_ROOT/language/zh-CN/zh-CN.tpl_shaper_languageschool.ini
+          -mkdir $REMOTE_ROOT/templates/shaper_languageschool/html/com_content
+          -mkdir $REMOTE_ROOT/templates/shaper_languageschool/html/com_content/category
+          put templates/shaper_languageschool/html/com_content/category/blog.php $REMOTE_ROOT/templates/shaper_languageschool/html/com_content/category/blog.php
           put robots.txt $REMOTE_ROOT/robots.txt
           put .htaccess $REMOTE_ROOT/.htaccess
           bye

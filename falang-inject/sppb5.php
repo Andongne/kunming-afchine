@@ -481,8 +481,11 @@ if ($action === 'write_file') {
     $path = isset($body['path']) ? $body['path'] : '';
     $content = isset($body['content']) ? $body['content'] : '';
     if (!$path || strpos($path,'..') !== false) { echo json_encode(['error'=>'invalid path']); exit; }
-    // Restreindre aux fichiers de langue uniquement
-    if (!preg_match('#^/language/#', $path)) { echo json_encode(['error'=>'path not allowed']); exit; }
+    // Restreindre aux fichiers de langue et overrides de templates
+    $allowed = ['#^/language/#', '#^/templates/shaper_languageschool/html/#', '#^/templates/shaper_languageschool/css/#'];
+    $ok = false;
+    foreach ($allowed as $pat) { if (preg_match($pat, $path)) { $ok = true; break; } }
+    if (!$ok) { echo json_encode(['error'=>'path not allowed']); exit; }
     $full = dirname(__DIR__) . '/' . ltrim($path,'/');
     $dir = dirname($full);
     if (!is_dir($dir)) { mkdir($dir, 0755, true); }
