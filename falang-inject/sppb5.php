@@ -762,4 +762,56 @@ if ($action === 'rsform_components') {
     exit;
 }
 
+
+// ─── rsform_property : get/set a specific property of a component ─────
+if ($action === 'rsform_property') {
+    $comp_id = (int)($_GET['comp_id'] ?? 0);
+    $prop    = $_GET['prop'] ?? '';
+    $raw     = file_get_contents('php://input');
+    $body    = json_decode($raw, true);
+    if (!$comp_id || !$prop) { echo json_encode(['error'=>'comp_id and prop required']); exit; }
+    try {
+        if ($body && isset($body['value'])) {
+            // SET
+            $stmt = $pdo->prepare("SELECT PropertyId FROM {$pfx}rsform_properties WHERE ComponentId=? AND PropertyName=?");
+            $stmt->execute([$comp_id, $prop]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $pdo->prepare("UPDATE {$pfx}rsform_properties SET PropertyValue=? WHERE PropertyId=?")->execute([$body['value'], $row['PropertyId']]);
+            } else {
+                $pdo->prepare("INSERT INTO {$pfx}rsform_properties (ComponentId,PropertyName,PropertyValue) VALUES (?,?,?)")->execute([$comp_id,$prop,$body['value']]);
+            }
+            echo json_encode(['ok'=>true,'action'=>'set']);
+        } else {
+            // GET
+            $stmt = $pdo->prepare("SELECT PropertyValue FROM {$pfx}rsform_properties WHERE ComponentId=? AND PropertyName=?");
+            $stmt->execute([$comp_id, $prop]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            echo json_encode(['ok'=>true,'value'=>$row ? $row['PropertyValue'] : null]);
+        }
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+// ─── rsform_form_property : get/set a property of the form itself ─────
+if ($action === 'rsform_form_property') {
+    $form_id = (int)($_GET['form_id'] ?? 0);
+    $col     = $_GET['col'] ?? '';
+    $raw     = file_get_contents('php://input');
+    $body    = json_decode($raw, true);
+    $allowed_cols = ['ScriptBeforeDisplay','ScriptBeforeValidation','ScriptProcess','JS','CSS'];
+    if (!$form_id || !$col || !in_array($col, $allowed_cols)) { echo json_encode(['error'=>'invalid']); exit; }
+    try {
+        if ($body && isset($body['value'])) {
+            $pdo->prepare("UPDATE {$pfx}rsform_forms SET {$col}=? WHERE FormId=?")->execute([$body['value'], $form_id]);
+            echo json_encode(['ok'=>true,'action'=>'set']);
+        } else {
+            $stmt = $pdo->prepare("SELECT {$col} FROM {$pfx}rsform_forms WHERE FormId=?");
+            $stmt->execute([$form_id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            echo json_encode(['ok'=>true,'value'=>$row ? $row[$col] : null]);
+        }
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
