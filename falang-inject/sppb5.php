@@ -609,27 +609,33 @@ if ($action === 'fix_rse_events') {
 
 // ─── menu_metakey : update meta keywords for menu items ───────────────
 if ($action === 'menu_metakey') {
-    $body = json_decode(file_get_contents('php://input'), true);
-    $ids = isset($body['ids']) ? $body['ids'] : [];
-    $metakey = isset($body['metakey']) ? $body['metakey'] : '';
-    if (empty($ids) || $metakey === '') {
-        echo json_encode(['error'=>'ids and metakey required']);
-        exit;
+    try {
+        $raw = file_get_contents('php://input');
+        $body = json_decode($raw, true);
+        $ids = isset($body['ids']) ? $body['ids'] : [];
+        $metakey = isset($body['metakey']) ? $body['metakey'] : '';
+        if (empty($ids) || $metakey === '') {
+            echo json_encode(['error'=>'ids and metakey required','raw'=>$raw]);
+            exit;
+        }
+        $updated = [];
+        foreach ($ids as $id) {
+            $id = (int)$id;
+            $stmt = $pdo->prepare("SELECT metadata FROM {$pfx}menu WHERE id=?");
+            $stmt->execute([$id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$row) { $updated[] = ['id'=>$id,'status'=>'not_found']; continue; }
+            $meta = json_decode($row['metadata'], true) ?: [];
+            $meta['metakey'] = $metakey;
+            $newmeta = json_encode($meta, JSON_UNESCAPED_UNICODE);
+            $pdo->prepare("UPDATE {$pfx}menu SET metadata=? WHERE id=?")->execute([$newmeta, $id]);
+            $updated[] = ['id'=>$id,'status'=>'ok'];
+        }
+        echo json_encode(['ok'=>true,'updated'=>$updated]);
+    } catch (Throwable $e) {
+        http_response_code(200);
+        echo json_encode(['error'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
     }
-    $updated = [];
-    foreach ($ids as $id) {
-        $id = (int)$id;
-        $stmt = $pdo->prepare("SELECT metadata FROM {$pfx}menu WHERE id=?");
-        $stmt->execute([$id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$row) { $updated[] = ['id'=>$id,'status'=>'not_found']; continue; }
-        $meta = json_decode($row['metadata'], true) ?: [];
-        $meta['metakey'] = $metakey;
-        $newmeta = json_encode($meta, JSON_UNESCAPED_UNICODE);
-        $pdo->prepare("UPDATE {$pfx}menu SET metadata=? WHERE id=?")->execute([$newmeta, $id]);
-        $updated[] = ['id'=>$id,'status'=>'ok'];
-    }
-    echo json_encode(['ok'=>true,'updated'=>$updated]);
     exit;
 }
 
