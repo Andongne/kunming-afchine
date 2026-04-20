@@ -493,7 +493,7 @@ if ($action === 'write_file') {
     $content = isset($body['content']) ? $body['content'] : '';
     if (!$path || strpos($path,'..') !== false) { echo json_encode(['error'=>'invalid path']); exit; }
     // Restreindre aux fichiers de langue et overrides de templates
-    $allowed = ['#^/language/#', '#^/templates/shaper_languageschool/html/#', '#^/templates/shaper_languageschool/css/#'];
+    $allowed = ['#^/language/#', '#^/templates/shaper_languageschool/html/#', '#^/templates/shaper_languageschool/css/#', '#^/components/com_sppagebuilder/assets/css/#', '#^/templates/shaper_languageschool/css/#'];
     $ok = false;
     foreach ($allowed as $pat) { if (preg_match($pat, $path)) { $ok = true; break; } }
     if (!$ok) { echo json_encode(['error'=>'path not allowed']); exit; }
