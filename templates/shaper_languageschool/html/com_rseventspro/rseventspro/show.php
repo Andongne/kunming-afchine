@@ -514,7 +514,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				<?php } ?>
 				<?php } ?>
 				
-				<?php if (false) { // Catégories masquées
+				<?php if (false) { // Catégories masquées ?>
 				<div id="rsepro-event-categories" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-folder fa-fw"></i> 
