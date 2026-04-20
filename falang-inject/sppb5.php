@@ -719,4 +719,21 @@ if ($action === 'rse_describe') {
     exit;
 }
 
+
+// ─── rsform_fields : list fields of an RSForm Pro form ────────────────
+if ($action === 'rsform_fields') {
+    $form_id = (int)($_GET['form_id'] ?? 0);
+    try {
+        if ($form_id) {
+            $stmt = $pdo->prepare("SELECT ComponentId, ComponentName, ComponentTypeId, Published, Params FROM {$pfx}rsform_components WHERE FormId=? ORDER BY Ordering");
+            $stmt->execute([$form_id]);
+        } else {
+            $stmt = $pdo->query("SELECT FormId, FormName, Published FROM {$pfx}rsform_forms ORDER BY FormId");
+        }
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'rows'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
