@@ -654,4 +654,17 @@ if ($action === 'menu_list') {
     exit;
 }
 
+
+// ─── get_template_style_params : read params for a template style ─────
+if ($action === 'get_template_style_params') {
+    $id = (int)($_GET['id'] ?? 10);
+    $stmt = $pdo->prepare("SELECT params FROM {$pfx}template_styles WHERE id=?");
+    $stmt->execute([$id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) { echo json_encode(['error'=>'not found']); exit; }
+    $params = json_decode($row['params'] ?: '{}', true);
+    echo json_encode(['ok'=>true,'params'=>$params]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
