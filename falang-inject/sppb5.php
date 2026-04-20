@@ -475,6 +475,22 @@ if ($action === 'read_file') {
     exit;
 }
 
+// Action : écrire un fichier (chemins restreints aux language/overrides et language/*/*.ini)
+if ($action === 'write_file') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $path = isset($body['path']) ? $body['path'] : '';
+    $content = isset($body['content']) ? $body['content'] : '';
+    if (!$path || strpos($path,'..') !== false) { echo json_encode(['error'=>'invalid path']); exit; }
+    // Restreindre aux fichiers de langue uniquement
+    if (!preg_match('#^/language/#', $path)) { echo json_encode(['error'=>'path not allowed']); exit; }
+    $full = dirname(__DIR__) . '/' . ltrim($path,'/');
+    $dir = dirname($full);
+    if (!is_dir($dir)) { mkdir($dir, 0755, true); }
+    $bytes = file_put_contents($full, $content);
+    echo json_encode(['ok'=>true,'bytes'=>$bytes,'path'=>$full]);
+    exit;
+}
+
 // Action : inspecter structure table locations
 if ($action === 'inspect_location') {
     $cols = $pdo->query("SHOW COLUMNS FROM bwhwo_rseventspro_locations")->fetchAll(PDO::FETCH_ASSOC);
