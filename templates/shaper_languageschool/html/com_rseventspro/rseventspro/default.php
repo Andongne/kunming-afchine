@@ -102,6 +102,17 @@ $ical = $this->params->get('ical',1); ?>
         <?php foreach($this->events as $details) { ?>
         <?php if (isset($details['event']) && !empty($details['event'])) $event = $details['event']; else continue; ?>
         <?php if (!rseventsproHelper::canview($event->id) && $event->owner != $this->user) continue; ?>
+        <?php
+        // ─── Filtrage et état d'inscription ─────────────────────────
+        $_now = time();
+        $_start = !empty($event->start) ? strtotime($event->start) : 0;
+        $_endReg = !empty($event->end_registration) ? strtotime($event->end_registration) : 0;
+        // Masquer les événements dont l'examen est passé
+        if ($_start > 0 && $_start < $_now) continue;
+        // Inscription fermée si end_registration < now
+        $_regClosed = ($_endReg > 0 && $_endReg < $_now);
+        // ─────────────────────────────────────────────────────────────
+        ?>
         <?php $full = rseventsproHelper::eventisfull($event->id); ?>
         <?php $ongoing = rseventsproHelper::ongoing($event->id); ?>
         <?php $categories = (isset($details['categories']) && !empty($details['categories'])) ? Text::_('COM_RSEVENTSPRO_GLOBAL_CATEGORIES').': '.$details['categories'] : '';  ?>
@@ -145,7 +156,22 @@ $ical = $this->params->get('ical',1); ?>
 
             <div class="<?php echo rseventsproHelper::layout('event-details-container'); ?>">
                 <div itemprop="name" class="<?php echo rseventsproHelper::layout('event-title'); ?>">
-                    <a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></a> <?php if (!$event->completed) echo Text::_('COM_RSEVENTSPRO_GLOBAL_INCOMPLETE_EVENT'); ?> <?php if (!$event->published) echo Text::_('COM_RSEVENTSPRO_GLOBAL_UNPUBLISHED_EVENT'); ?> <?php if ($event->published == 3) echo '<small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>'; ?>
+                    <a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></a>
+                    <?php if ($_regClosed): ?>
+                        <span class="rsepro-reg-closed" style="display:inline-block;margin-left:8px;padding:2px 8px;background:#da002e;color:#fff;border-radius:3px;font-size:0.78rem;font-weight:600;vertical-align:middle;"><?php echo (strpos(Factory::getApplication()->getLanguage()->getTag(),'zh')===0) ? '报名已截止' : 'Inscriptions fermées'; ?></span>
+                    <?php elseif ($_endReg > 0): ?>
+                        <span class="rsepro-reg-deadline" style="display:block;font-size:0.82rem;color:#888;margin-top:2px;">
+                        <?php
+                        $_tag = Factory::getApplication()->getLanguage()->getTag();
+                        if (strpos($_tag,'zh')===0) {
+                            echo '报名截止：' . date('Y', strtotime($event->end_registration)) . '年' . (int)date('n', strtotime($event->end_registration)) . '月' . (int)date('j', strtotime($event->end_registration)) . '日';
+                        } else {
+                            $_months_fr = ['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+                            echo 'Inscription avant le ' . (int)date('j', strtotime($event->end_registration)) . ' ' . $_months_fr[(int)date('n', strtotime($event->end_registration))] . ' ' . date('Y', strtotime($event->end_registration));
+                        }
+                        ?>
+                        </span>
+                    <?php endif; ?> <?php if (!$event->completed) echo Text::_('COM_RSEVENTSPRO_GLOBAL_INCOMPLETE_EVENT'); ?> <?php if (!$event->published) echo Text::_('COM_RSEVENTSPRO_GLOBAL_UNPUBLISHED_EVENT'); ?> <?php if ($event->published == 3) echo '<small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>'; ?>
                 </div>
                 <div class="<?php echo rseventsproHelper::layout('event-date'); ?>">
                     <?php if ($event->allday) { ?>
