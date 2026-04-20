@@ -685,9 +685,11 @@ if ($action === 'list_plugins') {
 
 // ─── rse_events : list/update RSEvents Pro events ────────────────────
 if ($action === 'rse_events') {
-    $stmt = $pdo->query("SELECT id, name, date, end_date, register_by, published FROM {$pfx}rseventspro_events ORDER BY date");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode(['ok'=>true,'events'=>$rows]);
+    try {
+        $stmt = $pdo->query("SELECT id, name, start, end, end_registration, published FROM {$pfx}rseventspro_events ORDER BY start");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'events'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
     exit;
 }
 
@@ -698,7 +700,7 @@ if ($action === 'rse_set_register_by') {
     foreach ($updates as $u) {
         $id = (int)$u['id'];
         $register_by = $u['register_by'];
-        $pdo->prepare("UPDATE {$pfx}rseventspro_events SET register_by=? WHERE id=?")->execute([$register_by, $id]);
+        $pdo->prepare("UPDATE {$pfx}rseventspro_events SET end_registration=? WHERE id=?")->execute([$register_by, $id]);
         $results[] = ['id'=>$id,'register_by'=>$register_by,'status'=>'ok'];
     }
     echo json_encode(['ok'=>true,'updated'=>$results]);
