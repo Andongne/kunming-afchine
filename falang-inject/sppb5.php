@@ -639,4 +639,19 @@ if ($action === 'menu_metakey') {
     exit;
 }
 
+
+// ─── menu_list : list menu items by language and path ─────────────────
+if ($action === 'menu_list') {
+    $lang = $_GET['lang'] ?? '';
+    $path = $_GET['path'] ?? '';
+    $sql = "SELECT id, title, language, path, params FROM {$pfx}menu WHERE client_id=0 AND published=1";
+    if ($lang) $sql .= $pdo->quote($lang) === false ? "" : " AND language=" . $pdo->quote($lang);
+    if ($path) $sql .= " AND path LIKE " . $pdo->quote($path . '%');
+    $sql .= " ORDER BY id";
+    $rows = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as &$r) { unset($r['params']); }
+    echo json_encode(['ok'=>true,'items'=>$rows]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
