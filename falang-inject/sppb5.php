@@ -465,6 +465,17 @@ if ($action === 'set_template_style_params') {
     exit;
 }
 
+// Action : reset PHP OPcache
+if ($action === 'reset_opcache') {
+    if (function_exists('opcache_reset')) {
+        $ok = opcache_reset();
+        echo json_encode(['ok'=>$ok,'opcache'=>true]);
+    } else {
+        echo json_encode(['ok'=>true,'opcache'=>false,'note'=>'opcache not available']);
+    }
+    exit;
+}
+
 // Action : lire un fichier PHP du serveur
 if ($action === 'read_file') {
     $path = $_GET['path'] ?? '';
