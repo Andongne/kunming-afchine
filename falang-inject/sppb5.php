@@ -667,4 +667,19 @@ if ($action === 'get_template_style_params') {
     exit;
 }
 
+
+// ─── list_plugins : list system plugins ─────────────────────────────
+if ($action === 'list_plugins') {
+    $folder = $_GET['folder'] ?? 'system';
+    $stmt = $pdo->query("SELECT extension_id, name, element, enabled, params FROM {$pfx}extensions WHERE type='plugin' AND folder=" . $pdo->quote($folder) . " ORDER BY ordering");
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as &$r) {
+        $p = json_decode($r['params'] ?: '{}', true);
+        $r['params_keys'] = array_keys($p);
+        unset($r['params']);
+    }
+    echo json_encode(['ok'=>true,'plugins'=>$rows]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
