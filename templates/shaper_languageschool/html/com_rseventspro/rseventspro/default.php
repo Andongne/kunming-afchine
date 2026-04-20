@@ -28,7 +28,7 @@ $ical = $this->params->get('ical',1); ?>
 
 <div class="rsepro-events-list-container">
 
-    <?php if ($this->params->get('show_page_heading', 1)) { ?><h1><?php echo $this->params->get('page_heading', Text::_('COM_RSEVENTSPRO_EVENTS')); ?></h1><?php } ?>
+    <?php // Titre de page masqué ?>
     <?php if ($this->params->get('show_category_title', 0) && $this->category) { ?><h2><span class="subheading-category"><?php echo $this->category->title; ?></span></h2><?php } ?>
 
     <?php if (($this->params->get('show_category_description', 0) || $this->params->def('show_category_image', 0)) && $this->category) { ?>
