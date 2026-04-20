@@ -814,4 +814,17 @@ if ($action === 'rsform_form_property') {
     exit;
 }
 
+
+// ─── rsform_all_props : get all properties for a component ────────────
+if ($action === 'rsform_all_props') {
+    $comp_id = (int)($_GET['comp_id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT PropertyName, PropertyValue FROM {$pfx}rsform_properties WHERE ComponentId=? ORDER BY PropertyName");
+        $stmt->execute([$comp_id]);
+        $rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+        echo json_encode(['ok'=>true,'props'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
