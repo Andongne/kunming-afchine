@@ -621,14 +621,14 @@ if ($action === 'menu_metakey') {
         $updated = [];
         foreach ($ids as $id) {
             $id = (int)$id;
-            $stmt = $pdo->prepare("SELECT metadata FROM {$pfx}menu WHERE id=?");
+            $stmt = $pdo->prepare("SELECT params FROM {$pfx}menu WHERE id=?");
             $stmt->execute([$id]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$row) { $updated[] = ['id'=>$id,'status'=>'not_found']; continue; }
-            $meta = json_decode($row['metadata'], true) ?: [];
-            $meta['metakey'] = $metakey;
-            $newmeta = json_encode($meta, JSON_UNESCAPED_UNICODE);
-            $pdo->prepare("UPDATE {$pfx}menu SET metadata=? WHERE id=?")->execute([$newmeta, $id]);
+            $params = json_decode($row['params'], true) ?: [];
+            $params['menu-meta_keywords'] = $metakey;
+            $newparams = json_encode($params, JSON_UNESCAPED_UNICODE);
+            $pdo->prepare("UPDATE {$pfx}menu SET params=? WHERE id=?")->execute([$newparams, $id]);
             $updated[] = ['id'=>$id,'status'=>'ok'];
         }
         echo json_encode(['ok'=>true,'updated'=>$updated]);
