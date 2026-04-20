@@ -198,7 +198,7 @@ if (strpos($_tag, 'zh') === 0) {
                     <span itemprop="address" style="display:none;"><?php echo $event->address; ?></span>
                     </span>
                     <?php } ?>
-                    <?php if (!empty($event->options['show_categories_list'])) { ?>
+                    <?php if (false) { // Catégories masquées ?>
                     <span class="rsepro-event-categories-block"><?php echo $categories; ?></span>
                     <?php } ?>
                     <?php if (!empty($event->options['show_tags_list'])) { ?>
