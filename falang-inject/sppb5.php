@@ -736,4 +736,30 @@ if ($action === 'rsform_fields') {
     exit;
 }
 
+
+// ─── rsform_components : list form components with key properties ─────
+if ($action === 'rsform_components') {
+    $form_id = (int)($_GET['form_id'] ?? 0);
+    if (!$form_id) { echo json_encode(['error'=>'form_id required']); exit; }
+    try {
+        $stmt = $pdo->prepare("
+            SELECT c.ComponentId, c.ComponentTypeId, ct.ComponentTypeName, c.Order,
+                   MAX(CASE WHEN p.PropertyName='NAME' THEN p.PropertyValue END) as name,
+                   MAX(CASE WHEN p.PropertyName='LABEL' THEN p.PropertyValue END) as label,
+                   MAX(CASE WHEN p.PropertyName='ITEMS' THEN p.PropertyValue END) as items,
+                   MAX(CASE WHEN p.PropertyName='DEFAULTVALUE' THEN p.PropertyValue END) as default_value
+            FROM {$pfx}rsform_components c
+            LEFT JOIN {$pfx}rsform_component_types ct ON c.ComponentTypeId=ct.ComponentTypeId
+            LEFT JOIN {$pfx}rsform_properties p ON c.ComponentId=p.ComponentId
+            WHERE c.FormId=?
+            GROUP BY c.ComponentId, c.ComponentTypeId, ct.ComponentTypeName, c.Order
+            ORDER BY c.Order
+        ");
+        $stmt->execute([$form_id]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'components'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
