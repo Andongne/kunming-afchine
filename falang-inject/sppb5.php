@@ -606,4 +606,32 @@ if ($action === 'fix_rse_events') {
     exit;
 }
 
+
+// ─── menu_metakey : update meta keywords for menu items ───────────────
+if ($action === 'menu_metakey') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $ids = isset($body['ids']) ? $body['ids'] : [];
+    $metakey = isset($body['metakey']) ? $body['metakey'] : '';
+    if (empty($ids) || $metakey === '') {
+        echo json_encode(['error'=>'ids and metakey required']);
+        exit;
+    }
+    $pdo = new PDO("mysql:host={$db_host};dbname={$db_name};charset=utf8mb4", $db_user, $db_pass);
+    $updated = [];
+    foreach ($ids as $id) {
+        $id = (int)$id;
+        $stmt = $pdo->prepare("SELECT metadata FROM {$db_prefix}menu WHERE id=?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) { $updated[] = ['id'=>$id,'status'=>'not_found']; continue; }
+        $meta = json_decode($row['metadata'], true) ?: [];
+        $meta['metakey'] = $metakey;
+        $newmeta = json_encode($meta, JSON_UNESCAPED_UNICODE);
+        $pdo->prepare("UPDATE {$db_prefix}menu SET metadata=? WHERE id=?")->execute([$newmeta, $id]);
+        $updated[] = ['id'=>$id,'status'=>'ok'];
+    }
+    echo json_encode(['ok'=>true,'updated'=>$updated]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
