@@ -682,4 +682,27 @@ if ($action === 'list_plugins') {
     exit;
 }
 
+
+// ─── rse_events : list/update RSEvents Pro events ────────────────────
+if ($action === 'rse_events') {
+    $stmt = $pdo->query("SELECT id, name, date, end_date, register_by, published FROM {$pfx}rseventspro_events ORDER BY date");
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode(['ok'=>true,'events'=>$rows]);
+    exit;
+}
+
+if ($action === 'rse_set_register_by') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $updates = isset($body['updates']) ? $body['updates'] : [];
+    $results = [];
+    foreach ($updates as $u) {
+        $id = (int)$u['id'];
+        $register_by = $u['register_by'];
+        $pdo->prepare("UPDATE {$pfx}rseventspro_events SET register_by=? WHERE id=?")->execute([$register_by, $id]);
+        $results[] = ['id'=>$id,'register_by'=>$register_by,'status'=>'ok'];
+    }
+    echo json_encode(['ok'=>true,'updated'=>$results]);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
