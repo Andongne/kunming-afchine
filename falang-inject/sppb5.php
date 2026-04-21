@@ -1008,4 +1008,42 @@ if ($action === 'sppb_set_text') {
     } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
     exit;
 }
+
+// ─── sppb_tables : list sppagebuilder-related tables ─────────────────
+if ($action === 'sppb_tables') {
+    try {
+        $stmt = $pdo->query("SHOW TABLES LIKE '%sppagebuilder%'");
+        $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $out = [];
+        foreach ($tables as $t) {
+            $stmt2 = $pdo->query("DESCRIBE {$t}");
+            $cols = array_column($stmt2->fetchAll(PDO::FETCH_ASSOC), 'Field');
+            $stmt3 = $pdo->query("SELECT COUNT(*) FROM {$t}");
+            $out[$t] = ['cols'=>$cols, 'rows'=>$stmt3->fetchColumn()];
+        }
+        echo json_encode(['ok'=>true,'tables'=>$out]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+// ─── sppb_row : get a row/nested_row by UUID ─────────────────────────
+if ($action === 'sppb_row') {
+    $id = $_GET['id'] ?? '';
+    try {
+        $out = [];
+        $tables = ['sppagebuilder_addons','sppagebuilder_rows','sppagebuilder_sections'];
+        foreach ($tables as $t) {
+            try {
+                $stmt = $pdo->prepare("SELECT * FROM {$pfx}{$t} WHERE id=? LIMIT 1");
+                $stmt->execute([$id]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($row) $out[$t] = $row;
+            } catch(Throwable $e) {}
+        }
+        // Also search in main sppagebuilder content/text
+        $stmt2 = $pdo->query("SELECT id, title FROM {$pfx}sppagebuilder WHERE content LIKE ".$pdo->quote('%'.$id.'%')." LIMIT 5");
+        $found_in = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'found'=>$out,'in_pages'=>$found_in]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
 echo json_encode(['error'=>'unknown action']);
