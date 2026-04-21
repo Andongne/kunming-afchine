@@ -985,4 +985,27 @@ if ($action === 'sppb_update_text') {
     } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
     exit;
 }
+
+// ─── sppb_get_text / sppb_set_text ───────────────────────────────────
+if ($action === 'sppb_get_text') {
+    $id = (int)($_GET['id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, title, text FROM {$pfx}sppagebuilder WHERE id=?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'page'=>$row]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+if ($action === 'sppb_set_text') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $id   = (int)($body['id'] ?? 0);
+    $text_new = $body['text'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}sppagebuilder SET text=?, modified=NOW() WHERE id=?");
+        $stmt->execute([$text_new, $id]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
 echo json_encode(['error'=>'unknown action']);
