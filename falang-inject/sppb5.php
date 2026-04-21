@@ -1046,4 +1046,35 @@ if ($action === 'sppb_row') {
     } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
     exit;
 }
+
+// ─── sppb_version : get/set active version ───────────────────────────
+if ($action === 'sppb_version_get') {
+    $page_id = (int)($_GET['page_id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, name, active, LEFT(content,300) as preview FROM {$pfx}sppagebuilder_versions WHERE page_id=? ORDER BY active DESC, id DESC LIMIT 10");
+        $stmt->execute([$page_id]);
+        echo json_encode(['ok'=>true,'versions'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+if ($action === 'sppb_version_content') {
+    $vid = (int)($_GET['vid'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, name, active, content FROM {$pfx}sppagebuilder_versions WHERE id=?");
+        $stmt->execute([$vid]);
+        echo json_encode(['ok'=>true,'version'=>$stmt->fetch(PDO::FETCH_ASSOC)]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+if ($action === 'sppb_version_set') {
+    $body    = json_decode(file_get_contents('php://input'), true);
+    $vid     = (int)($body['vid'] ?? 0);
+    $content = $body['content'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}sppagebuilder_versions SET content=? WHERE id=?");
+        $stmt->execute([$content, $vid]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
 echo json_encode(['error'=>'unknown action']);
