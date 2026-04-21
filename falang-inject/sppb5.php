@@ -849,4 +849,60 @@ if ($action === 'rse_assign_form') {
     exit;
 }
 
+
+// ─── search_content : search in articles and sppb pages ─────────────
+if ($action === 'search_content') {
+    $q   = '%' . ($_GET['q'] ?? '') . '%';
+    $out = [];
+    try {
+        // Articles
+        $stmt = $pdo->query("SELECT id, title, LEFT(introtext,300) as txt FROM {$pfx}content WHERE introtext LIKE " . $pdo->quote($q) . " OR fulltext LIKE " . $pdo->quote($q) . " LIMIT 10");
+        $out['articles'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // SPPageBuilder
+        $stmt2 = $pdo->query("SELECT id, title, LEFT(content,500) as txt FROM {$pfx}sppagebuilder WHERE content LIKE " . $pdo->quote($q) . " LIMIT 10");
+        $out['sppb'] = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+    } catch(Throwable $e) { $out['error'] = $e->getMessage(); }
+    echo json_encode($out);
+    exit;
+}
+
+// ─── get_sppb_page : get full SPPageBuilder page content ─────────────
+if ($action === 'get_sppb_page') {
+    $id = (int)($_GET['id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, title, content FROM {$pfx}sppagebuilder WHERE id=?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'page'=>$row]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
+// ─── set_sppb_page : update SPPageBuilder page content ───────────────
+if ($action === 'set_sppb_page') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $id   = (int)($body['id'] ?? 0);
+    $content_new = $body['content'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}sppagebuilder SET content=? WHERE id=?");
+        $stmt->execute([$content_new, $id]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
+// ─── update_article : update article introtext/fulltext ──────────────
+if ($action === 'update_article') {
+    $body    = json_decode(file_get_contents('php://input'), true);
+    $id      = (int)($body['id'] ?? 0);
+    $field   = in_array($body['field']??'', ['introtext','fulltext']) ? $body['field'] : 'introtext';
+    $content_new = $body['content'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}content SET {$field}=? WHERE id=?");
+        $stmt->execute([$content_new, $id]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
