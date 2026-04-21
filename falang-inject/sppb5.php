@@ -905,4 +905,38 @@ if ($action === 'update_article') {
     exit;
 }
 
+
+// ─── search_modules : search in Joomla modules content ───────────────
+if ($action === 'search_modules') {
+    $q = '%' . ($_GET['q'] ?? '') . '%';
+    try {
+        $stmt = $pdo->query("SELECT id, title, module, LEFT(content,400) as txt FROM {$pfx}modules WHERE content LIKE " . $pdo->quote($q) . " OR params LIKE " . $pdo->quote($q) . " LIMIT 20");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'modules'=>$rows]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
+// ─── get_module / set_module ──────────────────────────────────────────
+if ($action === 'get_module') {
+    $id = (int)($_GET['id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, title, module, content, params FROM {$pfx}modules WHERE id=?");
+        $stmt->execute([$id]);
+        echo json_encode(['ok'=>true,'module'=>$stmt->fetch(PDO::FETCH_ASSOC)]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+if ($action === 'set_module_content') {
+    $body    = json_decode(file_get_contents('php://input'), true);
+    $id      = (int)($body['id'] ?? 0);
+    $content_new = $body['content'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}modules SET content=? WHERE id=?");
+        $stmt->execute([$content_new, $id]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
