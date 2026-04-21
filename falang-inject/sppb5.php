@@ -962,4 +962,27 @@ if ($action === 'search_db') {
     exit;
 }
 
+
+// ─── sppb_text_check : compare text vs content fields ───────────────
+if ($action === 'sppb_text_check') {
+    $id = (int)($_GET['id'] ?? 0);
+    try {
+        $stmt = $pdo->prepare("SELECT id, title, published, version, LENGTH(text) as text_len, LENGTH(content) as content_len, LEFT(text,200) as text_preview, LEFT(content,200) as content_preview FROM {$pfx}sppagebuilder WHERE id=?");
+        $stmt->execute([$id]);
+        echo json_encode(['ok'=>true,'row'=>$stmt->fetch(PDO::FETCH_ASSOC)]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+// ─── sppb_update_text : update text field ───────────────────────────
+if ($action === 'sppb_update_text') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $id   = (int)($body['id'] ?? 0);
+    $content_new = $body['content'] ?? '';
+    try {
+        $stmt = $pdo->prepare("UPDATE {$pfx}sppagebuilder SET text=?, content=? WHERE id=?");
+        $stmt->execute([$content_new, $content_new, $id]);
+        echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
 echo json_encode(['error'=>'unknown action']);
