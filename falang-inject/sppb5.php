@@ -939,4 +939,27 @@ if ($action === 'set_module_content') {
     exit;
 }
 
+
+// ─── search_db : search across multiple tables ───────────────────────
+if ($action === 'search_db') {
+    $q = '%' . ($_GET['q'] ?? '') . '%';
+    $out = [];
+    $tables = [
+        'content'        => ['id','title','introtext','fulltext'],
+        'modules'        => ['id','title','module','content','params'],
+        'sppagebuilder'  => ['id','title','content'],
+    ];
+    foreach ($tables as $tbl => $cols) {
+        try {
+            $where = implode(" OR ", array_map(fn($c) => "{$c} LIKE ".$pdo->quote($q), $cols));
+            $select = implode(",", array_map(fn($c) => "LEFT({$c},300) as {$c}", $cols));
+            $stmt = $pdo->query("SELECT {$select} FROM {$pfx}{$tbl} WHERE {$where} LIMIT 5");
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($rows) $out[$tbl] = $rows;
+        } catch(Throwable $e) { $out[$tbl.'_err'] = $e->getMessage(); }
+    }
+    echo json_encode($out);
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
