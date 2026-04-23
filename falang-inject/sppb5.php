@@ -15,6 +15,16 @@ $pdo = new PDO("mysql:host={$mh[1]};dbname={$md[1]};charset=utf8mb4",$mu[1],$mp[
 $pfx = $mx[1];
 $action = $_GET['action'] ?? '';
 
+// ─── rsform_show_cols : show columns of a rsform table ────────────
+if ($action === 'rsform_show_cols') {
+    $table = preg_replace('/[^a-z_]/', '', $_GET['table'] ?? '');
+    if (!$table) { echo json_encode(['error'=>'table required']); exit; }
+    $stmt = $pdo->query("SHOW COLUMNS FROM {$pfx}{$table}");
+    $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    echo json_encode(['ok'=>true,'cols'=>$cols]);
+    exit;
+}
+
 if ($action === 'slice') {
     $id = (int)($_GET['id'] ?? 173);
     $from = (int)($_GET['from'] ?? 0);
@@ -683,6 +693,43 @@ if ($action === 'list_plugins') {
 }
 
 
+// ─── rsform_list : list RSForm Pro forms with thank-you config ──────────
+if ($action === 'rsform_list') {
+    try {
+        $stmt = $pdo->query("SELECT * FROM {$pfx}rsform_forms ORDER BY FormId LIMIT 10");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'forms'=>$rows], JSON_UNESCAPED_UNICODE);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
+// ─── rsform_set_thankyou : update ThankyouMessage for a form ──────────
+if ($action === 'rsform_set_thankyou') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $form_id = (int)($body['form_id'] ?? 0);
+    $message = $body['message'] ?? '';
+    if (!$form_id) { echo json_encode(['error'=>'form_id required']); exit; }
+    $stmt = $pdo->prepare("UPDATE {$pfx}rsform_forms SET Thankyou=? WHERE FormId=?");
+    $stmt->execute([$message, $form_id]);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
+// ─── rse_set_after_subscribe : set after_subscribe HTML for events ──────────
+if ($action === 'rse_set_after_subscribe') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $ids = isset($body['ids']) ? $body['ids'] : [];
+    $html = isset($body['html']) ? $body['html'] : '';
+    if (empty($ids) || $html === '') { echo json_encode(['error'=>'ids and html required']); exit; }
+    $ids_clean = array_map('intval', $ids);
+    $placeholders = implode(',', array_fill(0, count($ids_clean), '?'));
+    $stmt = $pdo->prepare("UPDATE {$pfx}rseventspro_events SET after_subscribe=? WHERE id IN ($placeholders)");
+    $params = array_merge([$html], $ids_clean);
+    $stmt->execute($params);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()]);
+    exit;
+}
+
 // ─── rse_events : list/update RSEvents Pro events ────────────────────
 if ($action === 'rse_events') {
     try {
@@ -798,7 +845,7 @@ if ($action === 'rsform_form_property') {
     $col     = $_GET['col'] ?? '';
     $raw     = file_get_contents('php://input');
     $body    = json_decode($raw, true);
-    $allowed_cols = ['ScriptBeforeDisplay','ScriptBeforeValidation','ScriptProcess','JS','CSS'];
+    $allowed_cols = ['ScriptBeforeDisplay','ScriptBeforeValidation','ScriptProcess','ScriptProcess2','JS','CSS'];
     if (!$form_id || !$col || !in_array($col, $allowed_cols)) { echo json_encode(['error'=>'invalid']); exit; }
     try {
         if ($body && isset($body['value'])) {
@@ -815,7 +862,48 @@ if ($action === 'rsform_form_property') {
 }
 
 
+// ─── rsform_set_translation : upsert a translated field for a form ──────
+if ($action === 'rsform_set_translation') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $form_id   = (int)($body['form_id'] ?? 0);
+    $field     = $body['field'] ?? '';   // e.g. 'Thankyou'
+    $lang      = $body['lang'] ?? '';    // e.g. 'zh-CN'
+    $value     = $body['value'] ?? '';
+    if (!$form_id || !$field || !$lang) { echo json_encode(['error'=>'form_id, field, lang required']); exit; }
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM {$pfx}rsform_translations WHERE form_id=? AND lang_code=? AND reference=? AND reference_id=?");
+        $stmt->execute([$form_id, $lang, 'forms', $field]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $pdo->prepare("UPDATE {$pfx}rsform_translations SET value=? WHERE id=?")->execute([$value, $row['id']]);
+            echo json_encode(['ok'=>true,'action'=>'update','id'=>$row['id']]);
+        } else {
+            $pdo->prepare("INSERT INTO {$pfx}rsform_translations (form_id, lang_code, reference, reference_id, value) VALUES (?,?,?,?,?)")->execute([$form_id,$lang,'forms',$field,$value]);
+            echo json_encode(['ok'=>true,'action'=>'insert','id'=>$pdo->lastInsertId()]);
+        }
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 // ─── rsform_all_props : get all properties for a component ────────────
+// ─── rsform_last_submission : show field names from last submission ──
+if ($action === 'rsform_last_submission') {
+    $form_id = (int)($_GET['form_id'] ?? 0);
+    if (!$form_id) { echo json_encode(['error'=>'form_id required']); exit; }
+    try {
+        $stmt = $pdo->prepare("SELECT SubmissionId FROM {$pfx}rsform_submissions WHERE FormId=? ORDER BY SubmissionId DESC LIMIT 1");
+        $stmt->execute([$form_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) { echo json_encode(['error'=>'no submissions']); exit; }
+        $sid = $row['SubmissionId'];
+        $stmt2 = $pdo->prepare("SELECT FieldName, FieldValue FROM {$pfx}rsform_submission_values WHERE SubmissionId=?");
+        $stmt2->execute([$sid]);
+        $vals = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['ok'=>true,'submission_id'=>$sid,'values'=>$vals], JSON_UNESCAPED_UNICODE);
+    } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
+    exit;
+}
+
 if ($action === 'rsform_all_props') {
     $comp_id = (int)($_GET['comp_id'] ?? 0);
     try {
