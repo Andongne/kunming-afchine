@@ -383,3 +383,84 @@
     background-color: transparent !important;
     background-image: none !important;
 }
+/* ══════════════════════════════════════════════════════════════════
+   RSEvents Pro — Cartes événements : style calendrier
+   ══════════════════════════════════════════════════════════════════ */
+
+li.rs_event_detail { overflow: hidden; }
+li.rs_event_detail .rs_event_details { overflow: hidden; }
+.rsepro-reg-closed { vertical-align: middle; }
+.rsepro-reg-deadline {
+  display: block; font-size: 0.82rem; color: #888; margin-top: 2px; font-weight: 400;
+}
+
+ul.rs_events_container li.rs_event_detail {
+  background: #fff5f6 !important; border-radius: 8px !important;
+  padding: 18px 20px 18px 16px !important; margin-bottom: 12px !important;
+  border: 1px solid #f0cdd2 !important; box-shadow: none !important; overflow: hidden;
+}
+ul.rs_events_container li.rs_event_detail:hover { background: #ffe8ec !important; }
+ul.rs_events_container .rs_event_image { float: left; margin-right: 20px; padding: 0; width: 100px; }
+ul.rs_events_container .rs_event_image img { width: 100px !important; height: auto; border-radius: 4px; }
+ul.rs_events_container .rs_event_details { overflow: hidden; line-height: 1.5; }
+ul.rs_events_container .rsepro-title-block { font-size: 1.25rem !important; font-weight: 700; margin-bottom: 4px; }
+ul.rs_events_container .rsepro-title-block a { color: #DA002E !important; font-size: 1.25rem; font-weight: 700; text-decoration: none; }
+ul.rs_events_container .rsepro-title-block a:hover { text-decoration: underline; }
+ul.rs_events_container .rsepro-date-block { font-size: 1.05rem; margin-bottom: 2px; }
+ul.rs_events_container .rsepro-date-block b { font-size: 1.1rem; }
+ul.rs_events_container .rsepro-event-location-block { font-size: 1rem; display: block; margin-bottom: 2px; }
+ul.rs_events_container .rsepro-event-location-block a { color: #DA002E !important; text-decoration: none; }
+ul.rs_events_container .rsepro-event-location-block a:hover { text-decoration: underline; }
+ul.rs_events_container .rsepro-small-description-block { font-size: 0.97rem; color: #555; margin-top: 3px; text-align: left !important; }
+ul.rs_events_container .rsepro-reg-deadline { font-size: 0.88rem !important; color: #888 !important; display: block !important; margin-top: 0 !important; margin-bottom: 4px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   RSForm Pro — Formulaire inscription tests de langue
+   ══════════════════════════════════════════════════════════════════ */
+
+.rsform .formContainer {
+  background: #fff5f6 !important; border: 1.5px solid #f0cdd2 !important;
+  border-radius: 10px !important; padding: 28px 32px !important;
+  box-shadow: 0 2px 12px rgba(218,0,46,.06) !important;
+}
+.rsform .rsform-block { margin-bottom: 18px; }
+.rsform .formControlLabel {
+  font-size: 0.9rem !important; font-weight: 600 !important; color: #333 !important;
+  margin-bottom: 5px !important; display: block; letter-spacing: .01em;
+}
+.rsform .formRequired { color: #DA002E !important; font-weight: 700; margin-left: 2px; }
+.rsform .rsform-input-box,
+.rsform textarea.rsform-input-box {
+  background: #ffffff !important; border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important; padding: 9px 12px !important;
+  font-size: 0.95rem !important; color: #222 !important; width: 100% !important;
+  box-sizing: border-box; transition: border-color .2s, box-shadow .2s;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.05);
+}
+.rsform .rsform-input-box:focus,
+.rsform textarea.rsform-input-box:focus {
+  border-color: #DA002E !important; outline: none !important;
+  box-shadow: 0 0 0 3px rgba(218,0,46,.12), inset 0 1px 3px rgba(0,0,0,.04) !important;
+}
+.rsform .rsform-select-box {
+  background: #ffffff !important; border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important; padding: 9px 12px !important;
+  font-size: 0.95rem !important; color: #222 !important; width: 100% !important;
+  box-sizing: border-box; cursor: pointer; transition: border-color .2s;
+}
+.rsform .rsform-select-box:focus { border-color: #DA002E !important; outline: none !important; box-shadow: 0 0 0 3px rgba(218,0,46,.12) !important; }
+.rsform .rsform-select-box:hover { border-color: #b8808a !important; }
+.rsform input[type="checkbox"] { accent-color: #DA002E; width: 16px; height: 16px; margin-right: 8px; vertical-align: middle; cursor: pointer; }
+.rsform .formDescription, .rsform small { font-size: 0.82rem !important; color: #888 !important; margin-top: 4px; display: block; }
+.rsform .rsform-error, .rsform .formError { color: #DA002E !important; font-size: 0.83rem !important; font-weight: 600; margin-top: 4px; display: block; }
+.rsform-block-soumettre .formBody input[type="submit"],
+.rsform-block-soumettre .formBody button {
+  background: #DA002E !important; color: #fff !important; border: none !important;
+  border-radius: 6px !important; padding: 12px 36px !important;
+  font-size: 1rem !important; font-weight: 700 !important;
+  letter-spacing: .03em; cursor: pointer; transition: background .2s, transform .1s;
+}
+.rsform-block-soumettre .formBody input[type="submit"]:hover,
+.rsform-block-soumettre .formBody button:hover {
+  background: #b5001f !important; transform: translateY(-1px);
+}

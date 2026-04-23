@@ -1,0 +1,610 @@
+html body #sp-header {
+  height: 140px !important;
+  overflow: visible !important;
+  border-bottom: 1px solid #eaeaea; /* Pour éviter la ligne qui dépasse */
+}
+
+/* Logo centré verticalement */
+html body #sp-header .logo {
+  height: 140px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* Image dans le logo */
+html body #sp-header .logo img {
+  max-height: 100%;
+  height: auto;
+}
+
+/* Toggler mobile */
+html body #offcanvas-toggler {
+  height: 140px !important;
+  line-height: 140px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* Menu principal centré verticalement */
+#sp-menu {
+  height: 140px;
+  display: flex;
+  align-items: center;
+}
+
+/* Liens de menu */
+#sp-menu .sp-megamenu-parent > li > a {
+  padding: 0 15px;
+  display: inline-block;
+  line-height: normal;
+}
+
+/* Menu déroulant */
+.sp-dropdown {
+  max-width: 600px;
+  min-width: 180px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* --- Responsive : hauteur réduite sur mobile à 80px --- */
+@media (max-width: 768px) {
+  html body #sp-header {
+    height: 80px !important;
+  }
+
+  html body #sp-header .logo {
+    height: 80px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  html body #sp-header .logo img {
+    max-height: 100%;
+  }
+
+  html body #offcanvas-toggler {
+    height: 80px !important;
+    line-height: 80px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  #sp-menu {
+    height: 80px;
+    align-items: center;
+  }
+
+  #sp-menu .sp-megamenu-parent > li > a {
+    padding: 0 10px;
+  }
+}
+
+/* === RSEvents Pro — Vue liste — Mobile === */
+@media (max-width: 767px) {
+  /* Masquer image par défaut (vide) sur mobile */
+  .rs_event_image { display: none !important; }
+
+  /* Détails pleine largeur */
+  .rs_event_details {
+    width: 100% !important;
+    padding-left: 0 !important;
+  }
+
+  /* Carte événement : layout vertical, padding confortable */
+  .rs_event_detail {
+    display: block !important;
+    padding: 14px 12px !important;
+    border-bottom: 1px solid #e8e8e8;
+    background: #fff;
+    margin-bottom: 8px !important;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+
+  /* Titre événement */
+  .rsepro-title-block a {
+    font-size: 1rem !important;
+    font-weight: 700;
+    line-height: 1.35;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Infos date / lieu — plus lisibles */
+  .rs_event_details .rs_event_date,
+  .rs_event_details .rsepro-date-block,
+  .rs_event_details .rsepro-location-block,
+  .rs_event_details .rs_event_location {
+    font-size: .9rem !important;
+    margin-bottom: 4px;
+  }
+
+  /* Bouton / lien d'inscription */
+  .rs_event_details .rsform-submit-btn,
+  .rs_event_details a.btn {
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* Conteneur liste */
+  .rsepro-events-list-container ul {
+    padding-left: 0 !important;
+    list-style: none;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   RSForm Pro — Responsive petit écran (iPhone 15 etc. ≤ 650px)
+   ══════════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 650px) {
+
+  /* Réduction padding conteneur */
+  .rsform .formContainer {
+    padding: 18px 14px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Label au-dessus du champ (empilage vertical) */
+  .formResponsive .formHorizontal .formControlLabel {
+    float: none !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding-top: 0 !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+  }
+
+  /* Zone input : supprimer la marge gauche liée au float du label */
+  .formResponsive .formHorizontal .formControls {
+    margin-left: 0 !important;
+  }
+
+  /* Inputs, selects, textarea : pleine largeur */
+  .formResponsive input[type="text"],
+  .formResponsive input[type="email"],
+  .formResponsive input[type="tel"],
+  .formResponsive input[type="password"],
+  .formResponsive input[type="number"],
+  .formResponsive textarea,
+  .formResponsive select,
+  .formResponsive .rsform-input-box,
+  .formResponsive .rsform-select-box {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Colonnes SPPB (formSpan) : toujours pleine largeur */
+  .formResponsive .formRow [class*="formSpan"] {
+    width: 100% !important;
+    margin-left: 0 !important;
+    float: none !important;
+  }
+
+  /* Bloc date de naissance : selects côte à côte mais adaptés */
+  .rsform-block-birth-date .rsform-select-box-small {
+    width: 30% !important;
+    min-width: 70px !important;
+    margin-right: 2% !important;
+  }
+
+  /* Upload fichier : mise en page compacte */
+  .rsform-type-fileupload .formBody {
+    font-size: 0.88rem !important;
+  }
+
+  /* Bloc bouton soumettre : centré, pleine largeur */
+  .rsform-block-soumettre .formBody {
+    text-align: center;
+  }
+  .rsform-block-soumettre .formBody input[type="submit"],
+  .rsform-block-soumettre .formBody button {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    font-size: 1rem !important;
+  }
+
+  /* Description / aide : légèrement réduite */
+  .rsform .formDescription {
+    font-size: 0.8rem !important;
+  }
+
+  /* Blocs RSForm : espacement plus compact */
+  .rsform .rsform-block {
+    margin-bottom: 14px !important;
+  }
+}
+/* ============================================================
+   ESPACEMENTS PAGE D'ACCUEIL — via custom_css (prioritaire sur SP Builder)
+   ============================================================ */
+
+/* Hero */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c {
+  padding-top: 70px !important;
+  padding-bottom: 30px !important;
+}
+
+/* Subtitle "Apprendre, progresser, certifier" */
+#section-id-7b135ebc-3dec-40c3-a895-768fefceb723 {
+  padding-top: 70px !important;
+  padding-bottom: 10px !important;
+}
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h1,
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h2,
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* TCF Canada + Cours */
+#section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 {
+  padding-top: 25px !important;
+  padding-bottom: 20px !important;
+}
+
+/* Méthode + Offre */
+#section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 {
+  padding-top: 15px !important;
+  padding-bottom: 20px !important;
+}
+
+/* Brochure */
+#section-id-57fab408-2f51-45ae-8949-8c19a6485f01 {
+  padding-top: 25px !important;
+}
+
+/* Actualités & Événements */
+#section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062 {
+  padding-bottom: 0px !important;
+}
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h1,
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h2,
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Nos Tests de langues — titre */
+#section-id-807fb343-9377-4821-8c30-95c0c194541d {
+  padding-top: 10px !important;
+  padding-bottom: 0px !important;
+  min-height: 0 !important;
+}
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h1,
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h2,
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* TEF Canada + TCF Québec */
+#section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
+  padding-top: 5px !important;
+  padding-bottom: 20px !important;
+}
+
+/* Ev@lang + DFP */
+#section-id-3c5f74e8-345c-4f8d-b473-58a361ae5012 {
+  padding-bottom: 40px !important;
+}
+
+/* S'entraîner à un test de langue — titre */
+#section-id-80e216e1-3493-4773-887f-e6e68f7f211d {
+  padding-bottom: 0px !important;
+  min-height: 0 !important;
+}
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h1,
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h2,
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Section après S'entraîner */
+#section-id-6f2911e6-2809-43b0-8ed3-51ec77bac1cf {
+  padding-top: 5px !important;
+}
+/* Hero — centrage du titre */
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h1,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h2,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h3 {
+  text-align: left !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Hero — section contenu (Bienvenue + Sessions) */
+body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
+.sp-page-builder #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+  padding-top: 30px !important;
+  padding-bottom: 160px !important;
+  margin-bottom: 40px !important;
+}
+/* ============================================================
+   HÉRO — titre et layout
+   ============================================================ */
+
+/* Section titre */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c {
+  padding-top: 70px !important;
+  padding-bottom: 30px !important;
+}
+
+/* Titre H1 — centré, grande taille, police du site */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c h1.sppb-addon-title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #DA002E;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Section contenu */
+body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
+.sp-page-builder #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+  padding-top: 30px !important;
+  padding-bottom: 160px !important;
+  margin-bottom: 40px !important;
+}
+
+/* Colonne gauche — alignement gauche */
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f,
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f * {
+  text-align: left !important;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f {
+  padding-right: 2.5rem;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f h2.sppb-addon-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #DA002E;
+  margin-bottom: 2px;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f h3.sppb-addon-title {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #444;
+  margin-bottom: 14px;
+}
+
+/* Colonne droite — carte Sessions */
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee .sppb-column {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  padding: 28px 24px 22px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee *,
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee h3.sppb-addon-title {
+  text-align: left !important;
+}
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee h3.sppb-addon-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #DA002E;
+  margin-bottom: 14px;
+}
+/* ══════════════════════════════════════════════════════════════════
+   RSEvents Pro — Cartes événements : style calendrier
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Fix overflow description hors carte */
+li.rs_event_detail { overflow: hidden; }
+li.rs_event_detail .rs_event_details { overflow: hidden; }
+
+/* Badge inscriptions fermées */
+.rsepro-reg-closed { vertical-align: middle; }
+
+/* Deadline — style discret */
+.rsepro-reg-deadline {
+  display: block;
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* Carte événement */
+ul.rs_events_container li.rs_event_detail {
+  background: #fff5f6 !important;
+  border-radius: 8px !important;
+  padding: 18px 20px 18px 16px !important;
+  margin-bottom: 12px !important;
+  border: 1px solid #f0cdd2 !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+ul.rs_events_container li.rs_event_detail:hover {
+  background: #ffe8ec !important;
+}
+
+/* Image */
+ul.rs_events_container .rs_event_image {
+  float: left;
+  margin-right: 20px;
+  padding: 0;
+  width: 100px;
+  flex-shrink: 0;
+}
+ul.rs_events_container .rs_event_image img {
+  width: 100px !important;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Bloc détails */
+ul.rs_events_container .rs_event_details {
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+/* Titre */
+ul.rs_events_container .rsepro-title-block {
+  font-size: 1.25rem !important;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+ul.rs_events_container .rsepro-title-block a {
+  color: #DA002E !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+ul.rs_events_container .rsepro-title-block a:hover { text-decoration: underline; }
+
+/* Date */
+ul.rs_events_container .rsepro-date-block { font-size: 1.05rem; margin-bottom: 2px; }
+ul.rs_events_container .rsepro-date-block b { font-size: 1.1rem; }
+
+/* Lieu */
+ul.rs_events_container .rsepro-event-location-block {
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 2px;
+}
+ul.rs_events_container .rsepro-event-location-block a {
+  color: #DA002E !important;
+  text-decoration: none;
+}
+ul.rs_events_container .rsepro-event-location-block a:hover { text-decoration: underline; }
+
+/* Description courte */
+ul.rs_events_container .rsepro-small-description-block {
+  font-size: 0.97rem;
+  color: #555;
+  margin-top: 3px;
+  text-align: left !important;
+}
+
+/* Deadline / inscription fermée */
+ul.rs_events_container .rsepro-reg-deadline {
+  font-size: 0.88rem !important;
+  color: #888 !important;
+  display: block !important;
+  margin-top: 0 !important;
+  margin-bottom: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RSForm Pro — Formulaire inscription tests de langue
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Conteneur principal */
+.rsform .formContainer {
+  background: #fff5f6 !important;
+  border: 1.5px solid #f0cdd2 !important;
+  border-radius: 10px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 12px rgba(218,0,46,.06) !important;
+}
+
+/* Blocs de champ */
+.rsform .rsform-block { margin-bottom: 18px; }
+
+/* Labels */
+.rsform .formControlLabel {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin-bottom: 5px !important;
+  display: block;
+  letter-spacing: .01em;
+}
+
+/* Étoile requis */
+.rsform .formRequired { color: #DA002E !important; font-weight: 700; margin-left: 2px; }
+
+/* Inputs texte */
+.rsform .rsform-input-box,
+.rsform textarea.rsform-input-box {
+  background: #ffffff !important;
+  border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important;
+  padding: 9px 12px !important;
+  font-size: 0.95rem !important;
+  color: #222 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.05);
+}
+.rsform .rsform-input-box:focus,
+.rsform textarea.rsform-input-box:focus {
+  border-color: #DA002E !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(218,0,46,.12), inset 0 1px 3px rgba(0,0,0,.04) !important;
+}
+
+/* Selects */
+.rsform .rsform-select-box {
+  background: #ffffff !important;
+  border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important;
+  padding: 9px 12px !important;
+  font-size: 0.95rem !important;
+  color: #222 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.rsform .rsform-select-box:focus {
+  border-color: #DA002E !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(218,0,46,.12) !important;
+}
+.rsform .rsform-select-box:hover { border-color: #b8808a !important; }
+
+/* Checkbox */
+.rsform input[type="checkbox"] {
+  accent-color: #DA002E;
+  width: 16px; height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* Texte d'aide */
+.rsform .formDescription,
+.rsform small {
+  font-size: 0.82rem !important;
+  color: #888 !important;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Erreurs */
+.rsform .rsform-error,
+.rsform .formError {
+  color: #DA002E !important;
+  font-size: 0.83rem !important;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Bouton soumettre */
+.rsform-block-soumettre .formBody input[type="submit"],
+.rsform-block-soumettre .formBody button {
+  background: #DA002E !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 12px 36px !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .03em;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.rsform-block-soumettre .formBody input[type="submit"]:hover,
+.rsform-block-soumettre .formBody button:hover {
+  background: #b5001f !important;
+  transform: translateY(-1px);
+}
