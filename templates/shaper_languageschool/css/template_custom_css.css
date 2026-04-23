@@ -608,3 +608,12 @@ ul.rs_events_container .rsepro-reg-deadline {
   background: #b5001f !important;
   transform: translateY(-1px);
 }
+
+/* ── Hover images SP Builder ─────────────────────────────────────── */
+.sp-page-builder .page-content a img {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.sp-page-builder .page-content a:hover img {
+  transform: scale(1.03);
+  opacity: 0.88;
+}
