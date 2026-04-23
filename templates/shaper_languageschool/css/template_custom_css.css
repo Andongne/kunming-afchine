@@ -617,3 +617,93 @@ ul.rs_events_container .rsepro-reg-deadline {
   transform: scale(1.03);
   opacity: 0.88;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   HÉRO — Responsive mobile (≤ 767px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Sections héro : image couvre bien, hauteur min, pas de fixed */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c,
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-attachment: scroll !important;
+    min-height: 0 !important;
+  }
+
+  /* Section titre */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c {
+    padding-top: 30px !important;
+    padding-bottom: 10px !important;
+  }
+
+  /* H1 — réduction forte + pas de débordement */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c .sppb-addon-title,
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c h1,
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Section contenu Bienvenue+Sessions */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    padding-top: 20px !important;
+    padding-bottom: 30px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Titres Bienvenue */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 .sppb-addon-title {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CARTES — Boutons centrés + blocs Retour/Presse/Blog (mobile)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Cartes article (Retour en images / On parle de nous / Blog TCF) */
+  .sppb-addon-content .sppb-addon-title,
+  .sppb-addon-header .sppb-addon-title {
+    font-size: 1.05rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Section Retour en images */
+  #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-col-md-4,
+  #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-col-sm-4 {
+    margin-bottom: 24px !important;
+  }
+
+  /* Section Blog TCF Canada (mobile uniquement) */
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-col-md-4,
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-col-sm-4 {
+    margin-bottom: 24px !important;
+  }
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-addon-title {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+  }
+
+  /* Texte date / méta des articles */
+  .sppb-article-date,
+  .sppb-article-meta,
+  .sppb-addon-content small {
+    font-size: 0.82rem !important;
+    color: #888 !important;
+  }
+
+  /* Intro text des cartes — espacement et lisibilité */
+  .sppb-addon-content .sppb-addon-text p,
+  .sppb-addon-text p {
+    font-size: 0.92rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 10px !important;
+  }
+}
