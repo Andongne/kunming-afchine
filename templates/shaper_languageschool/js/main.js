@@ -243,6 +243,15 @@ jQuery(function ($) {
     'Entra\u00eenement au TEF (Canada/Qu\u00e9bec)':'TEF Canada & TEFAQ Practice',
     'Pr\u00e9paration TCF Canada':'TCF Canada Preparation',
     'Inscription aux Tests de Langue':'Language Test Registration',
+    
+    'Test officiel de fran\u00e7ais pour l\u2019immigration et la citoyennet\u00e9 au Canada':'Official French test for immigration and Canadian citizenship.',
+    'Test officiel de fran\u00e7ais pour l\u2019immigration et la citoyennet\u00e9 canadienne':'Official French test for immigration and Canadian citizenship.',
+    'Test officiel de fran\u00e7ais pour l\u2019immigration au Qu\u00e9bec':'Official French test for immigration to Qu\u00e9bec.',
+    'Foire aux questions \u2013 Test de fran\u00e7ais pour l\u2019immigration et la citoyennet\u00e9 canadienne':'Frequently Asked Questions \u2013 French tests for immigration.',
+    'Niveau A1 \u2013 Premiers pas en fran\u00e7ais':'Level A1 \u2013 First steps in French',
+    'Pr\u00e9paration tests de langue':'Language Test Preparation',
+    'Inscriptions ferm\u00e9es':'Registrations closed',
+    'Nos \u00c9v\u00e9nements !':'Our Events!',
     'Nos Blogs':'Our Blog',
     'Cond[ui]tion G\u00e9n\u00e9rales de ventes':'General Terms and Conditions'
   };
