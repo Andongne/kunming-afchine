@@ -26,7 +26,25 @@ jQuery(function ($) {
                         $('.nav-placeholder').height('inherit');
                     }
                 }
-            };
+            
+    'Notre méthode':'Our Teaching Method',
+    'Nos tests de français':'Our French Language Tests',
+    'Notre équipe':'Our Team',
+    'Qui sommes-nous ?':'Who are we?',
+    'Qui sommes-nous ':'Who are we?',
+    'Nous rejoindre':'Join Us',
+    'On parle de nous':'In the News',
+    'Nos Événements !':'Our Events!',
+    'Notre offre de cours':'Our Course Offering',
+    'Certifications et diplômes':'Certifications & Diplomas',
+    'S’entrainer au TCF Canada':'Practise for TCF Canada',
+    'Entraînement au TCF (Canada/Québec)':'TCF Canada & Québec Practice',
+    'Entraînement au TEF (Canada/Québec)':'TEF Canada & TEFAQ Practice',
+    'Blog TCF Canada':'TCF Canada Blog',
+    'Actualités':'News',
+    'Formulaire d’inscription':'Registration Form',
+    'Nos Blogs':'Our Blog',
+  };
             stickyHeader();
             $(window).scroll(function () {
                 stickyHeader();
