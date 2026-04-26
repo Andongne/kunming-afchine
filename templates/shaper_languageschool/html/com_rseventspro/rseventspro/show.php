@@ -66,6 +66,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
+// AFK: charger les strings de langue selon &lang= si différent du contexte
+$_afk_url_lang = Factory::getApplication()->input->get('lang', '');
+if ($_afk_url_lang && $_afk_url_lang !== 'fr-FR') {
+    Factory::getLanguage()->load('com_rseventspro', JPATH_SITE, $_afk_url_lang, true, false);
+}
+
 $details	= rseventsproHelper::details($this->event->id, null, true);
 $event		= $details['event'];
 $categories = $details['categories'];
