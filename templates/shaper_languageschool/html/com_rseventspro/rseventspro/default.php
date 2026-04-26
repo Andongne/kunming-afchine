@@ -13,6 +13,21 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
+// AFK: détecter langue URL param ou cookie FaLang
+$_afk_list_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
+
+function afk_event_url($event_id, $event_name, $lang) {
+    $sef = rseventsproHelper::sef($event_id, $event_name);
+    $itemid = rseventsproHelper::itemid($event_id);
+    $url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.$sef, false, $itemid);
+    if ($lang && $lang !== 'fr-FR' && $lang !== '*') {
+        // Retirer préfixe langue /xx-XX/ ou /xx/ qui cause 404, ajouter &lang= à la place
+        $url = preg_replace('#^(/[a-z]{2}(-[A-Z]{2})?)/#', '/', $url);
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . 'lang=' . urlencode($lang);
+    }
+    return $url;
+}
+
 Text::script('COM_RSEVENTSPRO_GLOBAL_FREE');
 $count = count($this->events);
 $rss = $this->params->get('rss',1);
@@ -148,7 +163,7 @@ $ical = $this->params->get('ical',1); ?>
 
             <?php if (!empty($event->options['show_icon_list'])) { ?>
             <div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
-                <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="thumbnail" aria-label="<?php echo $event->name; ?>">
+                <a href="<?php echo afk_event_url($event->id,$event->name,$_afk_list_lang); ?>" class="thumbnail" aria-label="<?php echo $event->name; ?>">
                     <img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>" alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
                 </a>
             </div>
@@ -156,7 +171,7 @@ $ical = $this->params->get('ical',1); ?>
 
             <div class="<?php echo rseventsproHelper::layout('event-details-container'); ?>">
                 <div itemprop="name" class="<?php echo rseventsproHelper::layout('event-title'); ?>">
-                    <a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></a>
+                    <a itemprop="url" href="<?php echo afk_event_url($event->id,$event->name,$_afk_list_lang); ?>" class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></a>
                     <?php if ($_regClosed): ?>
                         <span class="rsepro-reg-closed" style="display:inline-block;margin-left:8px;padding:2px 8px;background:#da002e;color:#fff;border-radius:3px;font-size:0.78rem;font-weight:600;vertical-align:middle;"><?php echo (strpos(Factory::getApplication()->getLanguage()->getTag(),'zh')===0) ? '报名已截止' : 'Inscriptions fermées'; ?></span>
                     <?php elseif ($_endReg > 0): ?>
