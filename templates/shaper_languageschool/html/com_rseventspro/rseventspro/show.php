@@ -34,18 +34,24 @@ function afk_falang_translate($table, $id, $field, $default) {
 // AFK: mois localises selon langue
 function afk_localize_date($date_str) {
     $lang = JFactory::getLanguage()->getTag();
+    // Lire aussi le param URL &lang=
+    $url_lang = \Joomla\CMS\Factory::getApplication()->input->get('lang', '');
+    if ($url_lang) $lang = $url_lang;
     $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    $fr = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
     if (strpos($lang, 'zh') !== false) {
         $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+        // Remplacer mois anglais ET français
         $r = str_replace($en, $zh, $date_str);
+        $r = str_ireplace($fr, $zh, $r);
         // Reformater "24 4月 2026" → "2026年4月24日"
         if (preg_match('/^(\d+)\s+([\d]+月)\s+(\d{4})/', $r, $m)) {
             return $m[3] . '年' . $m[2] . $m[1] . '日';
         }
         return $r;
     }
-    $fr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-    return str_replace($en, $fr, $date_str);
+    $fr_lower = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    return str_replace($en, $fr_lower, $date_str);
 }
 /**
 * @package RSEvents!Pro
