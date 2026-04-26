@@ -16,6 +16,23 @@ use Joomla\CMS\Factory;
 // AFK: détecter langue URL param ou cookie FaLang
 $_afk_list_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
 
+// AFK: localiser les mois dans les chaînes de date
+function afk_localize_date_list($str, $lang) {
+    $fr = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre',
+           'janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    if (strpos($lang,'zh') !== false) {
+        $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月',
+               '1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+        return str_replace($fr, $zh, $str);
+    }
+    if (strpos($lang,'en') !== false) {
+        $en = ['January','February','March','April','May','June','July','August','September','October','November','December',
+               'January','February','March','April','May','June','July','August','September','October','November','December'];
+        return str_replace($fr, $en, $str);
+    }
+    return $str;
+}
+
 // Map lang tag → préfixe URL court
 function afk_lang_prefix($lang) {
     $map = ['zh-CN' => 'zh', 'en-GB' => 'en', 'en' => 'en'];
