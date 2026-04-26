@@ -94,6 +94,10 @@ $modal		= rseventsproHelper::getConfig('modaltype','int');
 $tmpl		= $links == 0 ? '' : '&tmpl=component';
 
 $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=subscribe&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
+// AFK: surcharger le lien d'inscription selon la langue
+if (isset($_afk_url_lang) && strpos($_afk_url_lang, 'zh') !== false) {
+    $subscribeURL = 'https://kunming-afchine.org/zh/ren-zheng-yu-wen-ping/bao-ming-can-jia-kao-shi/fa-yu-kao-shi-bao-ming-biao';
+}
 $waitinglistURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=waiting&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $inviteURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=invite&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $messageURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=message&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
