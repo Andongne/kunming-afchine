@@ -16,14 +16,20 @@ use Joomla\CMS\Factory;
 // AFK: détecter langue URL param ou cookie FaLang
 $_afk_list_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
 
+// Map lang tag → préfixe URL court
+function afk_lang_prefix($lang) {
+    $map = ['zh-CN' => 'zh', 'en-GB' => 'en', 'en' => 'en'];
+    return $map[$lang] ?? '';
+}
 function afk_event_url($event_id, $event_name, $lang) {
     $sef = rseventsproHelper::sef($event_id, $event_name);
     $itemid = rseventsproHelper::itemid($event_id);
     $url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.$sef, false, $itemid);
-    if ($lang && $lang !== 'fr-FR' && $lang !== '*') {
-        // Retirer préfixe langue /xx-XX/ ou /xx/ qui cause 404, ajouter &lang= à la place
-        $url = preg_replace('#^(/[a-z]{2}(-[A-Z]{2})?)/#', '/', $url);
-        $url .= (strpos($url, '?') !== false ? '&' : '?') . 'lang=' . urlencode($lang);
+    $prefix = afk_lang_prefix($lang);
+    if ($prefix) {
+        // Retirer préfixe existant /xx-XX/ ou /xx/ puis ajouter le bon
+        $url = preg_replace('#^(/[a-zA-Z-]{2,5})/#', '/', $url);
+        $url = '/' . $prefix . $url;
     }
     return $url;
 }

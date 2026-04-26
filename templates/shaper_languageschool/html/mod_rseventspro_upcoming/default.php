@@ -29,13 +29,14 @@ $_lang_param = ($_lang && $_lang !== 'fr-FR' && $_lang !== '*') ? '&lang=' . htm
 		<li class="<?php echo RSEventsproAdapterGrid::column(12 / $columns); ?>">
 			<?php
 			$_sef = rseventsproHelper::sef($event->id, $event->name);
-			if ($_lang && $_lang !== 'fr-FR' && $_lang !== '*') {
-				$_base_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $_sef, true, $itemid);
-				// Retirer le préfixe langue /zh-cn/ ou /en/ qui cause un 404, ajouter &lang= à la place
-				$_base_url = preg_replace('#^(/[a-z]{2}(-[A-Z]{2})?/)#', '/', $_base_url);
-				$_event_url = $_base_url . (strpos($_base_url, '?') !== false ? '&' : '?') . 'lang=' . htmlspecialchars($_lang);
+			$_prefix_map = ['zh-CN' => 'zh', 'en-GB' => 'en', 'en' => 'en'];
+			$_prefix = $_prefix_map[$_lang] ?? '';
+			$_base_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $_sef, true, $itemid);
+			if ($_prefix) {
+				$_base_url = preg_replace('#^(/[a-zA-Z-]{2,5})/#', '/', $_base_url);
+				$_event_url = '/' . $_prefix . $_base_url;
 			} else {
-				$_event_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $_sef, true, $itemid);
+				$_event_url = $_base_url;
 			}
 			?>
 			<a <?php echo $open; ?> href="<?php echo $_event_url; ?>"><?php echo $event->name; ?></a><?php if ($_regClosed): ?><span class="reg-closed-badge">Inscriptions fermées</span><?php endif; ?> <?php if ($event->published == 3) { ?><small class="text-error">(<?php echo Text::_('MOD_RSEVENTSPRO_UPCOMING_CANCELED'); ?>)</small><?php } ?>
