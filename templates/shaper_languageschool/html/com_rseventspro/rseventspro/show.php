@@ -11,7 +11,7 @@ function afk_falang_translate($table, $id, $field, $default) {
         $url_lang = \Joomla\CMS\Factory::getApplication()->input->get('lang', '');
         if ($url_lang) $lang = $url_lang;
         // Mapping connu : zh-CN = 4, en-GB = 1 (Falang site AF Kunming)
-        $map = ['zh-CN' => 4, 'en-GB' => 1, 'en' => 1];
+        $map = ['zh-CN' => 4, 'en-GB' => 1, 'en' => 1, 'en-US' => 1];
         $lang_id = 0;
         foreach ($map as $k => $v) {
             if (strpos($lang, $k) === 0) { $lang_id = $v; break; }
@@ -47,6 +47,15 @@ function afk_localize_date($date_str) {
         // Reformater "24 4月 2026" → "2026年4月24日"
         if (preg_match('/^(\d+)\s+([\d]+月)\s+(\d{4})/', $r, $m)) {
             return $m[3] . '年' . $m[2] . $m[1] . '日';
+        }
+        return $r;
+    }
+    if (strpos($lang, 'en') !== false) {
+        // Convertir mois français en anglais et reformater
+        $r = str_ireplace($fr, $en, $date_str);
+        // Reformater "24 April 2026" → "April 24, 2026"
+        if (preg_match('/^(\d+)\s+([A-Za-z]+)\s+(\d{4})/', $r, $m)) {
+            return $m[2] . ' ' . $m[1] . ', ' . $m[3];
         }
         return $r;
     }
@@ -97,6 +106,8 @@ $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventspro
 // AFK: surcharger le lien d'inscription selon la langue
 if (isset($_afk_url_lang) && strpos($_afk_url_lang, 'zh') !== false) {
     $subscribeURL = 'https://kunming-afchine.org/zh/ren-zheng-yu-wen-ping/bao-ming-can-jia-kao-shi/fa-yu-kao-shi-bao-ming-biao';
+} elseif (isset($_afk_url_lang) && strpos($_afk_url_lang, 'en') !== false) {
+    $subscribeURL = 'https://kunming-afchine.org/en/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen';
 }
 $waitinglistURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=waiting&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $inviteURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=invite&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
