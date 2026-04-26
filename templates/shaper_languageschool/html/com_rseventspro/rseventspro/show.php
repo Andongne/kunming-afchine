@@ -75,8 +75,25 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
-// AFK: charger les strings de langue selon &lang= si différent du contexte
-$_afk_url_lang = Factory::getApplication()->input->get('lang', '');
+// AFK: détecter la langue (URL param ou contexte FaLang)
+$_afk_url_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
+
+// AFK: lire traductions depuis rseventspro_translations (système RSEvents natif)
+function afk_rsevents_translate($event_id, $field, $default, $lang) {
+    if (!$lang || $lang === 'fr-FR') return $default;
+    static $db2 = null;
+    if ($db2 === null) $db2 = JFactory::getDbo();
+    $q = $db2->getQuery(true)
+        ->select('value')
+        ->from('#__rseventspro_translations')
+        ->where($db2->quoteName('reference') . '=' . $db2->quote('rseventspro_events'))
+        ->where($db2->quoteName('reference_id') . '=' . (int)$event_id)
+        ->where($db2->quoteName('property') . '=' . $db2->quote($field))
+        ->where($db2->quoteName('language') . '=' . $db2->quote($lang));
+    $db2->setQuery($q);
+    $val = $db2->loadResult();
+    return ($val !== null && $val !== '') ? $val : $default;
+}
 if ($_afk_url_lang && $_afk_url_lang !== 'fr-FR') {
     Factory::getLanguage()->load('com_rseventspro', JPATH_SITE, $_afk_url_lang, true, false);
 }
@@ -95,8 +112,10 @@ $full		= rseventsproHelper::eventisfull($this->event->id);
 $ongoing	= rseventsproHelper::ongoing($this->event->id); 
 $featured 	= $event->featured ? ' rs_featured_event' : ''; 
 // AFK: appliquer traductions Falang manuellement (driver n'intercepte pas RSEvents! Pro)
-$event->name = afk_falang_translate('rseventspro_events', $event->id, 'name', $event->name);
-$event->small_description = afk_falang_translate('rseventspro_events', $event->id, 'small_description', $event->small_description);
+$event->name = afk_rsevents_translate($event->id, 'name', $event->name, $_afk_url_lang)
+    ?: afk_falang_translate('rseventspro_events', $event->id, 'name', $event->name);
+$event->small_description = afk_rsevents_translate($event->id, 'small_description', $event->small_description, $_afk_url_lang)
+    ?: afk_falang_translate('rseventspro_events', $event->id, 'small_description', $event->small_description);
 $description= empty($event->description) ? $event->small_description : $event->description;
 $links		= rseventsproHelper::getConfig('modal','int');
 $modal		= rseventsproHelper::getConfig('modaltype','int');
