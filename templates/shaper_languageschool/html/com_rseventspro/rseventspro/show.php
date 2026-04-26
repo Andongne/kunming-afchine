@@ -7,8 +7,11 @@ function afk_falang_translate($table, $id, $field, $default) {
     if ($db === null) {
         $db = JFactory::getDbo();
         $lang = JFactory::getLanguage()->getTag();
-        // Mapping connu : zh-CN = 4, fr-FR = 1 (Falang site AF Kunming)
-        $map = ['zh-CN' => 4, 'fr-FR' => 1];
+        // Lire aussi le param URL &lang= (quand FaLang ne bascule pas le contexte)
+        $url_lang = \Joomla\CMS\Factory::getApplication()->input->get('lang', '');
+        if ($url_lang) $lang = $url_lang;
+        // Mapping connu : zh-CN = 4, en-GB = 1 (Falang site AF Kunming)
+        $map = ['zh-CN' => 4, 'en-GB' => 1, 'en' => 1];
         $lang_id = 0;
         foreach ($map as $k => $v) {
             if (strpos($lang, $k) === 0) { $lang_id = $v; break; }
