@@ -138,7 +138,8 @@ if ($custom_js = $this->params->get('custom_js'))
 
 <!doctype html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/custom.css">  
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/custom.css">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260429c">  
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -157,9 +158,21 @@ if ($custom_js = $this->params->get('custom_js'))
         // 2. Hreflang
         $lang = $app->getLanguage()->getTag();
         $siteRoot = rtrim(Uri::root(), '/');
-        if ($lang === 'fr-FR' || $lang === 'fr') {
+        $_reqUri = $_SERVER['REQUEST_URI'] ?? '';
+        $_isZhUrl = (strpos($_reqUri, '/zh/') === 0 || $_reqUri === '/zh');
+        $_isEnUrl = (strpos($_reqUri, '/en/') === 0 || $_reqUri === '/en');
+        // FR : Helix Ultimate ne génère pas hreflang pour la langue par défaut → on le fait
+        // ZH : Helix Ultimate génère déjà les hreflang → on ne surcharge pas
+        // EN : Helix Ultimate ne génère pas hreflang pour EN → on le fait
+        if (($lang === 'fr-FR' || $lang === 'fr') && !$_isZhUrl && !$_isEnUrl) {
             $document->addCustomTag('<link rel="alternate" hreflang="fr" href="' . $siteRoot . '/" />');
             $document->addCustomTag('<link rel="alternate" hreflang="zh-Hans" href="' . $siteRoot . '/zh/" />');
+            $document->addCustomTag('<link rel="alternate" hreflang="en" href="' . $siteRoot . '/en/" />');
+            $document->addCustomTag('<link rel="alternate" hreflang="x-default" href="' . $siteRoot . '/" />');
+        } elseif ($lang === 'en-GB' || strpos($lang, 'en') === 0) {
+            $document->addCustomTag('<link rel="alternate" hreflang="fr" href="' . $siteRoot . '/" />');
+            $document->addCustomTag('<link rel="alternate" hreflang="zh-Hans" href="' . $siteRoot . '/zh/" />');
+            $document->addCustomTag('<link rel="alternate" hreflang="en" href="' . $siteRoot . '/en/" />');
             $document->addCustomTag('<link rel="alternate" hreflang="x-default" href="' . $siteRoot . '/" />');
         }
 
@@ -186,11 +199,48 @@ if ($custom_js = $this->params->get('custom_js'))
         // Forcer le titre de la page (court) — écrase le titre long hérité
         // On force toujours : si trop long, on le raccourcit
         $rawTitle = $document->getTitle();
-        if ($isHome || strlen($rawTitle) > 70) {
-            $document->setTitle('Alliance Française de Kunming');
+        // Titres et descriptions adaptés par langue
+        if (strpos($lang, 'en') === 0) {
+            if ($isHome) {
+                $document->setTitle('Alliance Française de Kunming — French Language School in Kunming');
+            } else {
+                // FaLang ne traduit pas toujours les params menu pour EN sur Joomla 5 + SP Builder.
+                // Lecture directe de la traduction FaLang pour forcer le titre EN.
+                try {
+                    $_activeMenu = $app->getMenu()->getActive();
+                    if ($_activeMenu && $_activeMenu->id) {
+                        $_db = \Joomla\CMS\Factory::getDbo();
+                        $_q = $_db->getQuery(true)
+                            ->select('fc.value')
+                            ->from($_db->quoteName('#__falang_content', 'fc'))
+                            ->where('fc.reference_id = ' . (int)$_activeMenu->id)
+                            ->where('fc.language_id = 1')
+                            ->where('fc.reference_field = ' . $_db->quote('page_title'))
+                            ->where('fc.published = 1');
+                        $_db->setQuery($_q);
+                        $_enTitle = $_db->loadResult();
+                        if (!empty($_enTitle) && $_enTitle !== $rawTitle) {
+                            $document->setTitle($_enTitle . ' - kunming-afchine.org');
+                        }
+                    }
+                } catch (\Exception $e) {}
+            }
+            $ogDesc = $document->getMetaData('description') ?: 'The Alliance Française de Kunming offers French language courses for all levels, official certifications (TCF, TEF, DELF, DALF) and cultural events in Kunming, China.';
+            if ($isHome) {
+                $document->setMetaData('description', $ogDesc);
+            }
+        } elseif (strpos($lang, 'zh') === 0) {
+            if ($isHome || strlen($rawTitle) > 70) {
+                $document->setTitle('昆明法语联盟 — 法语课程与认证');
+            }
+            $ogDesc = $document->getMetaData('description') ?: '昆明法语联盟提供各级别法语课程、官方认证考试（TCF、TEF、DELF、DALF）及文化活动。';
+        } else {
+            if ($isHome || strlen($rawTitle) > 70) {
+                $document->setTitle('Alliance Française de Kunming');
+            }
+            $ogDesc = $document->getMetaData('description') ?: 'Alliance Française de Kunming — cours de français, certifications TCF TEF DELF DALF, événements culturels.';
         }
         $ogTitle = $document->getTitle();
-        $ogDesc  = $document->getMetaData('description') ?: 'Alliance Française de Kunming — cours de français, certifications TCF TEF DELF DALF, événements culturels.';
 
         $document->addCustomTag('<meta property="og:site_name" content="Alliance Française de Kunming" />');
         $document->addCustomTag('<meta property="og:url" content="' . htmlspecialchars($canonicalUrl, ENT_QUOTES) . '" />');
@@ -201,9 +251,18 @@ if ($custom_js = $this->params->get('custom_js'))
         $document->addCustomTag('<meta property="og:image:height" content="800" />');
         $document->addCustomTag('<meta property="og:type" content="' . ($isHome ? 'website' : 'article') . '" />');
         $langTag = $app->getLanguage()->getTag(); // ex: fr-FR ou zh-CN
-        $ogLocale = (strpos($langTag, 'zh') === 0) ? 'zh_CN' : 'fr_FR';
+        if (strpos($langTag, 'zh') === 0) {
+            $ogLocale = 'zh_CN';
+        } elseif (strpos($langTag, 'en') === 0) {
+            $ogLocale = 'en_GB';
+        } else {
+            $ogLocale = 'fr_FR';
+        }
         $document->addCustomTag('<meta property="og:locale" content="' . $ogLocale . '" />');
-        $document->addCustomTag('<meta property="og:locale:alternate" content="' . ($ogLocale === 'zh_CN' ? 'fr_FR' : 'zh_CN') . '" />');
+        $ogLocaleAlternates = array_filter(['fr_FR', 'zh_CN', 'en_GB'], fn($l) => $l !== $ogLocale);
+        foreach ($ogLocaleAlternates as $alt) {
+            $document->addCustomTag('<meta property="og:locale:alternate" content="' . $alt . '" />');
+        }
 
         $document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
         $document->addCustomTag('<meta name="twitter:title" content="' . htmlspecialchars($ogTitle, ENT_QUOTES) . '" />');
@@ -468,6 +527,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5N8DRLW6');</script>
 <!-- End Google Tag Manager -->
+    <style>
+    /* Accessibility: Override RSEvents Pro deadline color for contrast compliance */
+    .rsepro-reg-deadline, .rsepro-reg-closed { color: #666 !important; }
+    </style>
     </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -475,7 +538,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <?php if ($isHome): ?>
-<h1 class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Alliance Française de Kunming — Cours de français, certifications et culture francophone à Kunming, Chine</h1>
+<p class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Alliance Française de Kunming — Cours de français, certifications et culture francophone à Kunming, Chine</p>
 <?php endif; ?>
     <?php if($this->params->get('preloader')) : ?>
         <div class="sp-preloader"><div></div></div>
@@ -484,7 +547,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="body-wrapper">
         <div class="body-innerwrapper">
             <?php echo $theme->getHeaderStyle(); ?>
+            <main id="sp-main-body" role="main">
             <?php $theme->render_layout(); ?>
+            </main>
         </div>
     </div>
 
