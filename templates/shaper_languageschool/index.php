@@ -139,7 +139,7 @@ if ($custom_js = $this->params->get('custom_js'))
 <!doctype html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
   <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/custom.css">
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260429s">  
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260429t">  
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

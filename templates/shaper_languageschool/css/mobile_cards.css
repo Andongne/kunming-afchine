@@ -40,12 +40,11 @@
 
   /* === TITRE "Apprendre, progresser, certifier" === */
   #section-id-7b135ebc-3dec-40c3-a895-768fefceb723 {
-    padding-top: 6px !important;
-    padding-bottom: 2px !important;
+    display: none !important;
   }
   /* Réduire le padding bas de la section hero/sessions */
   #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
-    padding-bottom: 8px !important;
+    padding-bottom: 4px !important;
   }
 
   #sppb-addon-wrapper-effb6d7d-9ce8-4367-aee3-057d1060fd25 {
@@ -78,6 +77,11 @@
   }
 
   /* === CARDS : SECTIONS === */
+  
+  /* Premier rang de cards : harmoniser le gap avec le bloc sessions */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 {
+    padding-top: 4px !important;
+  }
   #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
   #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
