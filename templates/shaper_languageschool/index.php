@@ -139,7 +139,7 @@ if ($custom_js = $this->params->get('custom_js'))
 <!doctype html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
   <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/custom.css">
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260429c">  
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260429m">  
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -528,8 +528,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-5N8DRLW6');</script>
 <!-- End Google Tag Manager -->
     <style>
-    /* Accessibility: Override RSEvents Pro deadline color for contrast compliance */
-    .rsepro-reg-deadline, .rsepro-reg-closed { color: #666 !important; }
     </style>
     </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
