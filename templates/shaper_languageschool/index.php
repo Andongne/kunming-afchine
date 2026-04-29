@@ -528,8 +528,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-5N8DRLW6');</script>
 <!-- End Google Tag Manager -->
     <style>
-    /* Accessibility: Override RSEvents Pro deadline color for contrast compliance */
-    .rsepro-reg-deadline, .rsepro-reg-closed { color: #666 !important; }
     </style>
     </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
