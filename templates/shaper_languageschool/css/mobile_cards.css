@@ -40,9 +40,18 @@
 
   /* === TITRE "Apprendre, progresser, certifier" === */
   #section-id-7b135ebc-3dec-40c3-a895-768fefceb723 {
-    padding-top: 10px !important;
+    padding-top: 6px !important;
     padding-bottom: 2px !important;
   }
+  /* Réduire le padding bas de la section hero/sessions */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    padding-bottom: 8px !important;
+  }
+
+  #sppb-addon-wrapper-effb6d7d-9ce8-4367-aee3-057d1060fd25 {
+    text-align: center !important;
+  }
+
   #sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 .sppb-addon-title,
   #sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h1,
   #sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h2,
@@ -51,7 +60,9 @@
     font-weight: 400 !important;
     color: #5a6070 !important;
     text-align: center !important;
-    margin: 0 !important;
+    width: 100% !important;
+    display: block !important;
+    margin: 0 auto !important;
     letter-spacing: 0.06em !important;
     text-transform: uppercase !important;
   }
@@ -108,7 +119,7 @@
   #column-id-41c59e95-316d-47ef-a016-aaa82d14b301,
   #column-id-df15e649-4a43-451c-8dde-32b14f45012e,
   #column-id-12d65136-8c42-4b18-9a15-fd3f9f40ec72 {
-    background: #DA002E !important;
+    background: rgba(192,57,90,0.95) !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 8px rgba(218,0,46,0.18) !important;
     overflow: hidden !important;
@@ -192,7 +203,7 @@
     left: 0 !important;
     right: 0 !important;
     height: 50px !important;
-    background: linear-gradient(to bottom, transparent, #DA002E) !important;
+    background: linear-gradient(to bottom, transparent 20%, rgba(192,57,90,0.70) 75%, rgba(175,40,75,0.90) 100%) !important;
     pointer-events: none !important;
   }
 
@@ -218,7 +229,7 @@
   #sppb-addon-wrapper-5acf11b1-071e-4db8-8e80-b0a0c2867cdc,
   #sppb-addon-wrapper-3f212de7-8d56-410c-9f41-fb153c3f151a,
   #sppb-addon-wrapper-4e406770-4dd6-414e-96c9-d556a84d9dbe {
-    background: #DA002E !important;
+    background: rgba(192,57,90,0.95) !important;
     margin: 0 !important;
     padding: 0 !important;
     height: 44px !important;
@@ -334,4 +345,186 @@
     font-weight: 700 !important;
     text-align: center !important;
   }
+
+  /* === MODULE RSEVENT UPCOMING EVENTS === */
+  #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 {
+    border: 1px solid rgba(218,0,46,0.22) !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    padding: 10px 16px 14px !important;
+    box-shadow: 0 1px 8px rgba(218,0,46,0.06) !important;
+  }
+
+  /* Titre : bleu nuit bold */
+  #sppb-addon-149a2c58-166b-4568-b0c1-f1a0ee2f4dba .sppb-addon-title {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #1a2744 !important;
+    text-align: center !important;
+    margin: 0 0 10px 0 !important;
+    letter-spacing: 0 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Liste */
+  #rsepro-upcoming-module ul.rsepro_upcoming {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  #rsepro-upcoming-module ul.rsepro_upcoming li {
+    padding: 9px 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(218,0,46,0.10) !important;
+    text-align: center !important;
+    line-height: 1.4 !important;
+  }
+
+  #rsepro-upcoming-module ul.rsepro_upcoming li:last-child {
+    border-bottom: none !important;
+    padding-bottom: 4px !important;
+  }
+
+  #rsepro-upcoming-module ul.rsepro_upcoming li a {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    text-decoration: none !important;
+    display: inline !important;
+    line-height: 1.4 !important;
+  }
+
+  #rsepro-upcoming-module .reg-closed-badge {
+    display: inline-block !important;
+    margin-left: 6px !important;
+    vertical-align: middle !important;
+    font-size: 0.7rem !important;
+    padding: 2px 7px !important;
+  }
+
+  /* Bouton : style par défaut SP Builder (ne pas surcharger) */
+  #sppb-addon-83c93e81-0676-4d7e-bf40-0d51726f07b6 .sppb-button-wrapper {
+    margin-top: 12px !important;
+  }
+  /* ============================================================
+     PAGES INTERNES : espacement uniforme des cards sur mobile
+     cours / methode / certifications
+     ============================================================ */
+
+  /* Sections card : padding normalisé */
+  #section-id-d4cfe1a3-74fd-4308-b9f0-7a2c12d0a05f,
+  #section-id-4e97073e-2055-4c57-9b28-5d7c8988ee8c,
+  #section-id-faee211e-2b08-4401-b138-916f2ad3b71a,
+  #section-id-c1ec78a1-0a36-4fb8-9fa5-9b881c0dc255,
+  #section-id-addad42e-e6f2-44ce-9f47-0f385e4af65f,
+  #section-id-e528ea4d-981a-4d2c-b477-6bbde6bcbd2c,
+  #section-id-50f62e0c-d29a-406d-9cf7-f68dc1078b4c,
+  #section-id-85ce127d-c9b2-4c6a-9d21-1ed1af3bec6b,
+  #section-id-060c287f-0434-4475-bfac-101759afe95f,
+  #section-id-633ec21a-cb98-46b2-9e16-851a3bc46a38,
+  #section-id-deda62e0-ec1f-489d-9a0a-4b516c79ba8e,
+  #section-id-afdd77d0-7508-470d-8656-02096b322155 {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Première section de cards : espace de respiration post-hero */
+  #section-id-d4cfe1a3-74fd-4308-b9f0-7a2c12d0a05f,
+  #section-id-c1ec78a1-0a36-4fb8-9fa5-9b881c0dc255,
+  #section-id-50f62e0c-d29a-406d-9cf7-f68dc1078b4c {
+    padding-top: 16px !important;
+  }
+
+  /* Gap uniforme entre chaque card column */
+  #section-id-d4cfe1a3-74fd-4308-b9f0-7a2c12d0a05f .sppb-row-column,
+  #section-id-4e97073e-2055-4c57-9b28-5d7c8988ee8c .sppb-row-column,
+  #section-id-faee211e-2b08-4401-b138-916f2ad3b71a .sppb-row-column,
+  #section-id-c1ec78a1-0a36-4fb8-9fa5-9b881c0dc255 .sppb-row-column,
+  #section-id-addad42e-e6f2-44ce-9f47-0f385e4af65f .sppb-row-column,
+  #section-id-e528ea4d-981a-4d2c-b477-6bbde6bcbd2c .sppb-row-column,
+  #section-id-50f62e0c-d29a-406d-9cf7-f68dc1078b4c .sppb-row-column,
+  #section-id-85ce127d-c9b2-4c6a-9d21-1ed1af3bec6b .sppb-row-column,
+  #section-id-060c287f-0434-4475-bfac-101759afe95f .sppb-row-column,
+  #section-id-633ec21a-cb98-46b2-9e16-851a3bc46a38 .sppb-row-column,
+  #section-id-deda62e0-ec1f-489d-9a0a-4b516c79ba8e .sppb-row-column,
+  #section-id-afdd77d0-7508-470d-8656-02096b322155 .sppb-row-column {
+    margin-bottom: 12px !important;
+  }
+
+  /* Hero/bannière page : compresser le padding desktop excessif */
+  #section-id-16d08e71-e844-4516-941b-bb2c76f59d92,
+  #section-id-eb8a4bf8-bc2a-4983-80ad-4d3fef6449f7,
+  #section-id-e1d0bdb2-936d-4b39-83e3-e50d94d02925 {
+    padding-top: 0 !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* CTA fin de page : réduire les 75px desktop */
+  #section-id-80a63038-45bb-4eae-bab1-47298795dbb9,
+  #section-id-4e8346c0-61b4-4f1d-8889-21e4129e0319,
+  #section-id-a9593cb7-87cd-4fd1-bd86-75e3c2229f4d {
+    padding-top: 16px !important;
+    padding-bottom: 24px !important;
+  }
+
+  /* CTA colonnes : réduire 50px desktop → mobile */
+  #column-id-6c1902ce-ac0f-4e65-9279-0577b3acdb6d,
+  #column-id-2ed6f970-7f3d-4778-ad4b-7b6e4d47ee5b,
+  #column-id-4c680ee8-9779-4907-8f76-89736cf4f85b {
+    padding: 20px !important;
+  }
+  /* ============================================================
+     SIDEBAR MOBILE : masquer tout sauf Contact
+     Sauf page d'accueil (.page-173)
+     ============================================================ */
+
+  /* 1. TCF Canada (6 pages) : masquer sections non-Contact */
+  #section-id-2260745e-214c-432d-815d-d0fc7c967f3b,
+  #section-id-d6134004-18db-48f3-87a2-f35de2a41d3d,
+  #section-id-a7e5dd2b-756c-4e27-88fe-e1bfcc1e85cf {
+    display: none !important;
+  }
+
+  /* 2. Fallback ciblage direct des addons sidebar navigation collectés */
+  #sppb-addon-wrapper-3e492a8d-d251-4662-801a-973df706846a,
+  #sppb-addon-wrapper-ef7a5e0d-e99b-46c3-82f1-57460ad6bce9,
+  #sppb-addon-wrapper-aee16fcf-e666-4f46-82d9-e507ce3235da,
+  #sppb-addon-wrapper-9cfc8b12-44a4-4907-8124-c7beff405d73,
+  #sppb-addon-wrapper-aa013802-2ae4-4f03-a302-33bcccea1d67,
+  #sppb-addon-wrapper-8f579442-d575-4ba8-81ff-86b16675eec5,
+  #sppb-addon-wrapper-afaa5b5d-4206-49d5-b8b7-7256d68fe57b,
+  #sppb-addon-wrapper-cf57915c-e1b2-4dcf-8ed7-92a474304689,
+  #sppb-addon-wrapper-d65a7076-cc88-413d-aca1-ffb82b7e4119,
+  #sppb-addon-wrapper-519a47c8-822f-40d7-a85b-ff6e0c65feee,
+  #sppb-addon-wrapper-61945b95-e02b-4400-be72-0913a88e3323,
+  #sppb-addon-wrapper-2b39d0a5-6d30-4c6f-93d6-3727a68053a1,
+  #sppb-addon-wrapper-e2512cac-2821-453f-b180-1a4a2cf2d92e,
+  #sppb-addon-wrapper-9d7890f0-4790-42f8-9df6-92d93327b6f8,
+  #sppb-addon-wrapper-2fde8abf-868f-4bae-9e48-1516a4d5a114,
+  #sppb-addon-wrapper-3a22e733-25bc-4bc2-acff-7733756f92e3,
+  #sppb-addon-wrapper-751f6ae1-5092-4686-84d0-8d5fd280b5dd,
+  #sppb-addon-wrapper-e228f20c-6a06-4bf1-9a5b-0aa7a1d4165b,
+  #sppb-addon-wrapper-af034ffd-52c7-42e2-a2bf-d165851f6472,
+  #sppb-addon-wrapper-18d8ee73-6545-4628-a974-83bab5d2ea32,
+  #sppb-addon-wrapper-3e038376-0d3f-4438-9f71-1dce51bfec58,
+  #sppb-addon-wrapper-6b67b0ce-e2f9-4b8c-96a7-7fa88c353da0,
+  #sppb-addon-wrapper-0272bb5c-978b-44f3-9afb-dccda9117dba,
+  #sppb-addon-wrapper-f4e038d2-ec48-41e8-ac96-6d4294dc2078,
+  #sppb-addon-wrapper-7fdab23b-9a14-4245-8a37-12860d9c34e0,
+  #sppb-addon-wrapper-e5b679a6-906e-4505-adaf-0aec2c1d2215,
+  #sppb-addon-wrapper-edd19303-6a88-4d62-83ac-48a7f24e9259,
+  #sppb-addon-wrapper-c28596c3-744c-43c1-af28-f1be2380aaa2,
+  #sppb-addon-wrapper-359fcb89-d15e-4ecd-9e06-f78586a6468f,
+  #sppb-addon-wrapper-790da9e9-76de-4699-9a41-83d90cd9bd17,
+  #sppb-addon-wrapper-c0215c53-0584-45cd-9b16-e70774ab7de7,
+  #sppb-addon-wrapper-149d1919-c609-42ca-9ddc-710be230b948,
+  #sppb-addon-wrapper-9206dc32-19b3-4dea-ace4-d02ffb153087,
+  #sppb-addon-wrapper-069c1308-9742-4ba7-ba13-f52b62357014,
+  #sppb-addon-wrapper-cb06b73c-34a1-4056-befd-6ca3336999ba {
+    display: none !important;
+  }
+
+
 }
