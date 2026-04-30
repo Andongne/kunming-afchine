@@ -539,28 +539,30 @@
   /* ============================================================
      CONTACT MOBILE FOOTER — module 258 injecté dans #sp-footer
      ============================================================ */
+  /* Cacher le copyright sur mobile (sp-footer2) */
+  #sp-footer2 {
+    display: none !important;
+  }
+
   #contact-mobile-footer-wrap {
-    padding: 24px 20px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.10);
-    margin-bottom: 8px;
+    padding: 28px 20px 24px;
     text-align: center;
   }
 
   #contact-mobile-footer-wrap .contact-mobile-title {
-    font-size: 0.65rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: rgba(255,255,255,0.38);
-    margin: 0 0 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.10);
+    color: #ffffff;
+    letter-spacing: 0.01em;
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
   }
 
   #contact-mobile-footer-wrap ul {
     list-style: none !important;
     padding: 0 !important;
-    margin: 0 0 4px !important;
+    margin: 0 0 20px !important;
   }
 
   #contact-mobile-footer-wrap ul li {
@@ -573,6 +575,14 @@
   #contact-mobile-footer-wrap ul li a {
     color: rgba(255,255,255,0.85) !important;
     text-decoration: none !important;
+  }
+
+  #contact-mobile-footer-wrap img {
+    display: block !important;
+    margin: 0 auto !important;
+    width: 130px !important;
+    height: auto !important;
+    border-radius: 6px !important;
   }
 
 }
