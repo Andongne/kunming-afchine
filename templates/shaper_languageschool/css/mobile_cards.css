@@ -530,5 +530,51 @@
     display: none !important;
   }
 
+  /* ============================================================
+     CONTACT MOBILE FOOTER — module 258 injecté dans #sp-footer
+     ============================================================ */
+  #contact-mobile-footer-wrap {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 12px;
+  }
+
+  #contact-mobile-footer-wrap .contact-mobile-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+    margin: 0 0 12px;
+  }
+
+  #contact-mobile-footer-wrap ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 12px !important;
+  }
+
+  #contact-mobile-footer-wrap ul li {
+    font-size: 0.9rem;
+    color: #fff;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  #contact-mobile-footer-wrap ul li a {
+    color: #fff !important;
+    text-decoration: none !important;
+  }
+
+  #contact-mobile-footer-wrap .sppb-addon-single-image-container {
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  #contact-mobile-footer-wrap .sppb-addon-single-image-container img {
+    width: 120px !important;
+    height: auto;
+    border-radius: 4px;
+  }
 
 }
