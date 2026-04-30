@@ -47,40 +47,24 @@ html body #offcanvas-toggler {
 
 /* --- Responsive : hauteur ru00e9duite sur mobile u00e0 80px --- */
 @media (max-width: 768px) {
-  /* Top bar déjà masqué par template CSS */
-  #sp-top-bar { display: none !important; }
-
-  /* Logo : taille mobile */
+  /* Logo : taille raisonnable */
   html body #sp-header .logo img {
     max-width: 200px !important;
     height: auto !important;
   }
-
-  /* Header 80px en position relative pour le toggler absolu */
   html body #sp-header {
     height: 80px !important;
-    position: relative !important;
   }
-
   html body #sp-header .logo {
     height: 80px !important;
     display: flex;
     align-items: center;
   }
-
-  /* Hamburger positionné absolument à droite, centré verticalement */
+  /* Hamburger : couleur visible */
   html body #offcanvas-toggler {
-    position: absolute !important;
-    right: 16px !important;
-    top: 0 !important;
+    color: #DA002E !important;
     height: 80px !important;
     line-height: 80px !important;
-    width: auto !important;
-    float: none !important;
-    display: block !important;
-    color: #DA002E !important;
-    font-size: 28px !important;
-    padding: 0 4px !important;
   }
 }
 
