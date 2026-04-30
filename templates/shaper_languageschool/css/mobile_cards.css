@@ -334,6 +334,12 @@
     color: #DA002E !important;
   }
 
+  /* === NOTRE ACTUALITÉ : supprimer bordure et padding excessif sur mobile === */
+  #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6 {
+    border: none !important;
+    padding: 20px 16px !important;
+  }
+
   /* === TITRES SECTIONS GENERAUX : harmonisation === */
   /* Tous les titres h2/h3 de sections sur mobile */
   .sp-page-builder .sppb-section .sppb-addon-title:not(.sppb-btn):not([style*="color:#fff"]) {
@@ -534,47 +540,39 @@
      CONTACT MOBILE FOOTER — module 258 injecté dans #sp-footer
      ============================================================ */
   #contact-mobile-footer-wrap {
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    margin-bottom: 12px;
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 8px;
+    text-align: center;
   }
 
   #contact-mobile-footer-wrap .contact-mobile-title {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.5);
-    margin: 0 0 12px;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.38);
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
   }
 
   #contact-mobile-footer-wrap ul {
     list-style: none !important;
     padding: 0 !important;
-    margin: 0 0 12px !important;
+    margin: 0 0 4px !important;
   }
 
   #contact-mobile-footer-wrap ul li {
-    font-size: 0.9rem;
-    color: #fff;
-    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 10px;
     line-height: 1.4;
   }
 
   #contact-mobile-footer-wrap ul li a {
-    color: #fff !important;
+    color: rgba(255,255,255,0.85) !important;
     text-decoration: none !important;
-  }
-
-  #contact-mobile-footer-wrap .sppb-addon-single-image-container {
-    text-align: center;
-    margin-top: 12px;
-  }
-
-  #contact-mobile-footer-wrap .sppb-addon-single-image-container img {
-    width: 120px !important;
-    height: auto;
-    border-radius: 4px;
   }
 
 }
