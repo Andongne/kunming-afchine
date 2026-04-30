@@ -11,6 +11,43 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 
+// AFK: tooltip sans le label COM_RSEVENTSPRO_CALENDAR_EVENTS
+if (!function_exists('afk_calendar_tooltip_text')) {
+    function afk_calendar_tooltip_text($ids) {
+        $raw = modRseventsProCalendar::getDetailsSmall($ids);
+        $pos = strpos($raw, '::');
+        return $pos !== false ? substr($raw, $pos + 2) : $raw;
+    }
+}
+
+// AFK: URL vers l'événement individuel (premier événement du jour)
+// Si la date a plusieurs événements, redirige vers le premier.
+if (!function_exists('afk_calendar_event_url')) {
+    function afk_calendar_event_url($ids, $lang, $itemid) {
+        if (empty($ids)) return '';
+        $db = \Joomla\CMS\Factory::getDbo();
+        $id = (int) reset($ids);
+        $db->setQuery('SELECT id, name FROM #__rseventspro_events WHERE id=' . $id);
+        $event = $db->loadObject();
+        if (!$event) return '';
+        // Appliquer la traduction RSEvents si disponible
+        if (class_exists('RSEventsProTranslations')) {
+            $t = RSEventsProTranslations::getTranslation('event', $event->id, 'name');
+            if ($t) $event->name = $t;
+        }
+        $sef      = rseventsproHelper::sef($event->id, $event->name);
+        $base_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $sef, true, $itemid);
+        // Injecter le préfixe de langue
+        $_prefix_map = ['zh-CN' => 'zh', 'en-GB' => 'en', 'en' => 'en'];
+        $_prefix = isset($_prefix_map[$lang]) ? $_prefix_map[$lang] : '';
+        if ($_prefix) {
+            $base_url = preg_replace('#^(/[a-zA-Z]{2,5})/#', '/', $base_url);
+            return '/' . $_prefix . $base_url;
+        }
+        return $base_url;
+    }
+}
+
 ?>
 
 <div id="rs_calendar_module<?php echo $module->id; ?>" class="rs_calendar_module<?php echo $calendar->class_suffix; ?>">
@@ -65,7 +102,13 @@ foreach ($calendar->days->weekdays as $weekday) {
 			<tr>
 		<?php } ?>
 				<td class="<?php echo $day->class; ?>">
-					<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y').'&mid='.$module->id,true,$itemid);?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(modRseventsProCalendar::getDetailsSmall($day->events)); ?>">
+					<?php
+					$_cal_lang = \Joomla\CMS\Factory::getApplication()->getLanguage()->getTag();
+					$_cal_href = !empty($day->events)
+					    ? afk_calendar_event_url($day->events, $_cal_lang, $itemid)
+					    : rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y').'&mid='.$module->id, true, $itemid);
+					?>
+					<a <?php echo $nofollow; ?> href="<?php echo $_cal_href; ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(afk_calendar_tooltip_text($day->events)); ?>">
 						<span class="rs_calendar_date"><?php echo $unixdate->format('j'); ?></span>
 					</a>
 				</td>

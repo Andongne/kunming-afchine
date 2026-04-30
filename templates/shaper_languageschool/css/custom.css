@@ -236,3 +236,89 @@
     background-color: transparent !important;
     background-image: none !important;
 }
+/* ==========================================================================
+   MOBILE — Corrections ergonomie page d'accueil (max 767px)
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+
+    /* 1. Réduction du vide en haut (S01 hero masqué = gap résiduel) */
+    #section-id-841459e1-9e39-4805-8992-b77a8178447c {
+        padding-top: 0 !important;
+        min-height: 0 !important;
+    }
+
+    /* 2. min-height excessif sur les sections de cours/tests — désactivé sur mobile */
+    .sp-page-builder .page-content .sppb-section[style*="min-height"] {
+        min-height: 0 !important;
+    }
+    #section-id-57fab408-2f51-45ae-8949-8c19a6485f01,
+    #section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e,
+    #section-id-80e216e1-3493-4773-887f-e6e68f7f211d,
+    #section-id-6f2911e6-2809-43b0-8ed3-51ec77bac1cf,
+    #section-id-9f710dbf-7478-4c48-bfeb-b40c46ea831a,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132,
+    #section-id-1548239284438 {
+        min-height: 0 !important;
+    }
+
+    /* 3. Bordures pointillées rouges — remplacées par un encadré discret sur mobile */
+    #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 {
+        border: 1px solid rgba(218, 0, 46, 0.25) !important;
+        border-radius: 8px !important;
+    }
+    #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6,
+    #sppb-addon-2bd64cca-e4da-437b-83cc-4e4b3cda50c1,
+    #sppb-addon-28f8d766-e88a-4e01-b519-0c47eea5127b {
+        border: 1px solid rgba(218, 0, 46, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 24px 20px !important;
+    }
+
+    /* 4. Padding interne des colonnes de cours réduit sur mobile */
+    #column-id-affe6879-bb8c-4bac-a08b-d3b512522792,
+    #column-id-565f3eed-2863-4ce7-86e0-cea2668e2ba4,
+    #column-id-70cec1ba-4ceb-4bb7-ae49-ceeb1ad6bdce,
+    #column-id-cd615081-6fdd-4160-a9b1-ade5aa075d74,
+    #column-id-b888fa89-1f49-4d72-a3ac-91e58ee8e3f9,
+    #column-id-c7e198df-7fef-46f9-b891-50b8f03a7f03,
+    #column-id-b578938e-0c14-4391-a0e6-bd09349e9fe4,
+    #column-id-3fe8fda6-f8f6-4f67-8686-d8d1247f859e,
+    #column-id-ceb29ed8-a190-46b6-8233-2fd0e6416d7c {
+        padding: 24px 20px !important;
+    }
+
+    /* 5. Session column — padding interne réduit */
+    #sppb-addon-506b5e23-3c5b-4534-a628-7cb1e5dd009c {
+        padding-left: 0 !important;
+    }
+
+    /* 6. Sections margin-bottom négatif désactivé sur mobile */
+    #section-id-57fab408-2f51-45ae-8949-8c19a6485f01,
+    #section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062 {
+        margin-bottom: 0 !important;
+    }
+
+}
+
+@media (max-width: 767.98px) {
+    /* Centrage module upcoming events */
+    #rsepro-upcoming-module {
+        text-align: center !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming {
+        justify-content: center !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li {
+        display: block;
+        text-align: center !important;
+    }
+    #rsepro-upcoming-module .reg-closed-badge {
+        display: block !important;
+        margin: 4px auto 0 !important;
+        width: fit-content;
+    }
+}

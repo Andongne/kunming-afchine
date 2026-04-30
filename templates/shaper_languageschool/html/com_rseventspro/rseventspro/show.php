@@ -126,7 +126,7 @@ $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventspro
 if (isset($_afk_url_lang) && strpos($_afk_url_lang, 'zh') !== false) {
     $subscribeURL = 'https://kunming-afchine.org/zh/ren-zheng-yu-wen-ping/bao-ming-can-jia-kao-shi/fa-yu-kao-shi-bao-ming-biao';
 } elseif (isset($_afk_url_lang) && strpos($_afk_url_lang, 'en') !== false) {
-    $subscribeURL = 'https://kunming-afchine.org/en/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen';
+    $subscribeURL = 'https://kunming-afchine.org/en/certifications-and-diplomas/test-registration/registration-form';
 }
 $waitinglistURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=waiting&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $inviteURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=invite&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
