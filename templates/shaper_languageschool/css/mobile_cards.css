@@ -334,10 +334,14 @@
     color: #DA002E !important;
   }
 
-  /* === NOTRE ACTUALITÉ : supprimer bordure et padding excessif sur mobile === */
+  /* === NOTRE ACTUALITÉ : supprimer bordure pointillée sur mobile === */
+  #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66,
   #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6 {
     border: none !important;
-    padding: 20px 16px !important;
+    border-width: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 16px 12px !important;
   }
 
   /* === TITRES SECTIONS GENERAUX : harmonisation === */
@@ -555,8 +559,7 @@
     color: #ffffff;
     letter-spacing: 0.01em;
     margin: 0 0 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 0;
   }
 
   #contact-mobile-footer-wrap ul {
