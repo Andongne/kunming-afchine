@@ -1,10 +1,10 @@
 html body #sp-header {
   height: 140px !important;
   overflow: visible !important;
-  border-bottom: 1px solid #eaeaea; /* Pour éviter la ligne qui dépasse */
+  border-bottom: 1px solid #eaeaea; /* Pour u00e9viter la ligne qui du00e9passe */
 }
 
-/* Logo centré verticalement */
+/* Logo centru00e9 verticalement */
 html body #sp-header .logo {
   height: 140px !important;
   display: flex;
@@ -25,7 +25,7 @@ html body #offcanvas-toggler {
   align-items: center;
 }
 
-/* Menu principal centré verticalement */
+/* Menu principal centru00e9 verticalement */
 #sp-menu {
   height: 140px;
   display: flex;
@@ -39,7 +39,7 @@ html body #offcanvas-toggler {
   line-height: normal;
 }
 
-/* Menu déroulant */
+/* Menu du00e9roulant */
 .sp-dropdown {
   max-width: 600px;
   min-width: 180px;
@@ -47,7 +47,7 @@ html body #offcanvas-toggler {
   word-wrap: break-word;
 }
 
-/* --- Responsive : hauteur réduite sur mobile à 80px --- */
+/* --- Responsive : hauteur ru00e9duite sur mobile u00e0 80px --- */
 @media (max-width: 768px) {
   html body #sp-header {
     height: 80px !important;
@@ -80,18 +80,18 @@ html body #offcanvas-toggler {
   }
 }
 
-/* === RSEvents Pro — Vue liste — Mobile === */
+/* === RSEvents Pro u2014 Vue liste u2014 Mobile === */
 @media (max-width: 767px) {
-  /* Masquer image par défaut (vide) sur mobile */
+  /* Masquer image par du00e9faut (vide) sur mobile */
   .rs_event_image { display: none !important; }
 
-  /* Détails pleine largeur */
+  /* Du00e9tails pleine largeur */
   .rs_event_details {
     width: 100% !important;
     padding-left: 0 !important;
   }
 
-  /* Carte événement : layout vertical, padding confortable */
+  /* Carte u00e9vu00e9nement : layout vertical, padding confortable */
   .rs_event_detail {
     display: block !important;
     padding: 14px 12px !important;
@@ -102,7 +102,7 @@ html body #offcanvas-toggler {
     box-shadow: 0 1px 3px rgba(0,0,0,.06);
   }
 
-  /* Titre événement */
+  /* Titre u00e9vu00e9nement */
   .rsepro-title-block a {
     font-size: 1rem !important;
     font-weight: 700;
@@ -111,7 +111,7 @@ html body #offcanvas-toggler {
     margin-bottom: 6px;
   }
 
-  /* Infos date / lieu — plus lisibles */
+  /* Infos date / lieu u2014 plus lisibles */
   .rs_event_details .rs_event_date,
   .rs_event_details .rsepro-date-block,
   .rs_event_details .rsepro-location-block,
@@ -135,12 +135,12 @@ html body #offcanvas-toggler {
 }
 
 
-/* ══════════════════════════════════════════════════════════════════
-   RSForm Pro — Responsive petit écran (iPhone 15 etc. ≤ 650px)
-   ══════════════════════════════════════════════════════════════════ */
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSForm Pro u2014 Responsive petit u00e9cran (iPhone 15 etc. u2264 650px)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
 @media screen and (max-width: 650px) {
 
-  /* Réduction padding conteneur */
+  /* Ru00e9duction padding conteneur */
   .rsform .formContainer {
     padding: 18px 14px !important;
     border-radius: 8px !important;
@@ -156,7 +156,7 @@ html body #offcanvas-toggler {
     display: block !important;
   }
 
-  /* Zone input : supprimer la marge gauche liée au float du label */
+  /* Zone input : supprimer la marge gauche liu00e9e au float du label */
   .formResponsive .formHorizontal .formControls {
     margin-left: 0 !important;
   }
@@ -182,7 +182,7 @@ html body #offcanvas-toggler {
     float: none !important;
   }
 
-  /* Bloc date de naissance : selects côte à côte mais adaptés */
+  /* Bloc date de naissance : selects cu00f4te u00e0 cu00f4te mais adaptu00e9s */
   .rsform-block-birth-date .rsform-select-box-small {
     width: 30% !important;
     min-width: 70px !important;
@@ -194,7 +194,7 @@ html body #offcanvas-toggler {
     font-size: 0.88rem !important;
   }
 
-  /* Bloc bouton soumettre : centré, pleine largeur */
+  /* Bloc bouton soumettre : centru00e9, pleine largeur */
   .rsform-block-soumettre .formBody {
     text-align: center;
   }
@@ -205,7 +205,7 @@ html body #offcanvas-toggler {
     font-size: 1rem !important;
   }
 
-  /* Description / aide : légèrement réduite */
+  /* Description / aide : lu00e9gu00e8rement ru00e9duite */
   .rsform .formDescription {
     font-size: 0.8rem !important;
   }
@@ -216,7 +216,7 @@ html body #offcanvas-toggler {
   }
 }
 /* ============================================================
-   ESPACEMENTS PAGE D'ACCUEIL — via custom_css (prioritaire sur SP Builder)
+   ESPACEMENTS PAGE D'ACCUEIL u2014 via custom_css (prioritaire sur SP Builder)
    ============================================================ */
 
 /* Hero */
@@ -243,7 +243,7 @@ html body #offcanvas-toggler {
   padding-bottom: 20px !important;
 }
 
-/* Méthode + Offre */
+/* Mu00e9thode + Offre */
 #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 {
   padding-top: 15px !important;
   padding-bottom: 20px !important;
@@ -254,7 +254,7 @@ html body #offcanvas-toggler {
   padding-top: 25px !important;
 }
 
-/* Actualités & Événements */
+/* Actualitu00e9s & u00c9vu00e9nements */
 #section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062 {
   padding-bottom: 0px !important;
 }
@@ -265,7 +265,7 @@ html body #offcanvas-toggler {
   margin-bottom: 0 !important;
 }
 
-/* Nos Tests de langues — titre */
+/* Nos Tests de langues u2014 titre */
 #section-id-807fb343-9377-4821-8c30-95c0c194541d {
   padding-top: 10px !important;
   padding-bottom: 0px !important;
@@ -278,7 +278,7 @@ html body #offcanvas-toggler {
   margin-bottom: 0 !important;
 }
 
-/* TEF Canada + TCF Québec */
+/* TEF Canada + TCF Quu00e9bec */
 #section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
   padding-top: 5px !important;
   padding-bottom: 20px !important;
@@ -289,7 +289,7 @@ html body #offcanvas-toggler {
   padding-bottom: 40px !important;
 }
 
-/* S'entraîner à un test de langue — titre */
+/* S'entrau00eener u00e0 un test de langue u2014 titre */
 #section-id-80e216e1-3493-4773-887f-e6e68f7f211d {
   padding-bottom: 0px !important;
   min-height: 0 !important;
@@ -301,11 +301,11 @@ html body #offcanvas-toggler {
   margin-bottom: 0 !important;
 }
 
-/* Section après S'entraîner */
+/* Section apru00e8s S'entrau00eener */
 #section-id-6f2911e6-2809-43b0-8ed3-51ec77bac1cf {
   padding-top: 5px !important;
 }
-/* Hero — centrage du titre */
+/* Hero u2014 centrage du titre */
 #sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05,
 #sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h1,
 #sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h2,
@@ -315,7 +315,7 @@ html body #offcanvas-toggler {
   margin-bottom: 0 !important;
 }
 
-/* Hero — section contenu (Bienvenue + Sessions) */
+/* Hero u2014 section contenu (Bienvenue + Sessions) */
 body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
 .sp-page-builder #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
   padding-top: 30px !important;
@@ -323,7 +323,7 @@ body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
   margin-bottom: 40px !important;
 }
 /* ============================================================
-   HÉRO — titre et layout
+   Hu00c9RO u2014 titre et layout
    ============================================================ */
 
 /* Section titre */
@@ -332,9 +332,9 @@ body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
   padding-bottom: 30px !important;
 }
 
-/* Titre H1 — centré, grande taille, police du site */
+/* Titre H1 u2014 centru00e9, grande taille, police du site */
 #section-id-841459e1-9e39-4805-8992-b77a8178447c h1.sppb-addon-title {
-  font-size: 3.2rem;
+  font-size: clamp(1.8rem, 3.5vw, 3.2rem);
   font-weight: 700;
   text-align: center;
   color: #DA002E;
@@ -350,7 +350,7 @@ body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
   margin-bottom: 40px !important;
 }
 
-/* Colonne gauche — alignement gauche */
+/* Colonne gauche u2014 alignement gauche */
 #column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f,
 #column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f * {
   text-align: left !important;
@@ -371,7 +371,7 @@ body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
   margin-bottom: 14px;
 }
 
-/* Colonne droite — carte Sessions */
+/* Colonne droite u2014 carte Sessions */
 #column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee .sppb-column {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 6px;
@@ -390,18 +390,28 @@ body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
   color: #DA002E;
   margin-bottom: 14px;
 }
-/* ══════════════════════════════════════════════════════════════════
-   RSEvents Pro — Cartes événements : style calendrier
-   ══════════════════════════════════════════════════════════════════ */
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSEvents Pro u2014 Cartes u00e9vu00e9nements : style calendrier
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
 
 /* Fix overflow description hors carte */
 li.rs_event_detail { overflow: hidden; }
 li.rs_event_detail .rs_event_details { overflow: hidden; }
 
-/* Badge inscriptions fermées */
-.rsepro-reg-closed { vertical-align: middle; }
+/* Badge inscriptions fermu00e9es */
+.rsepro-reg-closed {
+  vertical-align: middle;
+  color: #ffffff !important;
+  background: #DA002E !important;
+  display: inline-block !important;
+  padding: 3px 10px !important;
+  border-radius: 3px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+}
 
-/* Deadline — style discret */
+/* Deadline u2014 style discret */
 .rsepro-reg-deadline {
   display: block;
   font-size: 0.82rem;
@@ -410,7 +420,7 @@ li.rs_event_detail .rs_event_details { overflow: hidden; }
   font-weight: 400;
 }
 
-/* Carte événement */
+/* Carte u00e9vu00e9nement */
 ul.rs_events_container li.rs_event_detail {
   background: #fff5f6 !important;
   border-radius: 8px !important;
@@ -438,7 +448,7 @@ ul.rs_events_container .rs_event_image img {
   border-radius: 4px;
 }
 
-/* Bloc détails */
+/* Bloc du00e9tails */
 ul.rs_events_container .rs_event_details {
   overflow: hidden;
   line-height: 1.5;
@@ -482,7 +492,7 @@ ul.rs_events_container .rsepro-small-description-block {
   text-align: left !important;
 }
 
-/* Deadline / inscription fermée */
+/* Deadline / inscription fermu00e9e */
 ul.rs_events_container .rsepro-reg-deadline {
   font-size: 0.88rem !important;
   color: #888 !important;
@@ -491,9 +501,9 @@ ul.rs_events_container .rsepro-reg-deadline {
   margin-bottom: 4px;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   RSForm Pro — Formulaire inscription tests de langue
-   ══════════════════════════════════════════════════════════════════ */
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSForm Pro u2014 Formulaire inscription tests de langue
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
 
 /* Conteneur principal */
 .rsform .formContainer {
@@ -517,7 +527,7 @@ ul.rs_events_container .rsepro-reg-deadline {
   letter-spacing: .01em;
 }
 
-/* Étoile requis */
+/* u00c9toile requis */
 .rsform .formRequired { color: #DA002E !important; font-weight: 700; margin-left: 2px; }
 
 /* Inputs texte */
@@ -609,7 +619,7 @@ ul.rs_events_container .rsepro-reg-deadline {
   transform: translateY(-1px);
 }
 
-/* ── Hover images SP Builder ─────────────────────────────────────── */
+/* u2500u2500 Hover images SP Builder u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500 */
 .sp-page-builder .page-content a img {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -618,12 +628,12 @@ ul.rs_events_container .rsepro-reg-deadline {
   opacity: 0.88;
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   HÉRO — Responsive mobile (≤ 767px)
-   ══════════════════════════════════════════════════════════════════ */
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   Hu00c9RO u2014 Responsive mobile (u2264 767px)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
 @media (max-width: 767px) {
 
-  /* Sections héro : image couvre bien, hauteur min, pas de fixed */
+  /* Sections hu00e9ro : image couvre bien, hauteur min, pas de fixed */
   #section-id-841459e1-9e39-4805-8992-b77a8178447c,
   #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
     background-size: cover !important;
@@ -638,7 +648,7 @@ ul.rs_events_container .rsepro-reg-deadline {
     padding-bottom: 10px !important;
   }
 
-  /* H1 — réduction forte + pas de débordement */
+  /* H1 u2014 ru00e9duction forte + pas de du00e9bordement */
   #section-id-841459e1-9e39-4805-8992-b77a8178447c .sppb-addon-title,
   #section-id-841459e1-9e39-4805-8992-b77a8178447c h1,
   #section-id-841459e1-9e39-4805-8992-b77a8178447c h2 {
@@ -663,9 +673,9 @@ ul.rs_events_container .rsepro-reg-deadline {
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   CARTES — Boutons centrés + blocs Retour/Presse/Blog (mobile)
-   ══════════════════════════════════════════════════════════════════ */
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   CARTES u2014 Boutons centru00e9s + blocs Retour/Presse/Blog (mobile)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
 @media (max-width: 767px) {
 
   /* Cartes article (Retour en images / On parle de nous / Blog TCF) */
@@ -691,7 +701,7 @@ ul.rs_events_container .rsepro-reg-deadline {
     font-weight: 700 !important;
   }
 
-  /* Texte date / méta des articles */
+  /* Texte date / mu00e9ta des articles */
   .sppb-article-date,
   .sppb-article-meta,
   .sppb-addon-content small {
@@ -699,11 +709,215 @@ ul.rs_events_container .rsepro-reg-deadline {
     color: #888 !important;
   }
 
-  /* Intro text des cartes — espacement et lisibilité */
+  /* Intro text des cartes u2014 espacement et lisibilitu00e9 */
   .sppb-addon-content .sppb-addon-text p,
   .sppb-addon-text p {
     font-size: 0.92rem !important;
     line-height: 1.55 !important;
     margin-bottom: 10px !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE - Corrections ergonomie page d'accueil (max 767px)
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+
+    /* 1. Espacement uniforme entre toutes les sections */
+    .sp-page-builder .page-content .sppb-section {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    /* min-height reset uniquement sur homepage (évite d'écraser les pages intérieures) */
+    .page-173 .sppb-section {
+        min-height: 0 !important;
+    }
+
+    /* 2. Hero masque - aucun espace residuel */
+    #section-id-841459e1-9e39-4805-8992-b77a8178447c {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* 3. Colonnes stackees - espacement interne reduit */
+    .sp-page-builder .page-content .sppb-section .sppb-column {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+
+    /* 4. Centrage contenu cards cours */
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-column,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-column,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-column,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-column,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-column,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-column {
+        text-align: center !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-title,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-title,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-title,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-title,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-title,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-title,
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-text,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-text,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-text,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-text,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-text,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-text {
+        text-align: center !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-btn-container,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-btn-container,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-btn-container,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-btn-container,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-btn-container,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-btn-container {
+        text-align: center !important;
+        display: block !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-btn,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-btn,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-btn,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-btn,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-btn,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-btn {
+        display: inline-block !important;
+        margin: 8px auto 0 !important;
+        padding: 8px 24px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* 5. Images banniere cours - hauteur fixe 150px */
+    #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-f02a29b8-e323-4c80-9b8d-4e287d17be80 .sppb-addon-single-image-container {
+        height: 150px !important;
+        overflow: hidden !important;
+        border-radius: 6px !important;
+    }
+    #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-f02a29b8-e323-4c80-9b8d-4e287d17be80 .sppb-addon-single-image-container img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+
+    /* 6. Bordures pointillees -> filet discret */
+    #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 {
+        border: 1px solid rgba(218, 0, 46, 0.25) !important;
+        border-radius: 8px !important;
+    }
+    #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6,
+    #sppb-addon-2bd64cca-e4da-437b-83cc-4e4b3cda50c1,
+    #sppb-addon-28f8d766-e88a-4e01-b519-0c47eea5127b,
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 {
+        background: #ffffff !important;
+        border: 1px solid rgba(218, 0, 46, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 24px 20px !important;
+    }
+
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn),
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):link,
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):visited {
+        color: #1a2744 !important;
+    }
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):hover {
+        color: #DA002E !important;
+    }
+
+    /* 7. Upcoming module - centrage */
+    #sppb-addon-506b5e23-3c5b-4534-a628-7cb1e5dd009c {
+        padding-left: 0 !important;
+        text-align: center !important;
+    }
+    #rsepro-upcoming-module {
+        text-align: center !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming {
+        padding-left: 0 !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li {
+        text-align: center !important;
+        padding: 8px 0 !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li a {
+        display: block !important;
+        text-align: center !important;
+    }
+    #rsepro-upcoming-module .reg-closed-badge {
+        display: block !important;
+        margin: 4px auto 0 !important;
+        width: fit-content !important;
+    }
+
+}
+/* === Contact mobile footer === */
+#contact-mobile-footer-wrap {
+  padding: 24px 16px 16px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+#contact-mobile-footer-wrap .sp-module-title {
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+#contact-mobile-footer-wrap a,
+#contact-mobile-footer-wrap li {
+  color: rgba(255,255,255,0.85) !important;
+  text-decoration: none !important;
+  list-style: none !important;
+  padding: 3px 0 !important;
+}
+#contact-mobile-footer-wrap img {
+  max-width: 140px !important;
+  margin-top: 12px !important;
+  opacity: 0.95;
+}
+}
+
+/* === PAGE CERTIFICATIONS (page-40) : fix mobile complet === */
+@media (max-width: 767px) {
+  .sp-page-builder.page-40 .page-content,
+  .sp-page-builder.page-40 .page-content .sppb-section,
+  .sp-page-builder.page-40 .page-content .sppb-row-container,
+  .sp-page-builder.page-40 .page-content .sppb-row,
+  .sp-page-builder.page-40 .page-content .sppb-row-column,
+  .sp-page-builder.page-40 .page-content .sppb-column,
+  .sp-page-builder.page-40 .page-content .sppb-column-addons,
+  .sp-page-builder.page-40 .page-content .sppb-addon-wrapper,
+  .sp-page-builder.page-40 .page-content [id^="sppb-addon"],
+  .sp-page-builder.page-40 .page-content .sppb-addon-content,
+  .sp-page-builder.page-40 .page-content .clearfix {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    clip: auto !important;
+    clip-path: none !important;
   }
 }
