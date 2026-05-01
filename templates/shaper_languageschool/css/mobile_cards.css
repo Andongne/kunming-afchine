@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260501b
+   v=20260501c
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -595,13 +595,14 @@
    * (haute spécificité). Sur mobile les colonnes s’empilent, ce qui crée
    * de grands écarts entre rows. On homogénéise avec !important.
    */
+  /*
+   * Uniquement padding vertical — ne pas toucher left/right
+   * (casse le layout des cards homepage)
+   */
   .sp-page-builder .page-content .sppb-section {
     padding-top: 24px !important;
     padding-bottom: 0 !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
   }
-  /* Dernière section : laisse un espace en bas de page */
   .sp-page-builder .page-content .sppb-section:last-child {
     padding-bottom: 24px !important;
   }
