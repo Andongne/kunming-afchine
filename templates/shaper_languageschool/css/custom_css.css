@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fixCertPage() {
     var w = window.innerWidth;
     if (w > 767) return;
-    var pb = document.querySelector('#sp-page-builder.page-40');
+    var pb = document.querySelector('#sp-page-builder');
     if (!pb) return;
     // Classes SP Builder à ne pas toucher selon breakpoint
     var hiddenClasses = ['sppb-hidden-sm','sppb-hidden-xs','sppb-hidden-md','sppb-hidden-lg','sppb-hidden-xl'];
