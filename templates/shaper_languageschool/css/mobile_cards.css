@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260501c
+   v=20260501d
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -589,23 +589,6 @@
     border-radius: 6px !important;
   }
 
-  /* === PAGES NIVEAUX A1–C2 : espacement harmonisé entre blocs unités === */
-  /*
-   * Les sections SP Builder ont padding-top:40px ou 75px via sélecteurs ID
-   * (haute spécificité). Sur mobile les colonnes s’empilent, ce qui crée
-   * de grands écarts entre rows. On homogénéise avec !important.
-   */
-  /*
-   * Uniquement padding vertical — ne pas toucher left/right
-   * (casse le layout des cards homepage)
-   */
-  .sp-page-builder .page-content .sppb-section {
-    padding-top: 24px !important;
-    padding-bottom: 0 !important;
-  }
-  .sp-page-builder .page-content .sppb-section:last-child {
-    padding-bottom: 24px !important;
-  }
   /* Supprime les paragraphes vides qui créent des espaces parasites */
   .sp-page-builder .page-content .sppb-addon-content p:empty {
     display: none !important;
