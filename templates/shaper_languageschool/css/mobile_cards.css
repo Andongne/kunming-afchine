@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260501f
+   v=20260501g
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -600,7 +600,7 @@
   .sp-page-builder.page-192 .page-content .sppb-section,
   .sp-page-builder.page-193 .page-content .sppb-section,
   .sp-page-builder.page-194 .page-content .sppb-section {
-    padding-top: 32px !important;
+    padding-top: 48px !important;
     padding-bottom: 0 !important;
   }
   .sp-page-builder.page-196 .page-content .sppb-section:last-child,
@@ -609,7 +609,7 @@
   .sp-page-builder.page-192 .page-content .sppb-section:last-child,
   .sp-page-builder.page-193 .page-content .sppb-section:last-child,
   .sp-page-builder.page-194 .page-content .sppb-section:last-child {
-    padding-bottom: 32px !important;
+    padding-bottom: 48px !important;
   }
 
   /* Supprime les paragraphes vides qui créent des espaces parasites */
