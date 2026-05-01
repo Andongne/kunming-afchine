@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fixCertPage() {
     var w = window.innerWidth;
     if (w > 767) return;
-    var pageClasses = ['page-40','page-196','page-288','page-197','page-198','page-199','page-200','page-201'];
+    var pageClasses = ['page-40','page-196','page-189','page-188','page-192','page-193','page-194','page-288'];
     var pb = document.querySelector('#sp-page-builder');
     if (!pb) return;
     var hasTarget = pageClasses.some(function(c){ return pb.classList.contains(c); });

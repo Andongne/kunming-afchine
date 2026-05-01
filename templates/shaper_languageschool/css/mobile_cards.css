@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260501d
+   v=20260501e
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -587,6 +587,29 @@
     width: 130px !important;
     height: auto !important;
     border-radius: 6px !important;
+  }
+
+  /* === PAGES NIVEAUX A1–C2 : espacement harmonisé entre rows (scopé aux seules pages concernées) ===
+   * A1=page-196, A2=page-189, B1=page-188, B2=page-192, C1=page-193, C2=page-194
+   * Les sections ont padding-top:40-75px via sélecteurs ID sans !important.
+   * On override avec !important dans un scope ciblé.
+   */
+  .sp-page-builder.page-196 .page-content .sppb-section,
+  .sp-page-builder.page-189 .page-content .sppb-section,
+  .sp-page-builder.page-188 .page-content .sppb-section,
+  .sp-page-builder.page-192 .page-content .sppb-section,
+  .sp-page-builder.page-193 .page-content .sppb-section,
+  .sp-page-builder.page-194 .page-content .sppb-section {
+    padding-top: 20px !important;
+    padding-bottom: 0 !important;
+  }
+  .sp-page-builder.page-196 .page-content .sppb-section:last-child,
+  .sp-page-builder.page-189 .page-content .sppb-section:last-child,
+  .sp-page-builder.page-188 .page-content .sppb-section:last-child,
+  .sp-page-builder.page-192 .page-content .sppb-section:last-child,
+  .sp-page-builder.page-193 .page-content .sppb-section:last-child,
+  .sp-page-builder.page-194 .page-content .sppb-section:last-child {
+    padding-bottom: 20px !important;
   }
 
   /* Supprime les paragraphes vides qui créent des espaces parasites */
