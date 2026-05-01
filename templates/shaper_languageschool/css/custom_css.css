@@ -171,7 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
   function fixCertPage() {
     var w = window.innerWidth;
     if (w > 767) return;
+    var pageClasses = ['page-40','page-196','page-288','page-197','page-198','page-199','page-200','page-201'];
     var pb = document.querySelector('#sp-page-builder');
+    if (!pb) return;
+    var hasTarget = pageClasses.some(function(c){ return pb.classList.contains(c); });
+    if (!hasTarget) return;
+    pb = document.querySelector('#sp-page-builder');
     if (!pb) return;
     // Classes SP Builder à ne pas toucher selon breakpoint
     var hiddenClasses = ['sppb-hidden-sm','sppb-hidden-xs','sppb-hidden-md','sppb-hidden-lg','sppb-hidden-xl'];
