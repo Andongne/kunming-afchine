@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260501a
+   v=20260501b
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -590,19 +590,20 @@
   }
 
   /* === PAGES NIVEAUX A1–C2 : espacement harmonisé entre blocs unités === */
-  /* Réduit les paddings de section trop larges pour mobile */
-  .sp-page-builder .page-content .sppb-section[id^="section-id"] {
+  /*
+   * Les sections SP Builder ont padding-top:40px ou 75px via sélecteurs ID
+   * (haute spécificité). Sur mobile les colonnes s’empilent, ce qui crée
+   * de grands écarts entre rows. On homogénéise avec !important.
+   */
+  .sp-page-builder .page-content .sppb-section {
+    padding-top: 24px !important;
+    padding-bottom: 0 !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
-  /* Réduit le padding vertical excessif */
-  .sp-page-builder .page-content .sppb-section[id^="section-id"][style*="padding-top:40px"],
-  .sp-page-builder .page-content .sppb-section[id^="section-id"][style*="padding-top: 40px"] {
-    padding-top: 20px !important;
-  }
-  .sp-page-builder .page-content .sppb-section[id^="section-id"][style*="padding-top:75px"],
-  .sp-page-builder .page-content .sppb-section[id^="section-id"][style*="padding-top: 75px"] {
-    padding-top: 32px !important;
+  /* Dernière section : laisse un espace en bas de page */
+  .sp-page-builder .page-content .sppb-section:last-child {
+    padding-bottom: 24px !important;
   }
   /* Supprime les paragraphes vides qui créent des espaces parasites */
   .sp-page-builder .page-content .sppb-addon-content p:empty {
