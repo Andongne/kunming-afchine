@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502j
+   v=20260502k
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -134,6 +134,7 @@
     display: flex !important;
     flex-direction: column !important;
     flex: 1 !important;
+    max-height: 160px !important;
   }
 
   #column-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9>.sppb-column-addons,
