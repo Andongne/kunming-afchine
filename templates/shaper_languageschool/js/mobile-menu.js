@@ -49,3 +49,32 @@
     initMobileMenu();
   }
 })();
+
+/**
+ * Neutralise le min-height:580px imposé par SP Builder sur les sections de cards
+ * uniquement sur mobile et sur la homepage (page-173)
+ */
+(function () {
+  function fixCardSections() {
+    if (window.innerWidth > 767) return;
+    var pb = document.querySelector('#sp-page-builder.page-173');
+    if (!pb) return;
+    [
+      'section-id-113b9392-0de7-4ad3-acfd-d47455b7e771',
+      'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47',
+      'section-id-73084a51-9be6-4f44-83ed-415ecddc194e'
+    ].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.setProperty('min-height', '0', 'important');
+        el.style.setProperty('height', 'auto', 'important');
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixCardSections);
+  } else {
+    fixCardSections();
+  }
+  window.addEventListener('load', fixCardSections);
+})();
