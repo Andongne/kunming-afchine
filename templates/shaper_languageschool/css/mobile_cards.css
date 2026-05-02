@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502e
+   v=20260502f
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -174,6 +174,7 @@
   #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon,
   #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon,
   #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon,
+  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon,
   #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon {
     padding: 0 !important;
     margin: 0 !important;
@@ -186,6 +187,7 @@
   #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container,
   #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container,
   #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container,
+  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon-single-image-container,
   #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container {
     height: 110px !important;
     overflow: hidden !important;
@@ -202,6 +204,7 @@
   #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container::after,
   #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container::after,
   #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container::after,
+  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon-single-image-container::after,
   #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container::after {
     content: "" !important;
     position: absolute !important;
@@ -218,6 +221,7 @@
   #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee img,
   #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 img,
   #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 img,
+  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d img,
   #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e img {
     width: 100% !important;
     height: 110px !important;
