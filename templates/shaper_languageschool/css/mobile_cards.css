@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502i
+   v=20260502j
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -88,6 +88,8 @@
     background: transparent !important;
     padding: 3px 10px !important;
     min-height: 0 !important;
+    max-height: 220px !important;
+    overflow: visible !important;
   }
 
   /* === CARDS : 2 COLONNES === */
