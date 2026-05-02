@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502p
+   v=20260502q
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -173,6 +173,9 @@
     font-size: 0 !important;
   }
 
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .clearfix,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .clearfix,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .clearfix,
   #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .sppb-addon-content,
   #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .sppb-addon-content,
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-content {
