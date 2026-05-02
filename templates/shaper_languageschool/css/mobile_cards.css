@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502r
+   v=20260502s
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -583,15 +583,4 @@
     margin: 0 !important;
     padding: 0 !important;
   }
-
-  /* === BOUTONS : couleur texte rouge par défaut sur mobile === */
-  .sppb-btn.sppb-btn-default {
-    color: #DC3545 !important;
-  }
-  .sppb-btn.sppb-btn-default:hover,
-  .sppb-btn.sppb-btn-default:focus {
-    color: #a80020 !important;
-  }
-
-
 }
