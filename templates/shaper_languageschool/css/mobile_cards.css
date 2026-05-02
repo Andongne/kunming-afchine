@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502a
+   v=20260502b
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -98,7 +98,10 @@
    ================================================================ */
 
   /* Grille 2 colonnes */
-  .afk-card-row .sppb-row {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-row {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: stretch !important;
@@ -106,7 +109,10 @@
   }
 
   /* Colonne wrapper : 50% */
-  .afk-card-row .sppb-row-column {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-row-column {
     width: 50% !important;
     float: none !important;
     flex: 0 0 50% !important;
@@ -119,7 +125,10 @@
   }
 
   /* Card container : fond rouge, coins arrondis */
-  .afk-card-row .sppb-column {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-column {
     background: rgba(192,57,90,0.95) !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 8px rgba(218,0,46,0.18) !important;
@@ -130,7 +139,10 @@
     flex: 1 !important;
   }
 
-  .afk-card-row .sppb-column > .sppb-column-addons {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-column > .sppb-column-addons {
     display: flex !important;
     flex-direction: column !important;
     padding: 0 !important;
@@ -139,7 +151,10 @@
   }
 
   /* Image */
-  .afk-card-row .sppb-addon-wrapper.addon-root-image {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-image {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 0 !important;
@@ -147,13 +162,19 @@
     display: block !important;
   }
 
-  .afk-card-row .sppb-addon-wrapper.addon-root-image .sppb-addon {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-image .sppb-addon {
     padding: 0 !important;
     margin: 0 !important;
     line-height: 0 !important;
   }
 
-  .afk-card-row .sppb-addon-single-image-container {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-single-image-container {
     height: 110px !important;
     overflow: hidden !important;
     border-radius: 0 !important;
@@ -164,7 +185,10 @@
     line-height: 0 !important;
   }
 
-  .afk-card-row .sppb-addon-single-image-container::after {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-single-image-container::after {
     content: "" !important;
     position: absolute !important;
     bottom: 0 !important;
@@ -175,7 +199,10 @@
     pointer-events: none !important;
   }
 
-  .afk-card-row .sppb-addon-single-image-container img {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-single-image-container img {
     width: 100% !important;
     height: 110px !important;
     object-fit: cover !important;
@@ -186,8 +213,14 @@
   }
 
   /* Barre titre (heading OU text-block) */
-  .afk-card-row .sppb-addon-wrapper.addon-root-heading,
-  .afk-card-row .sppb-addon-wrapper.addon-root-text-block {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-heading,
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-text-block {
     background: rgba(192,57,90,0.95) !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -198,15 +231,24 @@
     justify-content: center !important;
   }
 
-  .afk-card-row .sppb-addon-wrapper.addon-root-heading .sppb-addon,
-  .afk-card-row .sppb-addon-wrapper.addon-root-text-block .sppb-addon {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-heading .sppb-addon,
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-text-block .sppb-addon {
     width: 100% !important;
     padding: 0 8px !important;
     margin: 0 !important;
   }
 
   /* Titre de la card */
-  .afk-card-row .sppb-addon-title {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-title {
     color: #fff !important;
     font-size: 0.88rem !important;
     font-weight: 700 !important;
@@ -217,13 +259,22 @@
   }
 
   /* Masquer le contenu texte (ne garder que le titre) */
-  .afk-card-row .sppb-addon-content {
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-content {
     display: none !important;
   }
 
   /* Masquer boutons, spacers */
-  .afk-card-row .sppb-addon-wrapper.addon-root-button,
-  .afk-card-row .sppb-addon-wrapper.addon-root-empty-space,
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-button,
+  .afk-card-row,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-wrapper.addon-root-empty-space,
   /* Compatibilité anciens IDs conservés pendant transition */
   #sppb-addon-wrapper-17ed517d-1cc7-48f3-982b-9dfdf6cd0d4c,
   #sppb-addon-wrapper-8a070f5d-55d7-40ec-91ae-aa4348ce2b9c,
