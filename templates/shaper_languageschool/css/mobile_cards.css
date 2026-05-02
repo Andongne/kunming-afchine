@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502s
+   v=20260502t
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -323,7 +323,7 @@
   }
 
   /* Liens et dates Notre actualité : neutre comme On parle de nous */
-  #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6 a {
+  #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6 a:not(.sppb-btn) {
     color: #1a2744 !important;
     text-decoration: none !important;
   }
