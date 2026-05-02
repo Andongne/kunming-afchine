@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502h
+   v=20260502i
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -87,6 +87,7 @@
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
     background: transparent !important;
     padding: 3px 10px !important;
+    min-height: 0 !important;
   }
 
   /* === CARDS : 2 COLONNES === */
