@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502m
+   v=20260502n
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -76,12 +76,13 @@
     display: none !important;
   }
 
-  /* === CARDS : SECTIONS === */
-  
-  /* Premier rang de cards : harmoniser le gap avec le bloc sessions */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 {
-    padding-top: 4px !important;
-  }
+  /* ============================================================
+   CARDS HOMEPAGE MOBILE — approche classe (résistante aux réorganisations SP Builder)
+   ============================================================ */
+
+  /* === SECTIONS : fond transparent, padding réduit === */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 { padding-top: 4px !important; }
+
   #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
   #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
@@ -92,9 +93,9 @@
     overflow: visible !important;
   }
 
-  /* === CARDS : 2 COLONNES === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-row,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-row,
+  /* === ROW : flex 2 colonnes === */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-row {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -102,6 +103,7 @@
     margin: 0 -4px !important;
   }
 
+  /* === COLUMN WRAP : 50% === */
   #column-wrap-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9,
   #column-wrap-id-6b4135c7-be3f-431c-a215-b747d6b02cd9,
   #column-wrap-id-0cc04406-1e6e-4c36-9599-a0e920772385,
@@ -119,7 +121,7 @@
     flex-direction: column !important;
   }
 
-  /* === CARDS : CONTAINER ROUGE === */
+  /* === COLUMN : container rouge === */
   #column-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9,
   #column-id-6b4135c7-be3f-431c-a215-b747d6b02cd9,
   #column-id-0cc04406-1e6e-4c36-9599-a0e920772385,
@@ -147,23 +149,13 @@
     padding: 0 !important;
     margin: 0 !important;
     gap: 0 !important;
+    flex: 1 !important;
   }
 
-  /* === CARDS : IMAGE === */
-  #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55,
-  #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113,
-  #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee,
-  #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092,
-  #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287,
-  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d,
-  #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e,
-  #sppb-addon-e9ff34c0-da45-414c-b721-8552fdd55f55,
-  #sppb-addon-65f9b697-6c97-476a-93aa-6fffe45d4113,
-  #sppb-addon-880781b3-f4f1-4a7d-9c9a-533687a27eee,
-  #sppb-addon-ec3bbcac-7e20-4382-bb64-bfe1b5114092,
-  #sppb-addon-8306e0fc-34c1-4147-8ea0-d73efafc5287,
-  #sppb-addon-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d,
-  #sppb-addon-b30cd32b-fd23-4ae8-b512-f91c7b1f581e {
+  /* === IMAGE : addon-root-image dans les sections cards === */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 0 !important;
@@ -172,26 +164,18 @@
     display: block !important;
   }
 
-  #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon,
-  #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon,
-  #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon,
-  #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon,
-  #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon,
-  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon,
-  #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon {
     padding: 0 !important;
     margin: 0 !important;
     line-height: 0 !important;
     font-size: 0 !important;
   }
 
-  #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon-single-image-container,
-  #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-single-image-container {
     height: 110px !important;
     overflow: hidden !important;
     border-radius: 0 !important;
@@ -202,13 +186,9 @@
     line-height: 0 !important;
   }
 
-  #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d .sppb-addon-single-image-container::after,
-  #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container::after {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-single-image-container::after {
     content: "" !important;
     position: absolute !important;
     bottom: 0 !important;
@@ -219,13 +199,9 @@
     pointer-events: none !important;
   }
 
-  #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 img,
-  #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 img,
-  #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee img,
-  #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 img,
-  #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 img,
-  #sppb-addon-wrapper-258c9f90-c7f4-432c-a4b5-ba04d9d32e0d img,
-  #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e img {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image img {
     width: 100% !important;
     height: 110px !important;
     object-fit: cover !important;
@@ -235,14 +211,10 @@
     vertical-align: top !important;
   }
 
-  /* === CARDS : LABEL TITRE ROUGE === */
-  #sppb-addon-wrapper-c72f25f1-7feb-45c1-92f3-f6fb76937e12,
-  #sppb-addon-wrapper-213951bd-c257-4784-9231-89d2d2bfeeba,
-  #sppb-addon-wrapper-985d9c51-8292-4531-93ff-4e59f942c627,
-  #sppb-addon-wrapper-5acf11b1-071e-4db8-8e80-b0a0c2867cdc,
-  #sppb-addon-wrapper-3f212de7-8d56-410c-9f41-fb153c3f151a,
-  #sppb-addon-wrapper-9fa12d20-e606-4cda-91b8-5cf57097ea5c,
-  #sppb-addon-wrapper-4e406770-4dd6-414e-96c9-d556a84d9dbe {
+  /* === TITRE : addon-root-text-block (barre rouge titrée) === */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block {
     background: rgba(192,57,90,0.95) !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -255,27 +227,26 @@
     justify-content: center !important;
   }
 
-  #sppb-addon-c72f25f1-7feb-45c1-92f3-f6fb76937e12,
-  #sppb-addon-213951bd-c257-4784-9231-89d2d2bfeeba,
-  #sppb-addon-985d9c51-8292-4531-93ff-4e59f942c627,
-  #sppb-addon-5acf11b1-071e-4db8-8e80-b0a0c2867cdc,
-  #sppb-addon-3f212de7-8d56-410c-9f41-fb153c3f151a,
-  #sppb-addon-9fa12d20-e606-4cda-91b8-5cf57097ea5c,
-  #sppb-addon-4e406770-4dd6-414e-96c9-d556a84d9dbe {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .clearfix {
     width: 100% !important;
     padding: 0 8px !important;
     margin: 0 !important;
-    line-height: normal !important;
-    font-size: 1rem !important;
   }
 
-  #sppb-addon-c72f25f1-7feb-45c1-92f3-f6fb76937e12 .sppb-addon-title,
-  #sppb-addon-213951bd-c257-4784-9231-89d2d2bfeeba .sppb-addon-title,
-  #sppb-addon-985d9c51-8292-4531-93ff-4e59f942c627 .sppb-addon-title,
-  #sppb-addon-5acf11b1-071e-4db8-8e80-b0a0c2867cdc .sppb-addon-title,
-  #sppb-addon-3f212de7-8d56-410c-9f41-fb153c3f151a .sppb-addon-title,
-  #sppb-addon-9fa12d20-e606-4cda-91b8-5cf57097ea5c .sppb-addon-title,
-  #sppb-addon-4e406770-4dd6-414e-96c9-d556a84d9dbe .sppb-addon-title {
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: normal !important;
+  }
+
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon-title {
     color: #fff !important;
     font-size: 0.88rem !important;
     font-weight: 700 !important;
@@ -285,33 +256,20 @@
     line-height: 1.2 !important;
   }
 
-  #sppb-addon-c72f25f1-7feb-45c1-92f3-f6fb76937e12 .sppb-addon-content,
-  #sppb-addon-213951bd-c257-4784-9231-89d2d2bfeeba .sppb-addon-content,
-  #sppb-addon-985d9c51-8292-4531-93ff-4e59f942c627 .sppb-addon-content,
-  #sppb-addon-5acf11b1-071e-4db8-8e80-b0a0c2867cdc .sppb-addon-content,
-  #sppb-addon-3f212de7-8d56-410c-9f41-fb153c3f151a .sppb-addon-content,
-  #sppb-addon-9fa12d20-e606-4cda-91b8-5cf57097ea5c .sppb-addon-content,
-  #sppb-addon-4e406770-4dd6-414e-96c9-d556a84d9dbe .sppb-addon-content {
+  /* Masquer le contenu texte du text-block (seul le titre reste) */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon-content {
     display: none !important;
   }
 
-  /* === CARDS : MASQUER BOUTONS ET SPACERS === */
-  #sppb-addon-wrapper-bf4e92a5-b6a5-44a2-b5d4-eb047d4bf932,
-  #sppb-addon-wrapper-43f47597-8bcf-4578-83b8-efbbb53b9317,
-  #sppb-addon-wrapper-b6c0632f-7aba-4471-8110-b466428d524d,
-  #sppb-addon-wrapper-a4c0c317-b107-40b3-96ac-e385e90d29d1,
-  #sppb-addon-wrapper-17ed517d-1cc7-48f3-982b-9dfdf6cd0d4c,
-  #sppb-addon-wrapper-8a070f5d-55d7-40ec-91ae-aa4348ce2b9c,
-  #sppb-addon-wrapper-4e2392c9-9459-4bb9-8501-a049f3d71d74,
-  #sppb-addon-wrapper-b9ca5601-38bd-4ec2-ace7-a66cd402e4c3,
-  #sppb-addon-wrapper-47546033-123b-4076-9639-897b8d89f3b6,
-  #sppb-addon-wrapper-43f47597-8bcf-4578-83b8-efbbb53b9317,
-  #sppb-addon-wrapper-d24a7682-e9b0-4ca0-88eb-8dcab0753a01,
-  #sppb-addon-wrapper-80bfbe1a-c011-4daf-92c7-da3a8ecdf76a,
-  #sppb-addon-wrapper-833da064-8300-492c-9590-345d3f7e43cf,
-  #sppb-addon-wrapper-c6f1f253-d13b-42be-8673-210a8090bd39,
-  #sppb-addon-wrapper-a4c0c317-b107-40b3-96ac-e385e90d29d1,
-  #sppb-addon-wrapper-42cccd15-58bd-45f3-9b18-e408aa9e5f20 {
+  /* === MASQUER : boutons et spacers (par classe, indépendant des IDs) === */
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-button,
+  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
+  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-empty-space {
     display: none !important;
   }
 
