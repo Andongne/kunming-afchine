@@ -51,6 +51,57 @@
 })();
 
 /**
+ * Regroupe les 6 cards homepage en un seul conteneur 2-colonnes sur mobile
+ * (les 6 colonnes sont dans 2 sections séparées de 3 colonnes chacune)
+ */
+(function () {
+  var COL_IDS = [
+    'column-wrap-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9',
+    'column-wrap-id-6b4135c7-be3f-431c-a215-b747d6b02cd9',
+    'column-wrap-id-191123f9-b3bd-4275-87d0-ff89eb9b772c',
+    'column-wrap-id-0cc04406-1e6e-4c36-9599-a0e920772385',
+    'column-wrap-id-41c59e95-316d-47ef-a016-aaa82d14b301',
+    'column-wrap-id-06214299-0bd0-4f18-bb67-66d79b30f265'
+  ];
+  var SEC1 = 'section-id-113b9392-0de7-4ad3-acfd-d47455b7e771';
+  var SEC2 = 'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47';
+
+  function reorganizeCards() {
+    if (window.innerWidth > 767) return;
+    if (document.getElementById('afk-cards-grid')) return; // déjà fait
+
+    var cols = COL_IDS.map(function (id) { return document.getElementById(id); });
+    if (cols.some(function (c) { return !c; })) return; // pas encore chargé
+
+    var sec1 = document.getElementById(SEC1);
+    var sec2 = document.getElementById(SEC2);
+    if (!sec1 || !sec2) return;
+
+    // Créer un conteneur flex 2-colonnes
+    var grid = document.createElement('div');
+    grid.id = 'afk-cards-grid';
+    grid.style.cssText = 'display:flex;flex-wrap:wrap;padding:3px 10px;background:transparent;';
+
+    // Déplacer les 6 colonnes dans ce conteneur
+    cols.forEach(function (col) {
+      grid.appendChild(col);
+    });
+
+    // Insérer avant sec1 et masquer les 2 sections vides
+    sec1.parentNode.insertBefore(grid, sec1);
+    sec1.style.display = 'none';
+    sec2.style.display = 'none';
+  }
+
+  ['DOMContentLoaded', 'load'].forEach(function (evt) {
+    window.addEventListener(evt, reorganizeCards);
+  });
+  [100, 300, 600, 1000].forEach(function (ms) {
+    setTimeout(reorganizeCards, ms);
+  });
+})();
+
+/**
  * Neutralise le min-height:580px de SP Builder sur la section cards row 3
  */
 (function () {

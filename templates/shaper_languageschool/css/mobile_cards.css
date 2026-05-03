@@ -1,6 +1,6 @@
 /* ============================================================
    HOMEPAGE MOBILE — Tous styles mobiles AFK
-   v=20260502t
+   v=20260503g
    ============================================================ */
 @media (max-width: 767px) {
 
@@ -76,42 +76,29 @@
     display: none !important;
   }
 
-  /* ============================================================
-   CARDS HOMEPAGE MOBILE — approche classe (résistante aux réorganisations SP Builder)
+        /* ============================================================
+   CARDS HOMEPAGE MOBILE — 6 cards reroupées via JS dans #afk-cards-grid
+   2 colonnes × 3 lignes (50% chacune)
+   v=20260503g
    ============================================================ */
 
-  /* === SECTIONS : fond transparent, padding réduit === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 { padding-top: 4px !important; }
-
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47,
+  /* Sections d'origine masquées par le JS */
   #section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
-    background: transparent !important;
-    padding: 3px 10px !important;
-    min-height: 0 !important;
-    max-height: 220px !important;
-    overflow: visible !important;
+    display: none !important;
   }
 
-  /* === ROW : flex 2 colonnes === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-row,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-row,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-row {
+  /* === CONTENEUR JS : grille 2 colonnes === */
+  #afk-cards-grid {
     display: flex !important;
     flex-wrap: wrap !important;
-    align-items: stretch !important;
-    margin: 0 -4px !important;
+    padding: 3px 10px !important;
+    background: transparent !important;
+    margin: 0 !important;
   }
 
   /* === COLUMN WRAP : 50% === */
-  #column-wrap-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9,
-  #column-wrap-id-6b4135c7-be3f-431c-a215-b747d6b02cd9,
-  #column-wrap-id-0cc04406-1e6e-4c36-9599-a0e920772385,
-  #column-wrap-id-41c59e95-316d-47ef-a016-aaa82d14b301,
-  #column-wrap-id-df15e649-4a43-451c-8dde-32b14f45012e,
-  #column-wrap-id-12d65136-8c42-4b18-9a15-fd3f9f40ec72 {
+  #afk-cards-grid > [id^="column-wrap-id-"] {
     width: 50% !important;
-    float: none !important;
     flex: 0 0 50% !important;
     max-width: 50% !important;
     padding: 0 4px !important;
@@ -122,12 +109,7 @@
   }
 
   /* === COLUMN : container rouge === */
-  #column-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9,
-  #column-id-6b4135c7-be3f-431c-a215-b747d6b02cd9,
-  #column-id-0cc04406-1e6e-4c36-9599-a0e920772385,
-  #column-id-41c59e95-316d-47ef-a016-aaa82d14b301,
-  #column-id-df15e649-4a43-451c-8dde-32b14f45012e,
-  #column-id-12d65136-8c42-4b18-9a15-fd3f9f40ec72 {
+  #afk-cards-grid > [id^="column-wrap-id-"] > [id^="column-id-"] {
     background: rgba(192,57,90,0.95) !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 8px rgba(218,0,46,0.18) !important;
@@ -138,12 +120,7 @@
     flex: 1 !important;
   }
 
-  #column-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9 > .sppb-column-addons,
-  #column-id-6b4135c7-be3f-431c-a215-b747d6b02cd9 > .sppb-column-addons,
-  #column-id-0cc04406-1e6e-4c36-9599-a0e920772385 > .sppb-column-addons,
-  #column-id-41c59e95-316d-47ef-a016-aaa82d14b301 > .sppb-column-addons,
-  #column-id-df15e649-4a43-451c-8dde-32b14f45012e > .sppb-column-addons,
-  #column-id-12d65136-8c42-4b18-9a15-fd3f9f40ec72 > .sppb-column-addons {
+  #afk-cards-grid > [id^="column-wrap-id-"] > [id^="column-id-"] > .sppb-column-addons {
     display: flex !important;
     flex-direction: column !important;
     padding: 0 !important;
@@ -152,10 +129,8 @@
     flex: 1 !important;
   }
 
-  /* === IMAGE : addon-root-image dans les sections cards === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image {
+  /* === IMAGE === */
+  #afk-cards-grid .addon-root-image {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 0 !important;
@@ -164,31 +139,17 @@
     display: block !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .sppb-addon,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .sppb-addon,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon {
+  #afk-cards-grid .addon-root-image .sppb-addon,
+  #afk-cards-grid .addon-root-image .clearfix,
+  #afk-cards-grid .addon-root-image .sppb-addon-content {
     padding: 0 !important;
     margin: 0 !important;
     line-height: 0 !important;
     font-size: 0 !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .clearfix,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .clearfix,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .clearfix,
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .sppb-addon-content,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .sppb-addon-content,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-content {
-    padding: 0 !important;
-    margin: 0 !important;
-    line-height: 0 !important;
-    font-size: 0 !important;
-  }
-
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .sppb-addon-single-image-container,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .sppb-addon-single-image-container,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-single-image-container {
-    height: 110px !important;
+  #afk-cards-grid .addon-root-image .sppb-addon-single-image-container {
+    height: 133px !important;
     overflow: hidden !important;
     border-radius: 0 !important;
     position: relative !important;
@@ -198,24 +159,20 @@
     line-height: 0 !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image .sppb-addon-single-image-container::after,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image .sppb-addon-single-image-container::after,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image .sppb-addon-single-image-container::after {
+  #afk-cards-grid .addon-root-image .sppb-addon-single-image-container::after {
     content: "" !important;
     position: absolute !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 50px !important;
+    height: 45px !important;
     background: linear-gradient(to bottom, transparent 20%, rgba(192,57,90,0.70) 75%, rgba(175,40,75,0.90) 100%) !important;
     pointer-events: none !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-image img,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-image img,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-image img {
+  #afk-cards-grid .addon-root-image img {
     width: 100% !important;
-    height: 110px !important;
+    height: 133px !important;
     object-fit: cover !important;
     object-position: center !important;
     border-radius: 0 !important;
@@ -223,10 +180,8 @@
     vertical-align: top !important;
   }
 
-  /* === TITRE : addon-root-text-block (barre rouge titrée) === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-text-block,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-text-block,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block {
+  /* === TITRE === */
+  #afk-cards-grid .addon-root-text-block {
     background: rgba(192,57,90,0.95) !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -239,28 +194,22 @@
     justify-content: center !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-text-block .clearfix,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-text-block .clearfix,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .clearfix {
+  #afk-cards-grid .addon-root-text-block .clearfix {
     width: 100% !important;
     padding: 0 8px !important;
     margin: 0 !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-text-block .sppb-addon,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-text-block .sppb-addon,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon {
+  #afk-cards-grid .addon-root-text-block .sppb-addon {
     width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
     line-height: normal !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-text-block .sppb-addon-title,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-text-block .sppb-addon-title,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon-title {
+  #afk-cards-grid .addon-root-text-block .sppb-addon-title {
     color: #fff !important;
-    font-size: 0.88rem !important;
+    font-size: 0.82rem !important;
     font-weight: 700 !important;
     text-align: center !important;
     margin: 0 !important;
@@ -268,19 +217,13 @@
     line-height: 1.2 !important;
   }
 
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-text-block .sppb-addon-content,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-text-block .sppb-addon-content,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-text-block .sppb-addon-content {
+  #afk-cards-grid .addon-root-text-block .sppb-addon-content {
     display: none !important;
   }
 
-  /* === MASQUER : boutons et spacers (par classe) === */
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-button,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-button,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-button,
-  #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .addon-root-empty-space,
-  #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .addon-root-empty-space,
-  #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .addon-root-empty-space {
+  /* === MASQUER : boutons et spacers === */
+  #afk-cards-grid .addon-root-button,
+  #afk-cards-grid .addon-root-empty-space {
     display: none !important;
   }
 
