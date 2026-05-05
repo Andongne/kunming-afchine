@@ -304,21 +304,23 @@
 
 }
 
-@media (max-width: 767.98px) {
-    /* Centrage module upcoming events */
-    #rsepro-upcoming-module {
-        text-align: center !important;
-    }
-    #rsepro-upcoming-module ul.rsepro_upcoming {
-        justify-content: center !important;
-    }
-    #rsepro-upcoming-module ul.rsepro_upcoming li {
-        display: block;
-        text-align: center !important;
-    }
-    #rsepro-upcoming-module .reg-closed-badge {
-        display: block !important;
-        margin: 4px auto 0 !important;
-        width: fit-content;
+/* ==========================================================================
+   MISE EN PAGE - Titre de page et sidebar
+   ========================================================================== */
+
+/* RSEvents Pro - reduit l'espace au-dessus du titre */
+body.com-rseventspro main#sp-main-body > section#sp-main-body {
+    padding-top: 15px !important;
+}
+
+/* RSEvents Pro - espace entre le sous-titre et le contenu */
+.com-rseventspro .rse-page-subtitle {
+    margin-bottom: 60px;
+}
+
+/* RSEvents Pro (vue calendrier) - aligne la sidebar avec le debut du calendrier */
+@media (min-width: 992px) {
+    .com-rseventspro.view-calendar .rse-sidebar-col {
+        padding-top: 113px;
     }
 }

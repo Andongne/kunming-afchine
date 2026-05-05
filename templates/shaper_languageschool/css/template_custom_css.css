@@ -909,3 +909,26 @@ ul.rs_events_container .rsepro-reg-deadline {
     clip-path: none !important;
   }
 }
+
+
+/* ==========================================================================
+   MISE EN PAGE - Titre de page et sidebar
+   ========================================================================== */
+
+/* RSEvents Pro - reduit l'espace au-dessus du titre (section pt: 50px -> 15px)
+   pour aligner visuellement avec les pages SP Builder */
+body.com-rseventspro main#sp-main-body > section#sp-main-body {
+    padding-top: 15px !important;
+}
+
+/* RSEvents Pro - espace entre le sous-titre et le contenu */
+.com-rseventspro .rse-page-subtitle {
+    margin-bottom: 60px;
+}
+
+/* RSEvents Pro (vue calendrier) - aligne la sidebar avec le debut du calendrier */
+@media (min-width: 992px) {
+    .com-rseventspro.view-calendar .rse-sidebar-col {
+        padding-top: 113px;
+    }
+}
