@@ -1121,3 +1121,14 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
     box-sizing: border-box !important;
     resize: vertical;
 }
+
+/* ── Fix largeur universelle inputs formulaire cours ───────────── */
+#userForm select,
+#userForm textarea,
+#userForm input[type="text"],
+#userForm input[type="email"],
+#userForm input[type="tel"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
