@@ -746,7 +746,7 @@ a.afk-card-overlay-link {
     padding: 50px !important;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
     background: #fff !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 30px !important;
 }
 
 .afk-sidebar-card .afk-sidebar-title {
@@ -755,6 +755,14 @@ a.afk-card-overlay-link {
     font-weight: 600 !important;
     text-align: center !important;
     margin-bottom: 20px !important;
+}
+
+/* Boutons compacts dans la sidebar */
+.afk-sidebar-card .sppb-btn {
+    font-size: 0.78rem !important;
+    padding: 5px 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
 }
 
 /* Modules menu (Inscription, Préparation) */
