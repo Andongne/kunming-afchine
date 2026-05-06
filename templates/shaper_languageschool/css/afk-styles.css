@@ -967,9 +967,8 @@ body.com-rsform .sp-column > #userForm {
     margin-top: 0 !important;
 }
 
-/* Cards inscriptions fermées : grisées, sans hover, non cliquables */
+/* Cards inscriptions fermées : atténuées, sans hover, non cliquables */
 .afk-event-card:has(.rsepro-reg-closed) {
-    filter: grayscale(100%);
     opacity: 0.55;
 }
 .afk-event-card:has(.rsepro-reg-closed):hover {
@@ -981,4 +980,15 @@ body.com-rsform .sp-column > #userForm {
 .afk-event-card:has(.rsepro-reg-closed) * {
     pointer-events: none !important;
     cursor: default !important;
+}
+
+/* Masquer les événements sans image exam (cours parasites) en ZH/EN */
+body.zh-cn #rs_events_container > li.afk-event-card:not(:has(.rs_event_image)),
+body.en-gb #rs_events_container > li.afk-event-card:not(:has(.rs_event_image)) {
+    display: none !important;
+}
+/* Masquer aussi les groupes mois sans events visibles (si tous les events du mois sont masqués) */
+body.zh-cn #rs_events_container > li.rsepro-my-grouped:has(+ li.afk-event-card:not(:has(.rs_event_image)) + li.rsepro-my-grouped),
+body.en-gb #rs_events_container > li.rsepro-my-grouped:has(+ li.afk-event-card:not(:has(.rs_event_image)) + li.rsepro-my-grouped) {
+    display: none !important;
 }

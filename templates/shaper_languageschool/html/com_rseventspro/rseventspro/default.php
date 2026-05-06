@@ -403,3 +403,69 @@ if (strpos($_tag, 'zh') === 0) {
 </div><!-- /rse-sidebar-col -->
 </div><!-- /row rse-with-sidebar -->
 <?php endif; ?>
+<?php
+// Correction ordre + catégories pour ZH/EN (RSEvents bug multilingue)
+$bodyLang = strtolower(Factory::getLanguage()->getTag()); // zh-cn ou en-gb
+$isAltLang = in_array($bodyLang, ['zh-cn', 'en-gb']);
+if ($isAltLang):
+?>
+<script>
+(function(){
+  function afkFixCalendar(){
+    var list = document.querySelector('#rs_events_container, ul.rsepro-events-list, ul[class*="rsepro"]');
+    if (!list) return;
+
+    var items = [...list.querySelectorAll('li.afk-event-card')];
+    if (!items.length) return;
+
+    // 1. Masquer les events sans image exam (= cours parasites)
+    items.forEach(function(li){
+      var hasImg = li.querySelector('.rs_event_image img, .rsepro-event-image-block img, img[src*="/images/TCF"], img[src*="/images/TEF"], img[src*="/images/TEFAQ"]');
+      if (!hasImg) { li.style.display = 'none'; li.setAttribute('aria-hidden','true'); }
+    });
+
+    // 2. Re-trier les events visibles par date ASC
+    var groupItems = [...list.querySelectorAll('li')];
+    var blocks = [];
+    var current = [];
+    groupItems.forEach(function(li){
+      if (li.classList.contains('rsepro-my-grouped')) {
+        if (current.length) blocks.push(current);
+        current = [li];
+      } else {
+        current.push(li);
+      }
+    });
+    if (current.length) blocks.push(current);
+
+    // Extraire date depuis le contenu de la card
+    function getDate(block) {
+      var dateEl = block.find(function(el){ return el.querySelector && el.querySelector('.rsepro-event-on-block b'); });
+      if (!dateEl) return '';
+      return dateEl.querySelector('.rsepro-event-on-block b').textContent.trim();
+    }
+
+    // Re-trier les blocs par date ISO contenue dans le meta startDate
+    blocks.sort(function(a, b){
+      var ma = a.find ? a.find(function(el){ return el.querySelector && el.querySelector('meta[itemprop="startDate"]'); }) : null;
+      var mb = b.find ? b.find(function(el){ return el.querySelector && el.querySelector('meta[itemprop="startDate"]'); }) : null;
+      var da = ma ? (ma.querySelector('meta[itemprop="startDate"]') || {}).getAttribute('content') || '' : '';
+      var db = mb ? (mb.querySelector('meta[itemprop="startDate"]') || {}).getAttribute('content') || '' : '';
+      return da < db ? -1 : da > db ? 1 : 0;
+    });
+
+    // Remettre dans le DOM
+    blocks.forEach(function(block){
+      block.forEach(function(el){ list.appendChild(el); });
+    });
+  } // end afkFixCalendar
+
+  // Exécuter après l'initialisation RSEvents (jQuery ready + délai)
+  if (window.jQuery) {
+    jQuery(function(){ setTimeout(afkFixCalendar, 300); });
+  } else {
+    window.addEventListener('load', function(){ setTimeout(afkFixCalendar, 300); });
+  }
+})();
+</script>
+<?php endif; ?>
