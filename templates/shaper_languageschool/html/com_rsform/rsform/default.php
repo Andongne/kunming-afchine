@@ -222,14 +222,17 @@ if ($_afkFormId === 6) {
         }
         ff.dispatchEvent(new Event('change'));
       }
-      // Professeur
+      // Professeur — matching insensible à la casse
       var pf = document.querySelector("select[name='form[Professeur][]'],input[name='form[Professeur][]']");
-      if (pf) {
+      if (pf && d.teacher) {
         if (pf.tagName==='SELECT') {
+          var tl = d.teacher.toLowerCase().trim();
           for(var i=0;i<pf.options.length;i++){
-            if(pf.options[i].value===d.teacher||pf.options[i].text===d.teacher){pf.selectedIndex=i;break;}
+            if(pf.options[i].value.toLowerCase()===tl||pf.options[i].text.toLowerCase()===tl){
+              pf.selectedIndex=i; break;
+            }
           }
-        } else pf.value=d.teacher;
+        } else pf.value = d.teacher;
       }
     });
 

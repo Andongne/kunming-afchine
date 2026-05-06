@@ -17,10 +17,10 @@ $event		= $details['event'];
 // AFK: redirection automatique vers le formulaire pour les cours (non-examens)
 if (isset($event) && !preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
     // Format cours
-    $_afkFormat = preg_match('/VIP\s*3|trio/i', $event->name)  ? 'VIP 3 cours avec 3 \u00e9tudiants'
-        : (preg_match('/VIP\s*2|duo/i', $event->name)           ? 'VIP 2 cours avec 2 \u00e9tudiants'
+    $_afkFormat = preg_match('/VIP\\s*3|trio/i', $event->name)  ? 'VIP 3 cours avec 3 étudiants'
+        : (preg_match('/VIP\\s*2|duo/i', $event->name)           ? 'VIP 2 cours avec 2 étudiants'
         : (preg_match('/VIP/i', $event->name)                    ? 'VIP 1 cours individuel'
-        : 'Groupes (de 6 \u00e0 12 personnes)'));
+        : 'Groupes (de 6 à 12 personnes)'));
     // Date de la séance
     $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
     // Enseignant depuis la description
