@@ -52,67 +52,39 @@
 
 /**
  * Regroupe les 6 cards homepage en un seul conteneur 2-colonnes sur mobile
- * Détection automatique des cards par structure (image + texte + bouton)
- * Aucun ID codé en dur — résistant aux réorganisations SP Builder
+ * Cards mobiles homepage — class CSS à poser dans SP Builder sur chaque colonne-card :
+ *   afk-mobile-card
+ * Aucun UUID codé en dur, résistant à toute réorganisation.
  */
 (function () {
-
-  /**
-   * Détecte si un column-wrap est une "card" (contient image + texte + bouton)
-   */
-  function isCard(colWrap) {
-    // Les classes addon-root-* sont sur les sppb-addon-wrapper enfants
-    return colWrap.querySelector('.sppb-addon-wrapper.addon-root-image') &&
-           colWrap.querySelector('.sppb-addon-wrapper.addon-root-text-block, .sppb-addon-wrapper.addon-root-custom-html') &&
-           colWrap.querySelector('.sppb-addon-wrapper.addon-root-button, .sppb-btn');
-  }
 
   function reorganizeCards() {
     if (window.innerWidth > 767) return;
     if (document.getElementById('afk-cards-grid')) return;
 
-    var pb = document.querySelector('#sp-page-builder.page-173');
-    if (!pb) return;
-
-    // Borner la détection entre les marqueurs hp-cards-row-1 et hp-cards-row-3
-    // Ces classes sont posées manuellement dans SP Builder — stables aux réorganisations
-    var marker1 = pb.querySelector('.hp-cards-row-1');
-    var marker3 = pb.querySelector('.hp-cards-row-3');
-    if (!marker1 || !marker3) return;
-
-    var sec1 = marker1.closest('[id^="section-id-"]'); // section du marqueur début
-    var sec3 = marker3.closest('[id^="section-id-"]'); // section du marqueur fin
-    if (!sec1 || !sec3) return;
-
-    // Collecter toutes les sections entre sec1 (exclu) et sec3 (exclu)
-    var allSections = Array.from(pb.querySelectorAll('[id^="section-id-"]'));
-    var idx1 = allSections.indexOf(sec1);
-    var idx3 = allSections.indexOf(sec3);
-    if (idx1 < 0 || idx3 <= idx1) return;
-
-    var cardSections = allSections.slice(idx1 + 1, idx3);
-    if (!cardSections.length) return;
-
-    // Extraire les colonnes-cards dans ces sections uniquement
-    var cardCols = [];
-    cardSections.forEach(function (sec) {
-      sec.querySelectorAll('[id^="column-wrap-id-"]').forEach(function (cw) {
-        if (isCard(cw)) cardCols.push(cw);
-      });
-    });
+    // Sélectionner uniquement les colonnes marquées afk-mobile-card
+    var cardCols = Array.from(document.querySelectorAll('.afk-mobile-card'));
     if (cardCols.length < 2) return;
 
-    // Créer la grille 2 colonnes
+    // Créer la grille flex 2 colonnes
     var grid = document.createElement('div');
     grid.id = 'afk-cards-grid';
     grid.style.cssText = 'display:flex;flex-wrap:wrap;padding:3px 10px;background:transparent;';
 
-    var firstCardSection = cardSections[0];
-    cardCols.forEach(function (col) { grid.appendChild(col); });
+    // Insérer avant la première card et déplacer toutes les cards dedans
+    var firstCol = cardCols[0];
+    var firstSection = firstCol.closest('[id^="section-id-"]');
+    if (firstSection) firstSection.parentNode.insertBefore(grid, firstSection);
+    else firstCol.parentNode.insertBefore(grid, firstCol);
 
-    // Insérer avant la première section cards, masquer les sections vides
-    firstCardSection.parentNode.insertBefore(grid, firstCardSection);
-    cardSections.forEach(function (sec) {
+    var sectionsToHide = new Set();
+    cardCols.forEach(function (col) {
+      var sec = col.closest('[id^="section-id-"]');
+      if (sec) sectionsToHide.add(sec);
+      grid.appendChild(col);
+    });
+
+    sectionsToHide.forEach(function (sec) {
       sec.style.cssText += ';display:none!important;min-height:0!important;';
     });
   }
