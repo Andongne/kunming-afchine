@@ -58,8 +58,19 @@ if (!empty($event->small_description)) {
     }
 }
 
-// Badge inscription fermée
+// Badge inscription fermée / passée
 $regClosed = !empty($event->registration_closed);
+// Délai d'inscription passé (même logique que le sélecteur de séances)
+$_afkRegPast = false;
+if (!$regClosed && !empty($event->start)) {
+    $_afkEvTs   = strtotime($event->start);
+    $_afkEvDay  = date('Y-m-d', $_afkEvTs);
+    $_afkDl     = strtotime($_afkEvDay . ' -1 day 17:00:00');
+    $_afkDow    = (int)date('N', $_afkDl);
+    if ($_afkDow == 7) $_afkDl -= 2 * 86400;
+    if ($_afkDow == 6) $_afkDl -= 1 * 86400;
+    if (time() >= $_afkDl) $_afkRegPast = true;
+}
 ?>
 
 <?php if ($monthYear = rseventsproHelper::showMonthYear($event->start, 'events'.$this->fid, 'items')) { ?>
@@ -74,9 +85,14 @@ $regClosed = !empty($event->registration_closed);
 
     <!-- Badge tarif -->
     <span class="afk-tarif-badge"><?php echo htmlspecialchars($tarif, ENT_QUOTES, 'UTF-8'); ?></span>
+    <?php if ($regClosed || $_afkRegPast): ?>
+    <span class="afk-badge-closed">
+      <?php echo $regClosed ? 'Inscriptions fermées' : 'Inscription passée'; ?>
+    </span>
+    <?php endif; ?>
 
-    <!-- Card cliquable (désactivée si inscriptions fermées) -->
-    <?php if ($regClosed): ?>
+    <!-- Card cliquable (désactivée si inscriptions fermées ou passée) -->
+    <?php if ($regClosed || $_afkRegPast): ?>
     <div class="afk-card-link afk-card-closed">
     <?php else: ?>
     <a href="<?php echo htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8'); ?>"

@@ -1132,3 +1132,17 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
     max-width: 100% !important;
     box-sizing: border-box !important;
 }
+
+/* Badge "Inscription passée / fermée" sur les cartes cours */
+.afk-badge-closed {
+  display: inline-block;
+  background: #888;
+  color: #fff;
+  font-size: 0.72em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
