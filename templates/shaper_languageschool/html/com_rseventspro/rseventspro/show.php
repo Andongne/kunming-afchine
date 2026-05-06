@@ -1,67 +1,4 @@
 <?php
-
-// AFK: traduction manuelle via Falang (pour les champs non interceptes par le driver)
-function afk_falang_translate($table, $id, $field, $default) {
-    static $db = null;
-    static $lang_id = null;
-    if ($db === null) {
-        $db = JFactory::getDbo();
-        $lang = JFactory::getLanguage()->getTag();
-        // Lire aussi le param URL &lang= (quand FaLang ne bascule pas le contexte)
-        $url_lang = \Joomla\CMS\Factory::getApplication()->input->get('lang', '');
-        if ($url_lang) $lang = $url_lang;
-        // Mapping connu : zh-CN = 4, en-GB = 1 (Falang site AF Kunming)
-        $map = ['zh-CN' => 4, 'en-GB' => 1, 'en' => 1, 'en-US' => 1];
-        $lang_id = 0;
-        foreach ($map as $k => $v) {
-            if (strpos($lang, $k) === 0) { $lang_id = $v; break; }
-        }
-    }
-    if (!$lang_id) return $default;
-    $q = $db->getQuery(true)
-        ->select('value')
-        ->from('#__falang_content')
-        ->where($db->quoteName('reference_table') . ' = ' . $db->quote($table))
-        ->where($db->quoteName('reference_id') . ' = ' . (int)$id)
-        ->where($db->quoteName('reference_field') . ' = ' . $db->quote($field))
-        ->where($db->quoteName('language_id') . ' = ' . $lang_id)
-        ->where($db->quoteName('published') . ' = 1');
-    $db->setQuery($q);
-    $val = $db->loadResult();
-    return $val ?: $default;
-}
-
-// AFK: mois localises selon langue
-function afk_localize_date($date_str) {
-    $lang = JFactory::getLanguage()->getTag();
-    // Lire aussi le param URL &lang=
-    $url_lang = \Joomla\CMS\Factory::getApplication()->input->get('lang', '');
-    if ($url_lang) $lang = $url_lang;
-    $en = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    $fr = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-    if (strpos($lang, 'zh') !== false) {
-        $zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-        // Remplacer mois anglais ET français
-        $r = str_replace($en, $zh, $date_str);
-        $r = str_ireplace($fr, $zh, $r);
-        // Reformater "24 4月 2026" → "2026年4月24日"
-        if (preg_match('/^(\d+)\s+([\d]+月)\s+(\d{4})/', $r, $m)) {
-            return $m[3] . '年' . $m[2] . $m[1] . '日';
-        }
-        return $r;
-    }
-    if (strpos($lang, 'en') !== false) {
-        // Convertir mois français en anglais et reformater
-        $r = str_ireplace($fr, $en, $date_str);
-        // Reformater "24 April 2026" → "April 24, 2026"
-        if (preg_match('/^(\d+)\s+([A-Za-z]+)\s+(\d{4})/', $r, $m)) {
-            return $m[2] . ' ' . $m[1] . ', ' . $m[3];
-        }
-        return $r;
-    }
-    $fr_lower = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-    return str_replace($en, $fr_lower, $date_str);
-}
 /**
 * @package RSEvents!Pro
 * @copyright (C) 2020 www.rsjoomla.com
@@ -74,29 +11,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
-
-// AFK: détecter la langue (URL param ou contexte FaLang)
-$_afk_url_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
-
-// AFK: lire traductions depuis rseventspro_translations (système RSEvents natif)
-function afk_rsevents_translate($event_id, $field, $default, $lang) {
-    if (!$lang || $lang === 'fr-FR') return $default;
-    static $db2 = null;
-    if ($db2 === null) $db2 = JFactory::getDbo();
-    $q = $db2->getQuery(true)
-        ->select('value')
-        ->from('#__rseventspro_translations')
-        ->where($db2->quoteName('reference') . '=' . $db2->quote('rseventspro_events'))
-        ->where($db2->quoteName('reference_id') . '=' . (int)$event_id)
-        ->where($db2->quoteName('property') . '=' . $db2->quote($field))
-        ->where($db2->quoteName('language') . '=' . $db2->quote($lang));
-    $db2->setQuery($q);
-    $val = $db2->loadResult();
-    return ($val !== null && $val !== '') ? $val : $default;
-}
-if ($_afk_url_lang && $_afk_url_lang !== 'fr-FR') {
-    Factory::getLanguage()->load('com_rseventspro', JPATH_SITE, $_afk_url_lang, true, false);
-}
 
 $details	= rseventsproHelper::details($this->event->id, null, true);
 $event		= $details['event'];
@@ -111,22 +25,28 @@ $itinerary	= $details['itinerary'];
 $full		= rseventsproHelper::eventisfull($this->event->id);
 $ongoing	= rseventsproHelper::ongoing($this->event->id); 
 $featured 	= $event->featured ? ' rs_featured_event' : ''; 
-// AFK: appliquer traductions Falang manuellement (driver n'intercepte pas RSEvents! Pro)
-$event->name = afk_rsevents_translate($event->id, 'name', $event->name, $_afk_url_lang)
-    ?: afk_falang_translate('rseventspro_events', $event->id, 'name', $event->name);
-$event->small_description = afk_rsevents_translate($event->id, 'small_description', $event->small_description, $_afk_url_lang)
-    ?: afk_falang_translate('rseventspro_events', $event->id, 'small_description', $event->small_description);
 $description= empty($event->description) ? $event->small_description : $event->description;
 $links		= rseventsproHelper::getConfig('modal','int');
 $modal		= rseventsproHelper::getConfig('modaltype','int');
 $tmpl		= $links == 0 ? '' : '&tmpl=component';
 
 $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=subscribe&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
-// AFK: surcharger le lien d'inscription selon la langue
-if (isset($_afk_url_lang) && strpos($_afk_url_lang, 'zh') !== false) {
-    $subscribeURL = 'https://kunming-afchine.org/zh/ren-zheng-yu-wen-ping/bao-ming-can-jia-kao-shi/fa-yu-kao-shi-bao-ming-biao';
-} elseif (isset($_afk_url_lang) && strpos($_afk_url_lang, 'en') !== false) {
-    $subscribeURL = 'https://kunming-afchine.org/en/certifications-and-diplomas/test-registration/registration-form';
+
+// AFK : pour les cours (non-examens), rediriger vers le formulaire d'inscription cours
+if (!preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
+    $_afkLang = Factory::getLanguage()->getTag();
+    $_afkFormBase = Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
+    $_afkFormBase = strtok($_afkFormBase, '?');
+    $_afkFormat = preg_match('/VIP\s*3|trio/i', $event->name) ? 'VIP3 trio (98 yuan/h par pers.)'
+        : (preg_match('/VIP\s*2|duo/i', $event->name) ? 'VIP2 duo (128 yuan/h par pers.)'
+        : (preg_match('/VIP/i', $event->name) ? 'VIP1 individuel (208 yuan/h)'
+        : 'Groupe 6-12 pers. (49 yuan/h)'));
+    $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
+    $_afkNotes = $event->name . ($_afkDate ? ' — ' . $_afkDate : '');
+    $subscribeURL = $_afkFormBase
+        . '?form%5BFormat_cours%5D%5B%5D=' . urlencode($_afkFormat)
+        . '&form%5BNotes%5D=' . urlencode($_afkNotes);
+    if ($_afkLang && $_afkLang !== 'fr-FR') $subscribeURL .= '&lang=' . urlencode($_afkLang);
 }
 $waitinglistURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=waiting&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $inviteURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=invite&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
@@ -184,7 +104,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	<div id="rsepro-event-title" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mb-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 			<h1 class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?><?php echo $featured; ?>">
-				<?php $afk_t = explode(' — ', $event->name, 2); echo $this->escape($afk_t[0]); ?>
+				<?php echo $this->escape($event->name); ?>
 				<?php if ($event->published == 3) { ?><small class="text-danger">(<?php echo Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT'); ?>)</small><?php } ?>
 			</h1>
 		</div>
@@ -192,7 +112,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	
 	<div id="rsepro-event-controls" class="<?php echo RSEventsproAdapterGrid::styles(array('row')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
-			<?php if (false) /* AFK */ { ?>
+			<?php if ($this->admin || $event->owner == $this->user || $event->sid == $this->user) { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_ADMIN_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
@@ -352,7 +272,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if (false) /* AFK */ { ?>
+			<?php if ((!$this->eventended && !empty($this->options['show_invite'])) || $this->report || !empty($this->options['show_print']) || !empty($this->options['show_export']) || ($event->owner && !empty($this->options['contact'])) || $this->config->timezone || ($this->eventended && $event->feedback)) { ?>
 			<div class="btn-group">
 				<button data-toggle="dropdown" data-bs-toggle="dropdown" class="<?php echo RSEventsproAdapterGrid::styles(array('btn')); ?> dropdown-toggle"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_USER_OPTIONS'); ?> <span class="caret"></span></button>
 				<ul class="dropdown-menu">
@@ -396,7 +316,7 @@ rseventsproMapHelper::loadMap($mapParams);
 					</li>
 					<?php } ?>
 					
-					<?php if (false) /* AFK */ { ?>
+					<?php if (!empty($this->options['show_export'])) { ?>
 					<li>
 						<a class="dropdown-item" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&task=rseventspro.export&id='.rseventsproHelper::sef($event->id,$event->name)); ?>">
 							<i class="fa fa-calendar fa-fw"></i> <?php echo Text::_('COM_RSEVENTSPRO_EXPORT_EVENT'); ?>
@@ -440,7 +360,7 @@ rseventsproMapHelper::loadMap($mapParams);
 			<?php } ?>
 			<?php } ?>
 			
-			<?php if (false) /* AFK */ { ?>
+			<?php if (!empty($this->options['enable_rating'])) { ?>
 			<?php echo rseventsproHelper::rating($event->id); ?>
 			<?php } ?>
 		</div>
@@ -485,11 +405,11 @@ rseventsproMapHelper::loadMap($mapParams);
 			
 			<div id="rsepro-event-details-left">
 				<?php if (($event->allday && !empty($this->options['start_date'])) || (!$event->allday && (!empty($this->options['start_date']) || !empty($this->options['start_time']) || !empty($this->options['end_date']) || !empty($this->options['end_time'])))) { ?>
-				<div id="rsepro-event-date" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>" style="font-size:1.6em;font-weight:700;margin-bottom:0.4em;">
+				<div id="rsepro-event-date" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-calendar fa-fw"></i> 
 						<?php if ($event->allday) { ?>
-						<?php echo afk_localize_date(rseventsproHelper::showdate($event->start,$this->config->global_date,true)); ?>
+						<?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_ON'); ?> <?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?>
 						<?php } else { ?>
 						<?php if (!empty($this->options['start_date']) || !empty($this->options['start_time'])) { ?>
 						<?php if ((!empty($this->options['start_date']) || !empty($this->options['start_time'])) && empty($this->options['end_date']) && empty($this->options['end_time'])) { ?>
@@ -522,7 +442,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				</div>
 				<?php } ?>
 				
-				<?php if (false) /* AFK */ { ?>
+				<?php if (!empty($this->options['show_postedby'])) { ?>
 				<div id="rsepro-event-owner" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-user fa-fw"></i> 
@@ -563,7 +483,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				<?php } ?>
 				<?php } ?>
 				
-				<?php if (false) { // Catégories masquées ?>
+				<?php if (!empty($categories) && !empty($this->options['show_categories'])) { ?>
 				<div id="rsepro-event-categories" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-folder fa-fw"></i> 
@@ -581,7 +501,7 @@ rseventsproMapHelper::loadMap($mapParams);
 				</div>
 				<?php } ?>
 				
-				<?php if (false) /* AFK */ { ?>
+				<?php if (!empty($this->options['show_hits'])) { ?>
 				<div id="rsepro-event-hits" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'g-0')); ?>">
 					<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 						<i class="fa fa-eye fa-fw"></i> 
@@ -593,7 +513,7 @@ rseventsproMapHelper::loadMap($mapParams);
 		</div>
 	</div>
 	
-	<?php if (false) /* AFK */ { ?>
+	<?php if (!empty($this->options['sharing'])) { ?>
 	<div id="rsepro-event-sharing" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?>">
 			
@@ -665,7 +585,7 @@ rseventsproMapHelper::loadMap($mapParams);
 	<?php } ?>
 	
 	<?php if (!empty($this->options['show_description']) && !empty($description)) { ?>
-	<div id="rsepro-event-description" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>" style="font-size:1.4em;font-weight:600;">
+	<div id="rsepro-event-description" class="<?php echo RSEventsproAdapterGrid::styles(array('row', 'mt-3')); ?>">
 		<div class="<?php echo RSEventsproAdapterGrid::column(12); ?> description">
 			<?php echo $description; ?>
 		</div>
