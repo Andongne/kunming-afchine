@@ -99,6 +99,15 @@ foreach ($this->calendar->days->weekdays as $weekday) {
     return text;
   }
 
+  // Tarif selon nom d'événement
+  function detectTarif(name) {
+    if (/VIP\s*3|trio/i.test(name))  return '98 ¥/h/pers.';
+    if (/VIP\s*2|duo/i.test(name))   return '128 ¥/h/pers.';
+    if (/VIP/i.test(name))            return '208 ¥/h';
+    if (/4.?5\s*pers|Groupe\s*4/i.test(name)) return '78 ¥/h/pers.';
+    return '49 ¥/h/pers.';
+  }
+
   function processTooltip(pop) {
     // Traduire les dates dans le corps
     var content = pop.querySelector('.rsepro-calendar-tooltip-content');
@@ -111,6 +120,26 @@ foreach ($this->calendar->days->weekdays as $weekday) {
       var text = el.innerHTML.trim();
       el.innerHTML = '<strong>' + text + '</strong>';
     });
+    // Ajouter prof + tarif dans le corps du popover
+    var body = pop.querySelector('.popover-body');
+    var header = pop.querySelector('.popover-header');
+    if (body && header && !pop.getAttribute('data-afk-meta')) {
+      pop.setAttribute('data-afk-meta', '1');
+      var eventName = header.textContent.trim();
+      // Extraire enseignant depuis le texte du body
+      var bodyText = body.innerText || body.textContent;
+      var teacher = '';
+      var tm = bodyText.match(/Enseignant[^:]*:\s*([^\n\r]+)/);
+      if (tm) teacher = tm[1].trim();
+      var tarif = detectTarif(eventName);
+      // Injecter en bas du body
+      var meta = document.createElement('div');
+      meta.className = 'afk-tooltip-meta';
+      meta.style.cssText = 'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.85em;line-height:1.6';
+      if (teacher) meta.innerHTML += '<span style="color:#DA002E">&#9632;</span> ' + teacher + '<br>';
+      meta.innerHTML += '<span style="color:#DA002E">&#9632;</span> <strong>' + tarif + '</strong>';
+      body.appendChild(meta);
+    }
   }
 
   // Polling léger : surveille le popover actif toutes les 200ms
@@ -139,11 +168,11 @@ $_afkCoursFormUrl = strtok($_afkCoursFormUrl, '?'); // garder chemin SEF seuleme
 
   // Détecter le format de cours depuis le nom de l'événement
   function detectFormat(name) {
-    if (/VIP\s*3|trio/i.test(name))  return 'VIP3 trio (98 yuan/h par pers.)';
-    if (/VIP\s*2|duo/i.test(name))   return 'VIP2 duo (128 yuan/h par pers.)';
-    if (/VIP/i.test(name))            return 'VIP1 individuel (208 yuan/h)';
-    if (/Groupe\s*4|4.5\s*pers/i.test(name)) return 'Groupe 4-5 pers. (78 yuan/h)';
-    return 'Groupe 6-12 pers. (49 yuan/h)'; // défaut cours de groupe
+    if (/VIP\s*3|trio/i.test(name))  return 'VIP3 trio';
+    if (/VIP\s*2|duo/i.test(name))   return 'VIP2 duo';
+    if (/VIP/i.test(name))            return 'VIP1 individuel';
+    if (/Groupe\s*4|4.?5\s*pers/i.test(name)) return 'Groupe 4-5 pers.';
+    return 'Groupe 6-12 pers.'; // défaut cours de groupe
   }
 
   // Extraire la date depuis data-content du tooltip : "Ven 08/05/2026"
@@ -165,7 +194,7 @@ $_afkCoursFormUrl = strtok($_afkCoursFormUrl, '?'); // garder chemin SEF seuleme
       var date = extractDate(dc);
       var url = FORM_URL
         + '?form%5BFormat_cours%5D%5B%5D=' + encodeURIComponent(format)
-        + '&form%5BNotes%5D=' + encodeURIComponent(name + (date ? ' — ' + date : ''));
+        + (date ? '&form%5BSession%5D%5B%5D=' + encodeURIComponent(date) : '');
       if (LANG.indexOf('zh') === 0 || LANG.indexOf('en') === 0) url += '&lang=' + encodeURIComponent(LANG);
       a.href = url;
       a.removeAttribute('data-bs-toggle');  // désactiver le tooltip sur clic

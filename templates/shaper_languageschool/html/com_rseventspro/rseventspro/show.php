@@ -16,17 +16,27 @@ $details	= rseventsproHelper::details($this->event->id, null, true);
 $event		= $details['event'];
 // AFK: redirection automatique vers le formulaire pour les cours (non-examens)
 if (isset($event) && !preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
-    $_afkFormat = preg_match('/VIP\\s*3|trio/i', $event->name)  ? 'VIP3 trio (98 yuan/h par pers.)'
-        : (preg_match('/VIP\\s*2|duo/i', $event->name)           ? 'VIP2 duo (128 yuan/h par pers.)'
-        : (preg_match('/VIP/i', $event->name)                       ? 'VIP1 individuel (208 yuan/h)'
-        : 'Groupe 6-12 pers. (49 yuan/h)'));
+    // Format cours
+    $_afkFormat = preg_match('/VIP\s*3|trio/i', $event->name)  ? 'VIP3 trio'
+        : (preg_match('/VIP\s*2|duo/i', $event->name)           ? 'VIP2 duo'
+        : (preg_match('/VIP/i', $event->name)                    ? 'VIP1 individuel'
+        : 'Groupe 6-12 pers.'));
+    // Date de la séance
     $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
-    $_afkNotes = $event->name . ($_afkDate ? ' \xe2\x80\x94 ' . $_afkDate : '');
+    // Enseignant depuis la description
+    $_afkDesc = strip_tags($event->description ?? '');
+    $_afkTeacher = '';
+    if (preg_match('/Enseignant[^:]*:\s*([^\n\r]+)/u', $_afkDesc, $_afkTm)) {
+        $_afkTeacher = trim($_afkTm[1]);
+    }
+    // Langue
     $_afkLang = Factory::getLanguage()->getTag();
+    // URL formulaire
     $_afkURL = \Joomla\CMS\Router\Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
     $_afkURL = strtok($_afkURL, '?')
-        . '?form%5BFormat_cours%5D%5B%5D=' . rawurlencode($_afkFormat)
-        . '&form%5BNotes%5D=' . rawurlencode($_afkNotes);
+        . '?form%5BFormat_cours%5D%5B%5D=' . rawurlencode($_afkFormat);
+    if ($_afkDate)    $_afkURL .= '&form%5BSession%5D%5B%5D=' . rawurlencode($_afkDate);
+    if ($_afkTeacher) $_afkURL .= '&form%5BProfesseur%5D%5B%5D=' . rawurlencode($_afkTeacher);
     if ($_afkLang && $_afkLang !== 'fr-FR') $_afkURL .= '&lang=' . rawurlencode($_afkLang);
     Factory::getApplication()->redirect($_afkURL);
     exit;
@@ -50,23 +60,6 @@ $tmpl		= $links == 0 ? '' : '&tmpl=component';
 
 $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=subscribe&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 
-// AFK : pour les cours (non-examens), rediriger vers le formulaire d'inscription cours
-if (!preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
-    $_afkLang = Factory::getLanguage()->getTag();
-    $_afkFormBase = \Joomla\CMS\Router\Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
-    $_afkFormBase = strtok($_afkFormBase, '?');
-    $_afkFormat = preg_match('/VIP\s*3|trio/i', $event->name) ? 'VIP3 trio (98 yuan/h par pers.)'
-        : (preg_match('/VIP\s*2|duo/i', $event->name) ? 'VIP2 duo (128 yuan/h par pers.)'
-        : (preg_match('/VIP/i', $event->name) ? 'VIP1 individuel (208 yuan/h)'
-        : 'Groupe 6-12 pers. (49 yuan/h)'));
-    $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
-    $_afkNotes = $event->name . ($_afkDate ? ' — ' . $_afkDate : '');
-    $modal = 0; $links = 0; // désactiver modal pour cours
-    $subscribeURL = $_afkFormBase
-        . '?form%5BFormat_cours%5D%5B%5D=' . urlencode($_afkFormat)
-        . '&form%5BNotes%5D=' . urlencode($_afkNotes);
-    if ($_afkLang && $_afkLang !== 'fr-FR') $subscribeURL .= '&lang=' . urlencode($_afkLang);
-}
 $waitinglistURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=waiting&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $inviteURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=invite&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
 $messageURL		= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=message&id='.rseventsproHelper::sef($event->id,$event->name).$tmpl);
