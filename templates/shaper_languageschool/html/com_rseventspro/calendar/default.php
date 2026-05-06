@@ -7,6 +7,22 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+// AFK: pré-charger descriptions pour tooltip (teacher)
+$_afkDescMap = [];
+if (!empty($this->calendar->events)) {
+    $_afkDb = \Joomla\CMS\Factory::getDbo();
+    $_afkIds = implode(',', array_map('intval', array_keys($this->calendar->events)));
+    $_afkRows = $_afkDb->setQuery("SELECT id, description FROM #__rseventspro_events WHERE id IN ($_afkIds)")->loadAssocList('id');
+    foreach ($_afkRows as $id => $row) {
+        $_afkDesc = strip_tags($row['description'] ?? '');
+        $teacher = '';
+        if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur\xc3\xa9e|Niveau|$)/u', $_afkDesc, $tm)) {
+            $teacher = trim($tm[1]);
+        }
+        $_afkDescMap[$id] = $teacher;
+    }
+}
+
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -140,12 +156,8 @@ $showColors		= $this->params->get('colors', 0); ?>
 										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event,$this->calendar->events[$event]->name),false,rseventsproHelper::itemid($event)); ?>" class="rsttip rse_event_link <?php echo $full ? 'rs_event_full' : ''; ?> <?php echo $canceled ? 'rsepro_canceled_event_cal' : ''; ?>" data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php
     $_afkTip = rseventsproHelper::calendarTooltip($event);
     $_afkObj = $this->calendar->events[$event];
-    $_afkDesc = strip_tags($_afkObj->description ?? '');
-    // Enseignant
-    $_afkTeacher = '';
-    if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Durée|Niveau|$)/u', $_afkDesc, $_afkTm)) {
-        $_afkTeacher = trim($_afkTm[1]);
-    }
+    // Enseignant depuis map pré-chargée
+    $_afkTeacher = $_afkDescMap[$event] ?? '';
     // Tarif
     $_afkName = $_afkObj->name ?? '';
     if      (preg_match('/VIP\s*3|trio/i', $_afkName))         $_afkTarif = '98 ¥/h/pers.';
