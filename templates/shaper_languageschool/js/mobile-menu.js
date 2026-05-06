@@ -57,13 +57,14 @@
 (function () {
   var COL_IDS = [
     'column-wrap-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9',
-    'column-wrap-id-6b4135c7-be3f-431c-a215-b747d6b02cd9',
-    'column-wrap-id-191123f9-b3bd-4275-87d0-ff89eb9b772c',
+    'column-wrap-id-75c55a92-5c35-469f-817a-ec46505cc0c6',
+    'column-wrap-id-eb353f01-c701-4c12-8691-dda8e365a3a2',
+    'column-wrap-id-adae435c-32b6-4d67-8445-0bcc108e3408',
     'column-wrap-id-0cc04406-1e6e-4c36-9599-a0e920772385',
     'column-wrap-id-41c59e95-316d-47ef-a016-aaa82d14b301',
     'column-wrap-id-06214299-0bd0-4f18-bb67-66d79b30f265'
   ];
-  var SEC1 = 'section-id-113b9392-0de7-4ad3-acfd-d47455b7e771';
+  var SEC1 = 'section-id-90427b43-0b92-4538-964b-79192deb738d';
   var SEC2 = 'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47';
 
   function reorganizeCards() {
@@ -106,9 +107,8 @@
  */
 (function () {
   var TARGET_IDS = [
-    'section-id-113b9392-0de7-4ad3-acfd-d47455b7e771',
-    'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47',
-    'section-id-73084a51-9be6-4f44-83ed-415ecddc194e'
+    'section-id-90427b43-0b92-4538-964b-79192deb738d',
+    'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47'
   ];
 
   function applyFix() {
