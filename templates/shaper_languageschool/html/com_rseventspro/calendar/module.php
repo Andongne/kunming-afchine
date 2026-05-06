@@ -124,3 +124,56 @@ foreach ($this->calendar->days->weekdays as $weekday) {
 })();
 </script>
 
+
+<?php
+// Générer l'URL du formulaire cours (Itemid=1015) côté PHP pour toutes les langues
+use Joomla\CMS\Router\Route;
+$_afkCoursFormUrl = Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
+$_afkCoursFormUrl = strtok($_afkCoursFormUrl, '?'); // garder chemin SEF seulement
+?>
+<script>
+/* === CALENDRIER COURS : liens événements → formulaire pré-rempli === */
+(function () {
+  var FORM_URL = '<?php echo htmlspecialchars($_afkCoursFormUrl, ENT_QUOTES); ?>';
+  var LANG = document.documentElement.lang ? document.documentElement.lang.toLowerCase() : 'fr';
+
+  // Détecter le format de cours depuis le nom de l'événement
+  function detectFormat(name) {
+    if (/VIP\s*3|trio/i.test(name))  return 'VIP3 trio (98 yuan/h par pers.)';
+    if (/VIP\s*2|duo/i.test(name))   return 'VIP2 duo (128 yuan/h par pers.)';
+    if (/VIP/i.test(name))            return 'VIP1 individuel (208 yuan/h)';
+    if (/Groupe\s*4|4.5\s*pers/i.test(name)) return 'Groupe 4-5 pers. (78 yuan/h)';
+    return 'Groupe 6-12 pers. (49 yuan/h)'; // défaut cours de groupe
+  }
+
+  // Extraire la date depuis data-content du tooltip : "Ven 08/05/2026"
+  function extractDate(dataContent) {
+    if (!dataContent) return '';
+    var m = dataContent.match(/(\d{2}\/\d{2}\/\d{4})/);
+    return m ? m[1] : '';
+  }
+
+  function rewriteLinks() {
+    // Cibler uniquement le calendrier cours (itemid-1018)
+    if (!document.body.classList.contains('itemid-1018')) return;
+    document.querySelectorAll('.rsepro-calendar-events a').forEach(function (a) {
+      if (a.getAttribute('data-afk-rewritten')) return;
+      a.setAttribute('data-afk-rewritten', '1');
+      var name = a.textContent.trim();
+      var format = detectFormat(name);
+      var dc = a.getAttribute('data-content') || a.getAttribute('data-bs-content') || '';
+      var date = extractDate(dc);
+      var url = FORM_URL
+        + '?form%5BFormat_cours%5D%5B%5D=' + encodeURIComponent(format)
+        + '&form%5BNotes%5D=' + encodeURIComponent(name + (date ? ' — ' + date : ''));
+      if (LANG.indexOf('zh') === 0 || LANG.indexOf('en') === 0) url += '&lang=' + encodeURIComponent(LANG);
+      a.href = url;
+      a.removeAttribute('data-bs-toggle');  // désactiver le tooltip sur clic
+      a.removeAttribute('data-bs-content');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', rewriteLinks);
+  [300, 800, 1500].forEach(function(ms){ setTimeout(rewriteLinks, ms); });
+})();
+</script>

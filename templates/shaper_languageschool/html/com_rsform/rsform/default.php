@@ -156,3 +156,15 @@ $_afkHasSidebar     = !empty($_afkSidebarModules);
   updateTYTemplate();
 })();
 </script>
+
+<script>
+/* Traduction des titres de section du formulaire cours (data-i18n-*) */
+(function () {
+  var _lang = (document.documentElement.lang || 'fr').toLowerCase().slice(0, 2);
+  if (_lang === 'fr') return;
+  document.querySelectorAll('[data-i18n-' + _lang + ']').forEach(function (el) {
+    var t = el.getAttribute('data-i18n-' + _lang);
+    if (t) el.textContent = t;
+  });
+})();
+</script>
