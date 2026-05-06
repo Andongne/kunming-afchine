@@ -230,12 +230,7 @@
     background-color: #98111f;
 }
 
-/* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
-.formContainer,
-.formContainer * {
-    background-color: transparent !important;
-    background-image: none !important;
-}
+
 /* ==========================================================================
    MOBILE — Corrections ergonomie page d'accueil (max 767px)
    ========================================================================== */

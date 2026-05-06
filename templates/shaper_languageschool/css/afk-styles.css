@@ -230,11 +230,57 @@
     background-color: #98111f;
 }
 
-/* === DEBUG RSForm : suppression FORCÉE de tous les fonds === */
-.formContainer,
-.formContainer * {
-    background-color: transparent !important;
-    background-image: none !important;
+/* === RSForm : conteneur principal avec fond rosé (identique SPB) === */
+.rsform .formContainer,
+#userForm .formContainer {
+    background: #fff5f6 !important;
+    border-radius: 10px !important;
+    padding: 32px !important;
+}
+
+/* Inputs sur fond blanc dans le conteneur rosé */
+.rsform .formContainer input[type="text"],
+.rsform .formContainer input[type="email"],
+.rsform .formContainer input[type="tel"],
+.rsform .formContainer input[type="number"],
+.rsform .formContainer input[type="password"],
+.rsform .formContainer textarea,
+.rsform .formContainer select,
+.rsform .formContainer .rsform-input-box,
+.rsform .formContainer .rsform-select-box,
+#userForm .formContainer input[type="text"],
+#userForm .formContainer input[type="email"],
+#userForm .formContainer input[type="tel"],
+#userForm .formContainer input[type="number"],
+#userForm .formContainer input[type="password"],
+#userForm .formContainer textarea,
+#userForm .formContainer select {
+    background-color: #fff !important;
+    border-radius: 6px !important;
+    border: 1px solid #ddd !important;
+}
+#userForm .formContainer input:focus,
+#userForm .formContainer select:focus,
+#userForm .formContainer textarea:focus {
+    border-color: #da002e !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* En-têtes de section (freetext) avec ligne rouge */
+.rsform .rsform-type-freetext > div,
+#userForm .rsform-type-freetext > div {
+    border-bottom: 2px solid #da002e;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: #1a171b;
+}
+
+/* Checkbox accent rouge */
+.rsform .formContainer input[type="checkbox"],
+#userForm .formContainer input[type="checkbox"] {
+    accent-color: #da002e;
 }
 /* ==========================================================================
    MOBILE — Corrections ergonomie page d'accueil (max 767px)
@@ -888,4 +934,31 @@ body.com-rseventspro main#sp-main-body > section#sp-main-body {
 .afk-sidebar-card .afk-sidebar-content li {
     list-style: none !important;
     font-size: 0.85em !important;
+}
+
+/* ==========================================================================
+   RSForm Pro — Page native : espacements + fond formulaire
+   ========================================================================== */
+
+/* Supprimer le padding-top du main (identique RSEvents) */
+body.com-rsform main#sp-main-body {
+    padding-top: 0 !important;
+}
+
+/* Section contenu : 35px (harmonisé avec SP Builder) */
+body.com-rsform main#sp-main-body > section#sp-main-body {
+    padding-top: 35px !important;
+}
+
+/* Fond rosé sur le formContainer (assure le rendu sans cache) */
+body.com-rsform #userForm .formContainer {
+    background-color: #fff5f6 !important;
+    border-radius: 10px !important;
+    padding: 32px !important;
+    margin-top: 8px !important;
+}
+
+/* Espace titre → formulaire */
+body.com-rsform .sp-column > #userForm {
+    margin-top: 0 !important;
 }
