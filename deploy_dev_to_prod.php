@@ -242,6 +242,7 @@ $template_files = [
     'templates/shaper_languageschool/html/com_rsform/rsform/default.php',
     'templates/shaper_languageschool/html/com_rseventspro/calendar/default.php',
     'templates/shaper_languageschool/html/com_rseventspro/calendar/module.php',
+    'templates/shaper_languageschool/html/com_rseventspro/rseventspro/default.php',
     'templates/shaper_languageschool/html/com_rseventspro/rseventspro/items_events.php',
     'templates/shaper_languageschool/html/com_rseventspro/rseventspro/show.php',
 ];
