@@ -264,6 +264,23 @@ if ($_afkFormId === 6) {
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',buildWidget);
   else buildWidget();
+
+  // Auto-sélection depuis URL (arrivée depuis le calendrier)
+  function autoSelectFromUrl() {
+    var sel = document.getElementById('afk-session-sel');
+    if (!sel || sel.options.length <= 1) { setTimeout(autoSelectFromUrl, 300); return; }
+    var sf = document.querySelector("input[name='form[Session][]']");
+    var preDate = (sf ? sf.value : '').trim();
+    if (!preDate) {
+      var m = location.search.match(/form%5BSession%5D%5B%5D=([^&]+)/i);
+      if (m) preDate = decodeURIComponent(m[1].replace(/\+/g,' '));
+    }
+    if (!preDate) return;
+    for (var i = 1; i < sel.options.length; i++) {
+      try { var d = JSON.parse(sel.options[i].value); if (d.date === preDate) { sel.selectedIndex=i; sel.dispatchEvent(new Event('change')); break; } } catch(e){}
+    }
+  }
+  setTimeout(autoSelectFromUrl, 500);
 })();
 </script>
 <?php endif; ?>
