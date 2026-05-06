@@ -71,3 +71,31 @@ foreach ($this->calendar->days->weekdays as $weekday) {
 	</tbody>
 </table>
 <?php echo 'RS_DELIMITER1'; ?>
+
+<script>
+/* Nom de groupe en gras dans le tooltip calendrier */
+(function () {
+  function boldGroupName() {
+    document.querySelectorAll('.rsepro-calendar-tooltip-description').forEach(function (el) {
+      if (el.querySelector('.afk-group-name')) return;
+      var text = el.textContent.trim();
+      var parts = text.split(/\s*—\s*/);
+      if (parts.length > 1) {
+        el.innerHTML = '<span class="afk-group-name">' + parts[0] + '</span>'
+          + ' — ' + parts.slice(1).join(' — ');
+      }
+    });
+  }
+  // MutationObserver pour détecter l'apparition des tooltips dynamiques
+  var obs = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      m.addedNodes.forEach(function (n) {
+        if (n.nodeType === 1 && (n.classList.contains('popover') || n.querySelector('.rsepro-calendar-tooltip-description'))) {
+          boldGroupName();
+        }
+      });
+    });
+  });
+  obs.observe(document.body, { childList: true, subtree: true });
+})();
+</script>

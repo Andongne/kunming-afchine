@@ -1065,3 +1065,9 @@ body.view-calendar .popover .popover-body b {
   color: #da002e !important;
   font-weight: 600 !important;
 }
+
+/* Nom de groupe en gras dans la description tooltip */
+body.view-calendar .popover .rsepro-calendar-tooltip-description .afk-group-name {
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+}
