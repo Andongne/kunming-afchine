@@ -14,12 +14,15 @@ $open = !$links ? 'target="_blank"' : '';
 $_lang = Factory::getLanguage()->getTag();
 $_lang_param = ($_lang && $_lang !== 'fr-FR' && $_lang !== '*') ? '&lang=' . htmlspecialchars($_lang) : '';
 
-// AFK: URL du formulaire d'inscription selon la langue
-// Sur dev, les préfixes /zh/ et /en/ n'existent pas → utiliser ?lang= comme fallback
+// AFK: URL du formulaire via JRoute (menu item 776, language=*)
 if (!function_exists('afk_form_base_url')) {
     function afk_form_base_url($lang) {
-        $base = '/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen';
-        return $base; // Le paramètre lang est ajouté dans afk_form_url si besoin
+        // Utiliser JRoute pour obtenir l'URL SEF correcte quelle que soit la langue
+        $raw = 'index.php?option=com_rsform&view=rsform&formId=4&Itemid=776';
+        $url = JRoute::_($raw, false);
+        // Supprimer éventuels paramètres déjà présents dans l'URL SEF
+        $url = strtok($url, '?');
+        return $url;
     }
 }
 
@@ -43,8 +46,6 @@ if (!function_exists('afk_form_url')) {
         $url = afk_form_base_url($lang)
              . '?form%5BChoix_exam%5D%5B%5D=' . urlencode($exam_type);
         if ($dt) $url .= '&form%5BSession%5D%5B%5D=' . urlencode($dt);
-        // Ajouter lang= si besoin (dev n'a pas de préfixes /zh/ /en/)
-        if ($lang && $lang !== 'fr-FR' && $lang !== '*') $url .= '&lang=' . urlencode($lang);
         return $url;
     }
 }
