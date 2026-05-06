@@ -946,10 +946,12 @@ body.com-rseventspro main#sp-main-body > section#sp-main-body {
     margin-bottom: 20px;
 }
 
-/* Modules menu (Inscription, Préparation) : pas de card, style épuré */
+/* Modules menu : style standard sidebar (identique calendrier-des-cours) */
 .afk-sidebar-menu {
-    margin-bottom: 8px;
     padding: 0;
+    background: transparent;
+    box-shadow: none;
+    margin-bottom: 32px;
 }
 
 /* Titre : rouge centré 26px pour les cards */
@@ -962,12 +964,22 @@ body.com-rseventspro main#sp-main-body > section#sp-main-body {
     line-height: 1.3;
 }
 
-/* Titre menu : style normal */
+/* Titre menu : standard (noir, 26px, 500) */
 .afk-sidebar-menu .afk-sidebar-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 6px;
     color: #1a171b;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+/* Liens dans les modules menu */
+.afk-sidebar-menu .afk-sidebar-content a {
+    color: #da002e;
+    font-size: 14px;
+    text-decoration: none;
+}
+.afk-sidebar-menu .afk-sidebar-content a:hover {
+    text-decoration: underline;
 }
 
 .afk-sidebar-content {
