@@ -1072,3 +1072,22 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
   font-weight: 700 !important;
   color: #1a1a1a !important;
 }
+
+/* ── Sélecteur séances cours + largeur uniforme ────────────────── */
+.afk-session-block { margin-bottom: 14px; }
+.afk-session-block select#afk-session-sel {
+    width: 100% !important;
+    display: block;
+    box-sizing: border-box;
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.95em;
+}
+/* Uniformiser professeur et notes avec les autres champs */
+.rsform-block-professeur .formControls,
+.rsform-block-notes .formControls {
+    padding-left: 0 !important;
+    width: 100% !important;
+}

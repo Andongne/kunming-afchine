@@ -189,17 +189,12 @@ if ($_afkFormId === 6) {
     lbl.className = 'formControlLabel';
     lbl.setAttribute('for','afk-session-sel');
     lbl.textContent = _lbls[_lang] || _lbls.fr;
-    var ctrlDiv = document.createElement('div');
-    ctrlDiv.className = 'formControls';
-    var bodyDiv = document.createElement('div');
-    bodyDiv.className = 'formBody';
-    ctrlDiv.appendChild(bodyDiv);
     wrap.appendChild(lbl);
 
     var sel = document.createElement('select');
     sel.id = 'afk-session-sel';
     sel.className = 'rsform-select-box';
-    sel.style.cssText = 'width:100%;padding:6px 10px;border:1px solid #ccc;border-radius:4px;font-size:0.95em';
+    sel.style.cssText = 'width:100%;display:block;box-sizing:border-box';
     var opt0 = document.createElement('option');
     opt0.value=''; opt0.textContent='—';
     sel.appendChild(opt0);
@@ -235,8 +230,7 @@ if ($_afkFormId === 6) {
       }
     });
 
-    bodyDiv.appendChild(sel);
-    wrap.appendChild(ctrlDiv);
+    wrap.appendChild(sel);
     insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
   }
 
