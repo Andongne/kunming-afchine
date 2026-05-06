@@ -39,7 +39,7 @@ $_afkIsPost         = ($_SERVER['REQUEST_METHOD'] === 'POST');
 // ModuleHelper::getModules() peut retourner vide dans certains contextes prod.
 // Fallback : requête directe sur les modules publiés à la bonne position.
 $_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
-if (empty($_afkSidebarModules) && !$_afkIsPost) {
+if (empty($_afkSidebarModules)) {
     $_afkDb2 = Factory::getDbo();
     $_afkDb2->setQuery("SELECT m.* FROM #__modules m
         LEFT JOIN #__modules_menu mm ON mm.moduleid=m.id
@@ -49,7 +49,10 @@ if (empty($_afkSidebarModules) && !$_afkIsPost) {
         ORDER BY m.ordering");
     $_afkSidebarModules = $_afkDb2->loadObjectList();
 }
-$_afkHasSidebar     = !empty($_afkSidebarModules) && !$_afkIsPost;
+// Sidebar toujours visible sauf sur la page de confirmation (overlay JS)
+// $_afkIsPost seul ne suffit pas : il est aussi vrai quand la validation échoue
+// On détecte la confirmation via le JS overlay (sessionStorage), pas ici.
+$_afkHasSidebar = !empty($_afkSidebarModules);
 
 // Charger les sessions de cours disponibles (GET uniquement — pas sur la page de confirmation)
 $_afkCourseSessions = [];
@@ -115,6 +118,24 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
 <?php endif; ?>
 
 <?php echo RSFormProHelper::displayForm($this->formId); ?>
+
+<?php if ($_afkFormId === 6): ?>
+<script>
+/* Form 6 — Masquer toujours Format_cours (géré par le sélecteur de séances ou pré-rempli) */
+(function(){
+  function hideFormatCours() {
+    var t = document.querySelector('.rsform-block-format-cours');
+    if (t) { t.style.display = 'none'; return true; }
+    return false;
+  }
+  if (!hideFormatCours()) {
+    var obs = new MutationObserver(function(){ if(hideFormatCours()) obs.disconnect(); });
+    obs.observe(document.body, {childList:true, subtree:true});
+    setTimeout(function(){ hideFormatCours(); obs.disconnect(); }, 1000);
+  }
+})();
+</script>
+<?php endif; ?>
 
 <script>
 /* Visibilité conditionnelle des champs tarif/compétences selon l'examen choisi */
