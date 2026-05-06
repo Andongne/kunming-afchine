@@ -113,23 +113,14 @@ foreach ($this->calendar->days->weekdays as $weekday) {
     });
   }
 
-  // Bootstrap 5 : shown.bs.popover est non-bubbling → useCapture:true
-  document.addEventListener('shown.bs.popover', function () {
+  // Polling léger : surveille le popover actif toutes les 200ms
+  setInterval(function () {
     var pop = document.querySelector('.popover.show');
-    if (pop) processTooltip(pop);
-  }, true);
-  // Sécurité : MutationObserver avec délai augmenté
-  var obs = new MutationObserver(function (mutations) {
-    mutations.forEach(function (m) {
-      m.addedNodes.forEach(function (n) {
-        if (n.nodeType !== 1) return;
-        if (n.classList && n.classList.contains('popover')) {
-          setTimeout(function () { processTooltip(n); }, 150);
-        }
-      });
-    });
-  });
-  obs.observe(document.body, { childList: true });
+    if (pop && !pop.getAttribute('data-afk-done')) {
+      pop.setAttribute('data-afk-done', '1');
+      processTooltip(pop);
+    }
+  }, 200);
 })();
 </script>
 
