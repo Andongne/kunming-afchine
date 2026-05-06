@@ -37,6 +37,41 @@ if (isset($this->form) && isset($this->form->FormId)) $_afkFormId = (int)$this->
 $_afkSidebarPos     = $_afkFormId === 6 ? 'rse-calendar-sidebar' : 'rse-exams-sidebar';
 $_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
 $_afkHasSidebar     = !empty($_afkSidebarModules);
+
+// Charger les sessions de cours disponibles (formulaire cours uniquement)
+$_afkCourseSessions = [];
+if ($_afkFormId === 6) {
+    $_afkDb = \Joomla\CMS\Factory::getDbo();
+    $_afkCourseRows = $_afkDb->setQuery(
+        "SELECT id, name, start, description FROM #__rseventspro_events
+         WHERE published=1 AND start > NOW()
+         AND name NOT LIKE '%TCF%' AND name NOT LIKE '%TEF%'
+         AND name NOT LIKE '%Porte ouverte%'
+         ORDER BY start ASC LIMIT 60"
+    )->loadAssocList();
+    $__afkFmtMap = [
+        '/VIP\s*3|trio/i'    => 'VIP 3 cours avec 3 étudiants',
+        '/VIP\s*2|duo/i'     => 'VIP 2 cours avec 2 étudiants',
+        '/VIP/i'             => 'VIP 1 cours individuel',
+        '/4.?5|Petits/i'     => 'Petits groupes (de 4 à 5 personnes)',
+    ];
+    foreach ($_afkCourseRows as $_afkCR) {
+        $_afkDesc = strip_tags($_afkCR['description'] ?? '');
+        $_afkTch  = '';
+        if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur)/u', $_afkDesc, $_afkTm))
+            $_afkTch = trim($_afkTm[1]);
+        $_afkFmt = 'Groupes (de 6 à 12 personnes)';
+        foreach ($__afkFmtMap as $pat => $val) {
+            if (preg_match($pat, $_afkCR['name'])) { $_afkFmt = $val; break; }
+        }
+        $_afkCourseSessions[] = [
+            'label'   => $_afkCR['name'] . ' — ' . date('d/m/Y H\hi', strtotime($_afkCR['start'])),
+            'date'    => date('d/m/Y', strtotime($_afkCR['start'])),
+            'format'  => $_afkFmt,
+            'teacher' => $_afkTch,
+        ];
+    }
+}
 ?>
 
 <?php if ($_afkHasSidebar): ?>
@@ -124,6 +159,46 @@ $_afkHasSidebar     = !empty($_afkSidebarModules);
 </script>
 
 <?php if ($_afkHasSidebar): ?>
+
+<?php if (!empty($_afkCourseSessions)): ?>
+<div class="rsform-block rsform-type-freetext" style="margin-bottom:16px">
+  <label class="formControlLabel" for="afk-session-sel">
+    <?php
+    $__lbl = ['zh'=>'选择课程时间 (*)','en'=>'Choose a session (*)','fr'=>'Choisir une séance (*)'];
+    $__l = substr(\Joomla\CMS\Factory::getLanguage()->getTag(),0,2);
+    echo $__lbl[$__l] ?? $__lbl['fr'];
+    ?>
+  </label>
+  <select id="afk-session-sel" class="form-select" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px">
+    <option value="">—</option>
+    <?php foreach ($_afkCourseSessions as $_afkS): ?>
+    <option value="<?php echo htmlspecialchars(json_encode($_afkS),ENT_QUOTES); ?>">
+      <?php echo htmlspecialchars($_afkS['label']); ?>
+    </option>
+    <?php endforeach; ?>
+  </select>
+</div>
+<script>
+document.getElementById('afk-session-sel').addEventListener('change', function() {
+  var v = this.value; if (!v) return;
+  try { var d = JSON.parse(v); } catch(e){return;}
+  // Session
+  var sField = document.querySelector("input[name='form[Session][]'],input[name*='Session']");
+  if (sField) sField.value = d.date;
+  // Format_cours
+  var fSel = document.querySelector("select[name='form[Format_cours][]'],select[name*='Format_cours']");
+  if (fSel) {
+    for (var i=0;i<fSel.options.length;i++) {
+      if (fSel.options[i].value === d.format) { fSel.selectedIndex=i; break; }
+    }
+    fSel.dispatchEvent(new Event('change'));
+  }
+  // Professeur
+  var pField = document.querySelector("input[name='form[Professeur][]'],input[name*='Professeur'],select[name*='Professeur']");
+  if (pField) pField.value = d.teacher;
+});
+</script>
+<?php endif; ?>
 </div><!-- /col-lg-9 -->
 <div class="col-lg-3 col-md-12 rse-sidebar-col">
     <?php foreach ($_afkSidebarModules as $_afkMod): ?>
