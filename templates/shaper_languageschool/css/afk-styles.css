@@ -1091,3 +1091,33 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
     padding-left: 0 !important;
     width: 100% !important;
 }
+
+/* ── Largeur uniforme textarea Notes + select Séances ──────────── */
+.rsform-block-notes .formControls,
+.rsform-block-notes .formBody,
+.rsform-block-notes textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+/* formHorizontal : annuler la largeur partielle sur formControls pour ces blocs */
+.formHorizontal .rsform-block-notes .formControls,
+.formHorizontal .rsform-block-notes .formBody {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* ── Fix global : formControls pleine largeur dans #userForm ───── */
+#userForm .formControls,
+#userForm .formBody {
+    width: 100% !important;
+    display: block !important;
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+}
+#userForm .formBody textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    resize: vertical;
+}
