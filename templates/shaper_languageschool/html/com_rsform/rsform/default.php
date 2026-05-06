@@ -47,6 +47,8 @@ if ($_afkFormId === 6) {
          WHERE published=1 AND start > NOW()
          AND name NOT LIKE '%TCF%' AND name NOT LIKE '%TEF%'
          AND name NOT LIKE '%Porte ouverte%'
+         AND (force_close IS NULL OR force_close=0)
+         AND (registration_closed IS NULL OR registration_closed=0)
          ORDER BY start ASC LIMIT 60"
     )->loadAssocList();
     $__afkFmtMap = [
