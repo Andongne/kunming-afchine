@@ -198,6 +198,24 @@ document.getElementById('afk-session-sel').addEventListener('change', function()
   if (pField) pField.value = d.teacher;
 });
 </script>
+<script>
+// Repositionner le sélecteur après le champ Type de cours (format_cours)
+document.addEventListener('DOMContentLoaded', function() {
+  var sel = document.getElementById('afk-session-sel');
+  if (!sel) return;
+  var widget = sel.closest('.rsform-block');
+  if (!widget) return;
+  // Cible : après le bloc format_cours
+  var target = document.querySelector('.rsform-block-format-cours');
+  if (target && target.parentNode) {
+    // Insérer après le bloc tarif dynamique (s'il existe) ou après format_cours
+    var tarifBlock = document.getElementById('afk-tarif-display');
+    var insertAfter = tarifBlock || target;
+    insertAfter.parentNode.insertBefore(widget, insertAfter.nextSibling);
+    widget.style.display = '';
+  }
+});
+</script>
 <?php endif; ?>
 </div><!-- /col-lg-9 -->
 <div class="col-lg-3 col-md-12 rse-sidebar-col">
