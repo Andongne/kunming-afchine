@@ -36,11 +36,12 @@ $_afkFormId = (int) Factory::getApplication()->input->getInt('formId',
 if (isset($this->form) && isset($this->form->FormId)) $_afkFormId = (int)$this->form->FormId;
 $_afkSidebarPos     = $_afkFormId === 6 ? 'rse-calendar-sidebar' : 'rse-exams-sidebar';
 $_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
-$_afkHasSidebar     = !empty($_afkSidebarModules);
+$_afkIsPost         = ($_SERVER['REQUEST_METHOD'] === 'POST');
+$_afkHasSidebar     = !empty($_afkSidebarModules) && !$_afkIsPost;
 
-// Charger les sessions de cours disponibles (formulaire cours uniquement)
+// Charger les sessions de cours disponibles (GET uniquement — pas sur la page de confirmation)
 $_afkCourseSessions = [];
-if ($_afkFormId === 6) {
+if ($_afkFormId === 6 && !$_afkIsPost) {
     $_afkDb = \Joomla\CMS\Factory::getDbo();
     $_afkCourseRows = $_afkDb->setQuery(
         "SELECT id, name, start, description FROM #__rseventspro_events
@@ -176,7 +177,7 @@ if ($_afkFormId === 6) {
 })();
 </script>
 
-<?php if (!empty($_afkCourseSessions)): ?>
+<?php if (!empty($_afkCourseSessions) && !$_afkIsPost): ?>
 <script>
 (function(){
   var _sessions = <?php echo json_encode($_afkCourseSessions, JSON_UNESCAPED_UNICODE); ?>;
