@@ -136,3 +136,23 @@ $_afkHasSidebar     = !empty($_afkSidebarModules);
 </div><!-- /rse-sidebar-col -->
 </div><!-- /row rse-with-sidebar -->
 <?php endif; ?>
+
+<script>
+/* Remplacement du prix dans le template thank-you selon l'examen choisi */
+(function(){
+  function updateTYTemplate() {
+    var tpl = document.getElementById('rsf-ty-template');
+    if (!tpl) return;
+    // Remplacer la chaîne exacte stockée dans le HTML (entités non décodées)
+    var html = tpl.innerHTML;
+    // Toutes les formes possibles du prix fixe
+    html = html.split('2&#160;700 RMB').join('PRIX_CALCULE');
+    html = html.split('2\u00a0700 RMB').join('PRIX_CALCULE');
+    html = html.split('2 700 RMB').join('PRIX_CALCULE');
+    html = html.split('2700 RMB').join('PRIX_CALCULE');
+    tpl.innerHTML = html;
+  }
+  // Exécuter immédiatement — le script est après displayForm(), le DOM RSForm est prêt
+  updateTYTemplate();
+})();
+</script>
