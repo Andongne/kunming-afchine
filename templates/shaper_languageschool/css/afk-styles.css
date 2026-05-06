@@ -984,10 +984,8 @@ body.com-rsform .sp-column > #userForm {
 
 /* Correction ZH/EN : masquage des cours parasites géré par JS (filtrage par catégorie) dans default.php */
 
-/* ZH/EN : masquer le bouton "Load More" et le compteur d'événements */
-body.zh-cn #rsepro_loadmore,
-body.zh-cn #rsepro_number_events,
-body.en-gb #rsepro_loadmore,
-body.en-gb #rsepro_number_events {
+/* Masquer le bouton "Load More" et le compteur sur toutes les langues */
+#rsepro_loadmore,
+#rsepro_number_events {
     display: none !important;
 }
