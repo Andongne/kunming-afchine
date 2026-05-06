@@ -46,6 +46,40 @@ $_afkHasSidebar     = !empty($_afkSidebarModules);
 <?php echo RSFormProHelper::displayForm($this->formId); ?>
 
 <script>
+/* Visibilité conditionnelle des champs tarif/compétences selon l'examen choisi */
+(function(){
+  var EXAM_BLOCKS = {
+    'TCF Canada':  { show: ['tarif-tcf-canada'],         hide: ['tarif-tef-canada','competences-tcf-quebec','competences-tefaq'] },
+    'TEF Canada':  { show: ['tarif-tef-canada'],         hide: ['tarif-tcf-canada','competences-tcf-quebec','competences-tefaq'] },
+    'TCF Qu\u00e9bec': { show: ['competences-tcf-quebec'], hide: ['tarif-tcf-canada','tarif-tef-canada','competences-tefaq'] },
+    'TEFAQ':       { show: ['competences-tefaq'],        hide: ['tarif-tcf-canada','tarif-tef-canada','competences-tcf-quebec'] }
+  };
+  function getBlock(alias) { return document.querySelector('.rsform-block-'+alias); }
+  function applyExamVisibility(val) {
+    // Cacher tous les blocs conditionnels par défaut
+    ['tarif-tcf-canada','tarif-tef-canada','competences-tcf-quebec','competences-tefaq'].forEach(function(a){
+      var b = getBlock(a); if(b) b.style.display = 'none';
+    });
+    // Afficher les blocs correspondants
+    if (val && EXAM_BLOCKS[val]) {
+      EXAM_BLOCKS[val].show.forEach(function(a){ var b = getBlock(a); if(b) b.style.display = ''; });
+    }
+  }
+  function initExamVisibility() {
+    var sel = document.querySelector('select[name="form[Choix_exam][]"]');
+    if (!sel) return;
+    applyExamVisibility(sel.value);
+    sel.addEventListener('change', function(){ applyExamVisibility(this.value); });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initExamVisibility);
+  } else {
+    initExamVisibility();
+  }
+  // Aussi relancer après le prefill (100ms)
+  window.addEventListener('load', function(){ setTimeout(function(){ var s=document.querySelector('select[name="form[Choix_exam][]"]'); if(s) applyExamVisibility(s.value); }, 100); });
+})();
+
 (function(){
   // Si l'URL contient des paramètres form[...], ré-appliquer après le sessionStorage
   var params = new URLSearchParams(window.location.search);
