@@ -156,35 +156,48 @@ $showColors		= $this->params->get('colors', 0); ?>
 										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event,$this->calendar->events[$event]->name),false,rseventsproHelper::itemid($event)); ?>" class="rsttip rse_event_link <?php echo $full ? 'rs_event_full' : ''; ?> <?php echo $canceled ? 'rsepro_canceled_event_cal' : ''; ?>" data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php
     $_afkTip = rseventsproHelper::calendarTooltip($event);
     $_afkObj = $this->calendar->events[$event];
-    // Enseignant depuis map pré-chargée
     $_afkTeacher = $_afkDescMap[$event] ?? '';
-    // Tarif
     $_afkName = $_afkObj->name ?? '';
-    if      (preg_match('/VIP\s*3|trio/i', $_afkName))         $_afkTarif = '98 ¥/h/pers.';
-    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))          $_afkTarif = '128 ¥/h/pers.';
-    elseif  (preg_match('/VIP/i', $_afkName))                   $_afkTarif = '208 ¥/h';
+    if      (preg_match('/VIP\s*3|trio/i', $_afkName))           $_afkTarif = '98 ¥/h/pers.';
+    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))            $_afkTarif = '128 ¥/h/pers.';
+    elseif  (preg_match('/VIP/i', $_afkName))                     $_afkTarif = '208 ¥/h';
     elseif  (preg_match('/4.?5\s*pers|Groupe\s*4/i', $_afkName)) $_afkTarif = '78 ¥/h/pers.';
-    else                                                         $_afkTarif = '49 ¥/h/pers.';
-    // Injecter avant le dernier </div>
+    else                                                           $_afkTarif = '49 ¥/h/pers.';
     $_afkLangTag = \Joomla\CMS\Factory::getLanguage()->getTag();
-    if (strpos($_afkLangTag, 'zh') === 0) {
-        $_afkLblProf = '教师：'; $_afkLblTarif = '费用：';
-    } elseif (strpos($_afkLangTag, 'en') === 0) {
-        $_afkLblProf = 'Teacher:'; $_afkLblTarif = 'Price:';
-    } else {
-        $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :';
+    if (strpos($_afkLangTag, 'zh') === 0)      { $_afkLblProf = '教师：';      $_afkLblTarif = '费用：'; }
+    elseif (strpos($_afkLangTag, 'en') === 0)  { $_afkLblProf = 'Teacher:';   $_afkLblTarif = 'Price:'; }
+    else                                       { $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :'; }
+    // Décoder tooltip pour manipulation directe
+    $_afkHtml = html_entity_decode($_afkTip, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    // Extraire titre cours depuis la description (supprimer date finale)
+    $_afkCourseTitle = '';
+    if (preg_match('/<div[^>]*rsepro-calendar-tooltip-description[^>]*>\s*(.+?)\s*<\/div>/s', $_afkHtml, $_afkDm)) {
+        $_afkCourseTitle = preg_replace('/\s*[—–-]\s*\S+\s+\d{2}\/\d{2}\/\d{4}\s*$/', '', trim($_afkDm[1]));
     }
-    $_afkExtra = '<div class=\'afk-tooltip-meta\' style=\'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.82em;line-height:1.7\'>';
+    // Supprimer div description original
+    $_afkHtml = preg_replace('/<div[^>]*rsepro-calendar-tooltip-description[^>]*>.*?<\/div>/s', '', $_afkHtml);
+    // Traduction des mois (EN → langue courante)
+    if (strpos($_afkLangTag, 'fr') === 0) {
+        $_afkHtml = str_replace(
+            ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
+            $_afkHtml);
+    } elseif (strpos($_afkLangTag, 'zh') === 0) {
+        $_afkHtml = str_replace(
+            ['January','February','March','April','May','June','July','August','September','October','November','December'],
+            ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+            $_afkHtml);
+    }
+    // Bloc méta + titre en bas
+    $_afkExtra  = '<div style=\'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.82em;line-height:1.7\'>';
     if ($_afkTeacher) $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblProf).'</strong> '.htmlspecialchars($_afkTeacher).'<br>';
     $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblTarif).'</strong> '.htmlspecialchars($_afkTarif);
     $_afkExtra .= '</div>';
-    // calendarTooltip() retourne du HTML encodé (&lt;div&gt;) — on encode aussi $extra
-    $_afkExtraEnc = htmlspecialchars($_afkExtra, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    $_afkPos = strrpos($_afkTip, '&lt;/div&gt;');
-    if ($_afkPos !== false) {
-        $_afkTip = substr($_afkTip,0,$_afkPos).$_afkExtraEnc.substr($_afkTip,$_afkPos);
-    }
-    echo $_afkTip;
+    if ($_afkCourseTitle) $_afkExtra .= '<div style=\'margin-top:4px;font-weight:700\'>'.htmlspecialchars($_afkCourseTitle).'</div>';
+    // Réinjecter avant dernier </div> et re-encoder
+    $_afkPos = strrpos($_afkHtml, '</div>');
+    if ($_afkPos !== false) $_afkHtml = substr($_afkHtml,0,$_afkPos).$_afkExtra.substr($_afkHtml,$_afkPos);
+    echo htmlspecialchars($_afkHtml, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 ?>" title="<?php echo $this->escape($this->calendar->events[$event]->name.($canceled ? ' <small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>' : '')); ?>">
 											<i class="fa fa-calendar"></i>
 											<span class="event-name"><?php echo $this->escape($this->calendar->events[$event]->name); ?></span>
