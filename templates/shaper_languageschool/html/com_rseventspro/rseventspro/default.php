@@ -167,8 +167,8 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         $_afkDate     = date('d/m/Y', strtotime($event->start));
         $_afkSep      = (strpos($_afkFormBase, '?') !== false) ? '&' : '?';
         $_afkFormUrl  = $_afkFormBase . $_afkSep
-                      . 'rsfp_data[Choix_exam][]=' . urlencode($_afkExamType)
-                      . '&rsfp_data[Session][]='   . urlencode($_afkDate);
+                      . 'form[Choix_exam][]=' . urlencode($_afkExamType)
+                      . '&form[Session][]='   . urlencode($_afkDate);
         // AFK: Badge tarif (depuis small_description ou valeur par défaut)
         $_afkTarif = '2 700 ¥';
         if (!empty($event->small_description)) {
