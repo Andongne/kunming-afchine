@@ -408,7 +408,23 @@ if (strpos($_tag, 'zh') === 0) {
 $bodyLang = strtolower(Factory::getLanguage()->getTag()); // zh-cn ou en-gb
 $isAltLang = in_array($bodyLang, ['zh-cn', 'en-gb']);
 if ($isAltLang):
+  // Charger les IDs d'événements appartenant aux catégories exam (45,47,48,49)
+  $_afkExamCatIds = [45, 47, 48, 49];
+  $_afkDb2 = Factory::getDbo();
+  $_afkDb2->setQuery('SELECT DISTINCT tx.ide FROM #__rseventspro_taxonomy tx WHERE tx.type=' . $_afkDb2->quote('category') . ' AND tx.id IN (' . implode(',', $_afkExamCatIds) . ')');
+  $_afkExamIds = array_map('intval', array_column($_afkDb2->loadObjectList(), 'ide'));
+  // Générer les sélecteurs CSS pour masquer les événements hors catégorie exam
+  // On cache tout #rs_events_container li.afk-event-card sauf ceux dans $_afkExamIds
+  // Approche : cacher par exclusion via :not(#rs_eventXX) chainé
+  $_afkExamSelectors = implode(',', array_map(fn($id) => "#rs_events_container #rs_event{$id}", $_afkExamIds));
 ?>
+<style>
+/* ZH/EN : masquer les événements hors catégories exam par ID */
+body.<?php echo $bodyLang; ?> #rs_events_container li.afk-event-card { display: none !important; }
+<?php if ($_afkExamSelectors): ?>
+body.<?php echo $bodyLang; ?> <?php echo $_afkExamSelectors; ?> { display: list-item !important; }
+<?php endif; ?>
+</style>
 <script>
 (function(){
   function afkFixCalendar(){
@@ -418,10 +434,15 @@ if ($isAltLang):
     var items = [...list.querySelectorAll('li.afk-event-card')];
     if (!items.length) return;
 
-    // 1. Masquer les events sans image exam (= cours parasites)
+    // 1. Masquer les events hors catégories exam (filtrage par ID)
+    var examIds = <?php echo $_afkExamIds ?? '[]'; ?>;
     items.forEach(function(li){
-      var hasImg = li.querySelector('.rs_event_image img, .rsepro-event-image-block img, img[src*="/images/TCF"], img[src*="/images/TEF"], img[src*="/images/TEFAQ"]');
-      if (!hasImg) { li.style.display = 'none'; li.setAttribute('aria-hidden','true'); }
+      var m = li.id.match(/rs_event(\d+)/);
+      var eid = m ? parseInt(m[1], 10) : -1;
+      if (eid < 0 || examIds.indexOf(eid) === -1) {
+        li.style.display = 'none';
+        li.setAttribute('aria-hidden', 'true');
+      }
     });
 
     // 2. Re-trier les events visibles par date ASC
