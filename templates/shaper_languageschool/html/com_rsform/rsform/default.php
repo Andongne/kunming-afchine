@@ -161,108 +161,74 @@ if ($_afkFormId === 6) {
 <?php if ($_afkHasSidebar): ?>
 
 <?php if (!empty($_afkCourseSessions)): ?>
-<div class="rsform-block rsform-type-freetext" style="margin-bottom:16px">
-  <label class="formControlLabel" for="afk-session-sel">
-    <?php
-    $__lbl = ['zh'=>'选择课程时间 (*)','en'=>'Choose a session (*)','fr'=>'Choisir une séance (*)'];
-    $__l = substr(\Joomla\CMS\Factory::getLanguage()->getTag(),0,2);
-    echo $__lbl[$__l] ?? $__lbl['fr'];
-    ?>
-  </label>
-  <select id="afk-session-sel" class="form-select" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px">
-    <option value="">—</option>
-    <?php foreach ($_afkCourseSessions as $_afkS): ?>
-    <option value="<?php echo htmlspecialchars(json_encode($_afkS),ENT_QUOTES); ?>">
-      <?php echo htmlspecialchars($_afkS['label']); ?>
-    </option>
-    <?php endforeach; ?>
-  </select>
-</div>
 <script>
-document.getElementById('afk-session-sel').addEventListener('change', function() {
-  var v = this.value; if (!v) return;
-  try { var d = JSON.parse(v); } catch(e){return;}
-  // Session
-  var sField = document.querySelector("input[name='form[Session][]'],input[name*='Session']");
-  if (sField) sField.value = d.date;
-  // Format_cours
-  var fSel = document.querySelector("select[name='form[Format_cours][]'],select[name*='Format_cours']");
-  if (fSel) {
-    for (var i=0;i<fSel.options.length;i++) {
-      if (fSel.options[i].value === d.format) { fSel.selectedIndex=i; break; }
-    }
-    fSel.dispatchEvent(new Event('change'));
-  }
-  // Professeur
-  var pField = document.querySelector("input[name='form[Professeur][]'],input[name*='Professeur'],select[name*='Professeur']");
-  if (pField) pField.value = d.teacher;
-});
-</script>
-<script>
-// Repositionner le sélecteur après le champ Type de cours (format_cours)
-document.addEventListener('DOMContentLoaded', function() {
-  var sel = document.getElementById('afk-session-sel');
-  if (!sel) return;
-  var widget = sel.closest('.rsform-block');
-  if (!widget) return;
-  // Cible : après le bloc format_cours
-  var target = document.querySelector('.rsform-block-format-cours');
-  if (target && target.parentNode) {
-    // Insérer après le bloc tarif dynamique (s'il existe) ou après format_cours
+(function(){
+  var _sessions = <?php echo json_encode($_afkCourseSessions, JSON_UNESCAPED_UNICODE); ?>;
+  var _lang = (document.documentElement.lang||'fr').slice(0,2);
+  var _lbls = {fr:'Choisir une séance (*)',zh:'选择课程时间 (*)',en:'Choose a session (*)'};
+
+  function buildWidget() {
+    var target = document.querySelector('.rsform-block-format-cours');
+    if (!target) { setTimeout(buildWidget, 200); return; }
     var tarifBlock = document.getElementById('afk-tarif-display');
     var insertAfter = tarifBlock || target;
-    insertAfter.parentNode.insertBefore(widget, insertAfter.nextSibling);
-    widget.style.display = '';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'rsform-block rsform-type-freetext afk-session-block';
+    wrap.style.cssText = 'margin-bottom:12px';
+
+    var lbl = document.createElement('label');
+    lbl.className = 'formControlLabel';
+    lbl.setAttribute('for','afk-session-sel');
+    lbl.textContent = _lbls[_lang] || _lbls.fr;
+    wrap.appendChild(lbl);
+
+    var sel = document.createElement('select');
+    sel.id = 'afk-session-sel';
+    sel.className = 'form-select rsform-select-box';
+    sel.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:0.95em';
+    var opt0 = document.createElement('option');
+    opt0.value=''; opt0.textContent='—';
+    sel.appendChild(opt0);
+    _sessions.forEach(function(s){
+      var o = document.createElement('option');
+      o.value = JSON.stringify(s);
+      o.textContent = s.label;
+      sel.appendChild(o);
+    });
+
+    sel.addEventListener('change', function(){
+      if (!this.value) return;
+      var d = JSON.parse(this.value);
+      // Session
+      var sf = document.querySelector("input[name='form[Session][]']");
+      if (sf) sf.value = d.date;
+      // Format_cours
+      var ff = document.querySelector("select[name='form[Format_cours][]']");
+      if (ff) {
+        for (var i=0;i<ff.options.length;i++){
+          if (ff.options[i].value===d.format){ff.selectedIndex=i;break;}
+        }
+        ff.dispatchEvent(new Event('change'));
+      }
+      // Professeur
+      var pf = document.querySelector("select[name='form[Professeur][]'],input[name='form[Professeur][]']");
+      if (pf) {
+        if (pf.tagName==='SELECT') {
+          for(var i=0;i<pf.options.length;i++){
+            if(pf.options[i].value===d.teacher||pf.options[i].text===d.teacher){pf.selectedIndex=i;break;}
+          }
+        } else pf.value=d.teacher;
+      }
+    });
+
+    wrap.appendChild(sel);
+    insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
   }
-});
+
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',buildWidget);
+  else buildWidget();
+})();
 </script>
 <?php endif; ?>
 </div><!-- /col-lg-9 -->
-<div class="col-lg-3 col-md-12 rse-sidebar-col">
-    <?php foreach ($_afkSidebarModules as $_afkMod): ?>
-    <?php $_afkModClass = (strpos($_afkMod->module, 'mod_menu') !== false) ? 'afk-sidebar-module afk-sidebar-menu' : 'afk-sidebar-module afk-sidebar-card'; ?>
-    <?php $_afkTitle = $_afkFalangTitles[(int)$_afkMod->id] ?? $_afkMod->title; ?>
-    <div class="<?php echo $_afkModClass; ?>">
-        <?php if ($_afkMod->showtitle): ?>
-        <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkTitle); ?></div>
-        <?php endif; ?>
-        <div class="afk-sidebar-content">
-            <?php echo ModuleHelper::renderModule($_afkMod, ['style' => 'none']); ?>
-        </div>
-    </div>
-    <?php endforeach; ?>
-</div><!-- /rse-sidebar-col -->
-</div><!-- /row rse-with-sidebar -->
-<?php endif; ?>
-
-<script>
-/* Remplacement du prix dans le template thank-you selon l'examen choisi */
-(function(){
-  function updateTYTemplate() {
-    var tpl = document.getElementById('rsf-ty-template');
-    if (!tpl) return;
-    // Remplacer la chaîne exacte stockée dans le HTML (entités non décodées)
-    var html = tpl.innerHTML;
-    // Toutes les formes possibles du prix fixe
-    html = html.split('2&#160;700 RMB').join('PRIX_CALCULE');
-    html = html.split('2\u00a0700 RMB').join('PRIX_CALCULE');
-    html = html.split('2 700 RMB').join('PRIX_CALCULE');
-    html = html.split('2700 RMB').join('PRIX_CALCULE');
-    tpl.innerHTML = html;
-  }
-  // Exécuter immédiatement — le script est après displayForm(), le DOM RSForm est prêt
-  updateTYTemplate();
-})();
-</script>
-
-<script>
-/* Traduction des titres de section du formulaire cours (data-i18n-*) */
-(function () {
-  var _lang = (document.documentElement.lang || 'fr').toLowerCase().slice(0, 2);
-  if (_lang === 'fr') return;
-  document.querySelectorAll('[data-i18n-' + _lang + ']').forEach(function (el) {
-    var t = el.getAttribute('data-i18n-' + _lang);
-    if (t) el.textContent = t;
-  });
-})();
-</script>
