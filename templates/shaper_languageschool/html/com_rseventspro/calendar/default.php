@@ -154,9 +154,25 @@ $showColors		= $this->params->get('colors', 0); ?>
 										
 										$full = rseventsproHelper::eventisfull($event);
 										$canceled = $this->calendar->events[$event]->published == 3;
+										// Badge inscription passée
+										$_afkEvObj   = $this->calendar->events[$event];
+										$_afkRegClosed = !empty($_afkEvObj->registration_closed);
+										$_afkRegPast   = false;
+										if (!$_afkRegClosed && !empty($_afkEvObj->start)) {
+											$_afkEvTs  = strtotime($_afkEvObj->start);
+											$_afkDl    = strtotime(date('Y-m-d', $_afkEvTs) . ' -1 day 17:00:00');
+											$_afkDow   = (int)date('N', $_afkDl);
+											if ($_afkDow == 7) $_afkDl -= 2 * 86400;
+											if ($_afkDow == 6) $_afkDl -= 1 * 86400;
+											if (time() >= $_afkDl) $_afkRegPast = true;
+										}
+										$_afkIsBlocked = $_afkRegClosed || $_afkRegPast;
 								?>
-									<li class="event" <?php echo $style; ?>>
-										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event,$this->calendar->events[$event]->name),false,rseventsproHelper::itemid($event)); ?>" class="rsttip rse_event_link <?php echo $full ? 'rs_event_full' : ''; ?> <?php echo $canceled ? 'rsepro_canceled_event_cal' : ''; ?>" data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php
+									<li class="event <?php echo $_afkIsBlocked ? 'afk-reg-past' : ''; ?>" <?php echo $style; ?>>
+										<a <?php echo $nofollow; ?> href="<?php echo $_afkIsBlocked ? '#' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event,$this->calendar->events[$event]->name),false,rseventsproHelper::itemid($event)); ?>"
+										   class="rsttip rse_event_link <?php echo $full ? 'rs_event_full' : ''; ?> <?php echo $canceled ? 'rsepro_canceled_event_cal' : ''; ?> <?php echo $_afkIsBlocked ? 'afk-reg-past-link' : ''; ?>"
+										   <?php if ($_afkIsBlocked): ?>style="pointer-events:none;cursor:default;opacity:0.65;"<?php endif; ?>
+										   data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php
     $_afkTip = rseventsproHelper::calendarTooltip($event);
     $_afkObj = $this->calendar->events[$event];
     $_afkTeacher = $_afkDescMap[$event]['teacher'] ?? '';
@@ -201,6 +217,7 @@ $showColors		= $this->params->get('colors', 0); ?>
 											<i class="fa fa-calendar"></i>
 											<span class="event-name"><?php echo $this->escape($this->calendar->events[$event]->name); ?></span>
 										</a>
+										<?php if ($_afkRegPast): ?><span class="afk-cal-badge-past">Inscription passée</span><?php endif; ?>
 									</li>
 								<?php $j++; ?>
 								<?php } ?>

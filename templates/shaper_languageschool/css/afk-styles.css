@@ -1146,3 +1146,16 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
   vertical-align: middle;
   letter-spacing: 0.03em;
 }
+
+/* Badge "Inscription passée" dans la grille calendrier */
+.afk-cal-badge-past {
+  display: block;
+  font-size: 0.65em;
+  color: #888;
+  font-style: italic;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+li.event.afk-reg-past a.afk-reg-past-link {
+  opacity: 0.6;
+}
