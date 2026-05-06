@@ -75,11 +75,15 @@ $regClosed = !empty($event->registration_closed);
     <!-- Badge tarif -->
     <span class="afk-tarif-badge"><?php echo htmlspecialchars($tarif, ENT_QUOTES, 'UTF-8'); ?></span>
 
-    <!-- Card entièrement cliquable vers le formulaire -->
+    <!-- Card cliquable (désactivée si inscriptions fermées) -->
+    <?php if ($regClosed): ?>
+    <div class="afk-card-link afk-card-closed">
+    <?php else: ?>
     <a href="<?php echo htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8'); ?>"
        class="afk-card-link"
        itemprop="url"
        aria-label="<?php echo htmlspecialchars($event->name, ENT_QUOTES, 'UTF-8'); ?>">
+    <?php endif; ?>
 
         <?php if (!empty($event->options['show_icon_list'])) { ?>
         <div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
@@ -131,7 +135,11 @@ $regClosed = !empty($event->registration_closed);
 
         </div><!-- /event-details -->
 
+    <?php if ($regClosed): ?>
+    </div><!-- /afk-card-closed -->
+    <?php else: ?>
     </a><!-- /afk-card-link -->
+    <?php endif; ?>
 
     <meta content="<?php echo rseventsproHelper::showdate($event->start, 'Y-m-d H:i:s'); ?>" itemprop="startDate" />
 
