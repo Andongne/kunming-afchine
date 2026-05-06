@@ -821,3 +821,49 @@ body.com-rseventspro main#sp-main-body > section#sp-main-body {
     opacity: 0.6;
 }
 .rs_rss--bottom:hover { opacity: 1; }
+
+/* ==========================================================================
+   Sidebar blocs — padding réduit + boutons sppb-btn recréés
+   ========================================================================== */
+
+/* Padding réduit pour les modules card */
+.afk-sidebar-card {
+    padding: 25px 28px !important;
+}
+
+/* Boutons SP Builder recréés pour les modules natifs Joomla */
+.afk-sidebar-content .sppb-btn {
+    display: block !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 0.92em !important;
+    padding: 10px 16px !important;
+    cursor: pointer !important;
+    transition: opacity .2s ease !important;
+}
+.afk-sidebar-content .sppb-btn:hover {
+    opacity: 0.85 !important;
+}
+.afk-sidebar-content .sppb-btn-primary {
+    background-color: #da002e !important;
+    color: #fff !important;
+    border: none !important;
+}
+.afk-sidebar-content .sppb-btn-rounded {
+    border-radius: 4px !important;
+}
+.afk-sidebar-content .sppb-btn-flat {
+    box-shadow: none !important;
+}
+
+/* Contacts : liste sans puces, police compacte */
+.afk-sidebar-card .afk-sidebar-content ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+.afk-sidebar-card .afk-sidebar-content li {
+    list-style: none !important;
+    font-size: 0.85em !important;
+}
