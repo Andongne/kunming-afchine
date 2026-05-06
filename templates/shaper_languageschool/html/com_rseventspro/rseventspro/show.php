@@ -35,7 +35,7 @@ $subscribeURL	= $links == 1 && $modal == 1 ? 'javascript:void(0);' : rseventspro
 // AFK : pour les cours (non-examens), rediriger vers le formulaire d'inscription cours
 if (!preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
     $_afkLang = Factory::getLanguage()->getTag();
-    $_afkFormBase = Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
+    $_afkFormBase = \Joomla\CMS\Router\Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
     $_afkFormBase = strtok($_afkFormBase, '?');
     $_afkFormat = preg_match('/VIP\s*3|trio/i', $event->name) ? 'VIP3 trio (98 yuan/h par pers.)'
         : (preg_match('/VIP\s*2|duo/i', $event->name) ? 'VIP2 duo (128 yuan/h par pers.)'
