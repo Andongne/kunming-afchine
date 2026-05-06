@@ -168,8 +168,6 @@ if ($_afkFormId === 6) {
 })();
 </script>
 
-<?php if ($_afkHasSidebar): ?>
-
 <?php if (!empty($_afkCourseSessions)): ?>
 <script>
 (function(){
@@ -241,4 +239,23 @@ if ($_afkFormId === 6) {
 })();
 </script>
 <?php endif; ?>
+<?php if ($_afkHasSidebar): ?>
 </div><!-- /col-lg-9 -->
+<div class="col-lg-3 col-md-12 rse-sidebar-col">
+<?php foreach ($_afkSidebarModules as $_afkMod): ?>
+<?php
+    $_afkTitle = $_afkFalangTitles[(int)$_afkMod->id] ?? $this->escape($_afkMod->title);
+    $_afkModClass = (strpos($_afkMod->module, 'mod_menu') !== false)
+        ? 'afk-sidebar-module afk-sidebar-menu'
+        : 'afk-sidebar-module afk-sidebar-card';
+?>
+<div class="<?php echo $_afkModClass; ?>">
+    <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkTitle); ?></div>
+    <div class="afk-sidebar-content">
+        <?php echo ModuleHelper::renderModule($_afkMod, ['style' => 'none']); ?>
+    </div>
+</div>
+<?php endforeach; ?>
+</div><!-- /rse-sidebar-col -->
+</div><!-- /row rse-with-sidebar -->
+<?php endif; ?>
