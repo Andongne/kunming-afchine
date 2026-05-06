@@ -113,18 +113,18 @@ foreach ($this->calendar->days->weekdays as $weekday) {
     });
   }
 
-  // Bootstrap v5 : contenu injecté après l'événement shown.bs.popover
+  // Bootstrap 5 : shown.bs.popover est non-bubbling → useCapture:true
   document.addEventListener('shown.bs.popover', function () {
     var pop = document.querySelector('.popover.show');
     if (pop) processTooltip(pop);
-  });
-  // Fallback MutationObserver avec délai
+  }, true);
+  // Sécurité : MutationObserver avec délai augmenté
   var obs = new MutationObserver(function (mutations) {
     mutations.forEach(function (m) {
       m.addedNodes.forEach(function (n) {
         if (n.nodeType !== 1) return;
         if (n.classList && n.classList.contains('popover')) {
-          setTimeout(function () { processTooltip(n); }, 50);
+          setTimeout(function () { processTooltip(n); }, 150);
         }
       });
     });
