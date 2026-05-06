@@ -158,8 +158,12 @@ $showColors		= $this->params->get('colors', 0); ?>
     if ($_afkTeacher) $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> '.htmlspecialchars($_afkTeacher).'<br>';
     $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> <strong>'.htmlspecialchars($_afkTarif).'</strong>';
     $_afkExtra .= '</div>';
-    $_afkPos = strrpos($_afkTip, '</div>');
-    if ($_afkPos !== false) $_afkTip = substr($_afkTip,0,$_afkPos).$_afkExtra.substr($_afkTip,$_afkPos);
+    // calendarTooltip() retourne du HTML encodé (&lt;div&gt;) — on encode aussi $extra
+    $_afkExtraEnc = htmlspecialchars($_afkExtra, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $_afkPos = strrpos($_afkTip, '&lt;/div&gt;');
+    if ($_afkPos !== false) {
+        $_afkTip = substr($_afkTip,0,$_afkPos).$_afkExtraEnc.substr($_afkTip,$_afkPos);
+    }
     echo $_afkTip;
 ?>" title="<?php echo $this->escape($this->calendar->events[$event]->name.($canceled ? ' <small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>' : '')); ?>">
 											<i class="fa fa-calendar"></i>
