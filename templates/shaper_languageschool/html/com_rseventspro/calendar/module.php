@@ -101,11 +101,11 @@ foreach ($this->calendar->days->weekdays as $weekday) {
 
   // Tarif selon nom d'événement
   function detectTarif(name) {
-    if (/VIP\s*3|trio/i.test(name))  return '98 ¥/h/pers.';
-    if (/VIP\s*2|duo/i.test(name))   return '128 ¥/h/pers.';
-    if (/VIP/i.test(name))            return '208 ¥/h';
-    if (/4.?5\s*pers|Groupe\s*4/i.test(name)) return '78 ¥/h/pers.';
-    return '49 ¥/h/pers.';
+    if (/VIP\s*3|trio/i.test(name))  return '98 \u00a5/h/pers.';
+    if (/VIP\s*2|duo/i.test(name))   return '128 \u00a5/h/pers.';
+    if (/VIP/i.test(name))            return '208 \u00a5/h';
+    if (/4.?5\s*pers|Groupe\s*4|Petits/i.test(name)) return '78 \u00a5/h/pers.';
+    return '49 \u00a5/h/pers.';
   }
 
   function processTooltip(pop) {
