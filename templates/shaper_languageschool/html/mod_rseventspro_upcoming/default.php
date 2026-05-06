@@ -2,7 +2,7 @@
 /**
 * @package RSEvents!Pro — Template override AF Kunming
 * Suppression de la date redondante entre parenthèses
-* Événements à inscription fermée : affichés avec badge, non masqués
+* Lien événement → formulaire pré-rempli (type examen + date session)
 */
 
 defined('_JEXEC') or die('Restricted access');
@@ -13,6 +13,40 @@ use Joomla\CMS\Factory;
 $open = !$links ? 'target="_blank"' : '';
 $_lang = Factory::getLanguage()->getTag();
 $_lang_param = ($_lang && $_lang !== 'fr-FR' && $_lang !== '*') ? '&lang=' . htmlspecialchars($_lang) : '';
+
+// AFK: URL du formulaire d'inscription selon la langue
+if (!function_exists('afk_form_base_url')) {
+    function afk_form_base_url($lang) {
+        $base = '/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen';
+        if (strpos($lang, 'zh') !== false) return '/zh' . $base;
+        if (strpos($lang, 'en') !== false) return '/en' . $base;
+        return $base;
+    }
+}
+
+// AFK: extraire le type d'examen depuis le nom de l'événement
+if (!function_exists('afk_exam_type_from_name')) {
+    function afk_exam_type_from_name($name) {
+        if (preg_match('/TCF\s+Qu[eé]bec/iu', $name)) return 'TCF Québec';
+        if (preg_match('/TCF\s+Canada/iu', $name))   return 'TCF Canada';
+        if (preg_match('/TEF\s+Canada/iu', $name))   return 'TEF Canada';
+        if (preg_match('/TEFAQ/iu', $name))           return 'TEFAQ';
+        return null;
+    }
+}
+
+// AFK: construire l'URL formulaire pré-remplie
+if (!function_exists('afk_form_url')) {
+    function afk_form_url($exam_type, $start_date, $lang) {
+        if (!$exam_type) return null;
+        // Formater la date : YYYY-MM-DD HH:MM:SS → DD/MM/YYYY
+        $dt = $start_date ? date('d/m/Y', strtotime($start_date)) : '';
+        $url = afk_form_base_url($lang)
+             . '?form%5BChoix_exam%5D%5B%5D=' . urlencode($exam_type);
+        if ($dt) $url .= '&form%5BSession%5D%5B%5D=' . urlencode($dt);
+        return $url;
+    }
+}
 
 // AFK: traduction depuis rseventspro_translations
 if (!function_exists('afk_upcoming_translate')) {
@@ -53,7 +87,7 @@ if (!function_exists('afk_upcoming_localize_date')) {
 } ?>
 
 <?php if ($items) { ?>
-<style>#rsepro-upcoming-module ul.rsepro_upcoming{margin-bottom:10px!important}#rsepro-upcoming-module ul.rsepro_upcoming li a{font-size:1.05rem!important;line-height:1.6}#rsepro-upcoming-module .reg-closed-badge{display:inline-block;margin-left:6px;padding:1px 7px;background:#da002e;color:#fff;border-radius:3px;font-size:0.75rem;font-weight:600;vertical-align:middle;white-space:nowrap}</style>
+<style>#rsepro-upcoming-module ul.rsepro_upcoming{margin-bottom:10px!important}#rsepro-upcoming-module ul.rsepro_upcoming li a{font-size:1.05rem!important;line-height:1.6}#rsepro-upcoming-module .reg-closed-badge{display:inline-block;margin-left:6px;padding:1px 7px;background:#da002e;color:#fff;border-radius:3px;font-size:0.75rem;font-weight:600;vertical-align:middle;white-space:nowrap}#rsepro-upcoming-module .reg-closed-item{opacity:.55;pointer-events:none;cursor:default}</style>
 <div id="rsepro-upcoming-module">
 	<?php foreach ($items as $block => $events) { ?>
 	<ul class="rsepro_upcoming<?php echo $suffix; ?> <?php echo RSEventsproAdapterGrid::row(); ?>">
@@ -61,28 +95,29 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		<?php $details = rseventsproHelper::details($id); ?>
 		<?php if (isset($details['event']) && !empty($details['event'])) $event = $details['event']; else continue; ?>
 		<?php
-		$_endReg = $event->end_registration ?? '';
+		$_endReg   = $event->end_registration ?? '';
 		$_regClosed = (!empty($_endReg) && $_endReg !== '0000-00-00 00:00:00' && strtotime($_endReg) < time());
+
+		// Nom traduit + localisation date
+		$_event_name = afk_upcoming_translate($event->id, 'name', $event->name, $_lang);
+		$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
+
+		// URL : formulaire pré-rempli si type d'examen reconnu, sinon lien RSEvents standard
+		$_exam_type = afk_exam_type_from_name($event->name); // toujours depuis nom FR
+		if ($_exam_type) {
+		    $_href = afk_form_url($_exam_type, $event->start ?? '', $_lang);
+		} else {
+		    $_sef  = rseventsproHelper::sef($event->id, $event->name);
+		    $_base = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $_sef, true, $itemid);
+		    $_pfx  = strpos($_lang,'zh')!==false ? 'zh' : (strpos($_lang,'en')!==false ? 'en' : '');
+		    $_href = $_pfx ? '/' . $_pfx . preg_replace('#^(/[a-zA-Z-]{2,5})/#','/',$_base) : $_base;
+		}
+
+		// Badge inscription fermée localisé
+		$_badge_closed = strpos($_lang,'zh')!==false ? '报名已截止' : (strpos($_lang,'en')!==false ? 'Registration closed' : 'Inscriptions fermées');
 		?>
-		<li class="<?php echo RSEventsproAdapterGrid::column(12 / $columns); ?>">
-			<?php
-			// Traduire nom et small_description
-			$_event_name = afk_upcoming_translate($event->id, 'name', $event->name, $_lang);
-			$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
-			$_sef = rseventsproHelper::sef($event->id, $event->name);
-			$_prefix_map = ['zh-CN' => 'zh', 'en-GB' => 'en', 'en' => 'en'];
-			$_prefix = $_prefix_map[$_lang] ?? '';
-			$_base_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id=' . $_sef, true, $itemid);
-			if ($_prefix) {
-				$_base_url = preg_replace('#^(/[a-zA-Z-]{2,5})/#', '/', $_base_url);
-				$_event_url = '/' . $_prefix . $_base_url;
-			} else {
-				$_event_url = $_base_url;
-			}
-			// Badge inscription fermée localisé
-			$_badge_closed = strpos($_lang, 'zh') !== false ? '报名已截止' : (strpos($_lang, 'en') !== false ? 'Registration closed' : 'Inscriptions fermées');
-			?>
-			<a <?php echo $open; ?> href="<?php echo $_event_url; ?>"><?php echo $_event_name; ?></a><?php if ($_regClosed): ?><span class="reg-closed-badge"><?php echo $_badge_closed; ?></span><?php endif; ?> <?php if ($event->published == 3) { ?><small class="text-error">(<?php echo Text::_('MOD_RSEVENTSPRO_UPCOMING_CANCELED'); ?>)</small><?php } ?>
+		<li class="<?php echo RSEventsproAdapterGrid::column(12 / $columns); ?><?php echo $_regClosed ? ' reg-closed-item' : ''; ?>">
+			<a <?php echo $open; ?> href="<?php echo htmlspecialchars($_href); ?>"><?php echo $_event_name; ?></a><?php if ($_regClosed): ?><span class="reg-closed-badge"><?php echo $_badge_closed; ?></span><?php endif; ?> <?php if ($event->published == 3) { ?><small class="text-error">(<?php echo Text::_('MOD_RSEVENTSPRO_UPCOMING_CANCELED'); ?>)</small><?php } ?>
 		</li>
 		<?php } ?>
 	</ul>
