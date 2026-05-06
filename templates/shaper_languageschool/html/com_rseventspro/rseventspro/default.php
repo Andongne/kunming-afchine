@@ -91,7 +91,6 @@ $ical = $this->params->get('ical',1); ?>
 </script>
 
 <?php
-use Joomla\CMS\Factory;
 // Résoudre language_id FaLang (SEF /zh/ ou ?lang=zh-CN)
 $_afkLangMap   = ['zh-CN' => 4, 'en-GB' => 1];
 $_afkLangTag   = Factory::getLanguage()->getTag();
