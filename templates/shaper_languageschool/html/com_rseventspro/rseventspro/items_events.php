@@ -41,7 +41,9 @@ function afkExamType(string $name): string {
 <?php
 // URL formulaire avec pré-remplissage type d'examen + date
 $examType    = afkExamType($event->name);
-$sessionDate = date('d/m/Y', strtotime($event->start));
+$_dt = new DateTime($event->start, new DateTimeZone('UTC'));
+$_dt->setTimezone(new DateTimeZone('Asia/Shanghai'));
+$sessionDate = $_dt->format('d/m/Y');
 $sep         = (strpos($afkFormBase, '?') !== false) ? '&' : '?';
 $formUrl     = $afkFormBase . $sep
              . 'form%5BChoix_exam%5D%5B%5D=' . urlencode($examType)

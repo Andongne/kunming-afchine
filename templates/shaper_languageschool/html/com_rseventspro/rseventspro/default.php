@@ -164,7 +164,9 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         // AFK: URL formulaire avec pré-remplissage
         $_afkFormBase = Route::_('index.php?Itemid=776');
         $_afkExamType = afk_exam_type($event->name);
-        $_afkDate     = date('d/m/Y', strtotime($event->start));
+        $_afkDt = new DateTime($event->start, new DateTimeZone('UTC'));
+        $_afkDt->setTimezone(new DateTimeZone('Asia/Shanghai'));
+        $_afkDate = $_afkDt->format('d/m/Y');
         $_afkSep      = (strpos($_afkFormBase, '?') !== false) ? '&' : '?';
         $_afkFormUrl  = $_afkFormBase . $_afkSep
                       . 'form%5BChoix_exam%5D%5B%5D=' . urlencode($_afkExamType)
