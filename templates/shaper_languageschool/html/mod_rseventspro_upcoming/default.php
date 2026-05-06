@@ -26,7 +26,20 @@ if (!function_exists('afk_form_base_url')) {
     }
 }
 
-// AFK: extraire le type d'examen depuis le nom de l'événement
+// AFK: récupérer le nom FR original depuis la DB (indépendant de la langue active)
+if (!function_exists('afk_event_name_fr')) {
+    function afk_event_name_fr($event_id) {
+        static $_cache = [];
+        if (isset($_cache[$event_id])) return $_cache[$event_id];
+        static $_db = null;
+        if ($_db === null) $_db = JFactory::getDbo();
+        $_db->setQuery('SELECT name FROM #__rseventspro_events WHERE id=' . (int)$event_id);
+        $_cache[$event_id] = $_db->loadResult();
+        return $_cache[$event_id];
+    }
+}
+
+// AFK: extraire le type d'examen depuis le nom FR de l'événement
 if (!function_exists('afk_exam_type_from_name')) {
     function afk_exam_type_from_name($name) {
         if (preg_match('/TCF\s+Qu[eé]bec/iu', $name)) return 'TCF Québec';
@@ -105,7 +118,7 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
 
 		// URL : formulaire pré-rempli si type d'examen reconnu, sinon lien RSEvents standard
-		$_exam_type = afk_exam_type_from_name($event->name); // toujours depuis nom FR
+		$_exam_type = afk_exam_type_from_name(afk_event_name_fr($event->id)); // toujours depuis nom FR DB
 		if ($_exam_type) {
 		    $_href = afk_form_url($_exam_type, $event->start ?? '', $_lang);
 		} else {
