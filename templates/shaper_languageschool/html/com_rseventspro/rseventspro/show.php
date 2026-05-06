@@ -43,6 +43,7 @@ if (!preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
         : 'Groupe 6-12 pers. (49 yuan/h)'));
     $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
     $_afkNotes = $event->name . ($_afkDate ? ' — ' . $_afkDate : '');
+    $modal = 0; $links = 0; // désactiver modal pour cours
     $subscribeURL = $_afkFormBase
         . '?form%5BFormat_cours%5D%5B%5D=' . urlencode($_afkFormat)
         . '&form%5BNotes%5D=' . urlencode($_afkNotes);
