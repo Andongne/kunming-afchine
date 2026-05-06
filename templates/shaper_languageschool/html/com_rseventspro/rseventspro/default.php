@@ -499,3 +499,45 @@ body.<?php echo $bodyLang; ?> #rs_events_container #rs_event<?php echo $_afkEid;
 })();
 </script>
 <?php endif; ?>
+
+<?php
+// Badge tarif : label selon type d'examen + langue
+$_afkTarifLang = $bodyLang;
+?>
+<script>
+(function(){
+  var lang = '<?php echo htmlspecialchars($_afkTarifLang ?? 'fr-fr'); ?>';
+  var tarifs = {
+    canada: {
+      'fr-fr': '4 comp&eacute;tences &mdash; 2&thinsp;700&nbsp;&yen;',
+      'zh-cn': '4项技能 &mdash; 2&thinsp;700&nbsp;&yen;',
+      'en-gb': '4 skills &mdash; 2,700&nbsp;&yen;'
+    },
+    quebec: {
+      'fr-fr': '&Agrave; partir de 675&nbsp;&yen;&thinsp;/&thinsp;comp&eacute;tence',
+      'zh-cn': '起&nbsp;675&nbsp;&yen;&thinsp;/&thinsp;技能',
+      'en-gb': 'From&nbsp;675&nbsp;&yen;&thinsp;/&thinsp;skill'
+    }
+  };
+  function updateBadges() {
+    document.querySelectorAll('li.afk-event-card').forEach(function(card) {
+      var badge = card.querySelector('.afk-tarif-badge');
+      if (!badge) return;
+      var nameEl = card.querySelector('[itemprop="name"]');
+      var name = nameEl ? nameEl.textContent : '';
+      var key = null;
+      if (/Canada|加拿大/i.test(name)) key = 'canada';
+      else if (/Qu[eé]bec|TEFAQ|魁北克/i.test(name)) key = 'quebec';
+      if (!key) return;
+      var l = lang || 'fr-fr';
+      badge.innerHTML = (tarifs[key][l] || tarifs[key]['fr-fr']);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateBadges);
+  } else {
+    updateBadges();
+  }
+  window.addEventListener('load', function(){ setTimeout(updateBadges, 150); });
+})();
+</script>
