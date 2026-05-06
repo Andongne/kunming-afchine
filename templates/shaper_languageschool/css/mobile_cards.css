@@ -904,3 +904,81 @@ html[lang^="zh"] .com-rseventspro .rsepro-calendar thead th:nth-child(8) .hidden
     font-style: normal;
     line-height: 1.5;
 }
+
+/* ==========================================================================
+   RSEvents Pro — Cards examens + Sidebar blocs v20260506
+   ========================================================================== */
+
+/* Card event : position relative pour badge et overlay */
+li.afk-event-card {
+    position: relative !important;
+    overflow: visible;
+}
+
+li.afk-event-card:hover {
+    background: #f8f8f8 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08) !important;
+    transition: box-shadow .18s ease, background .18s ease;
+}
+
+/* Badge tarif — discret, top-right */
+span.afk-tarif-badge {
+    position: absolute !important;
+    top: 10px !important;
+    right: 12px !important;
+    z-index: 2 !important;
+    background: #f5f0e8;
+    color: #7a6540;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 12px;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* Lien overlay couvrant toute la card */
+a.afk-card-overlay-link {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+    display: block !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+/* Modules card (Contacts, Régler, Calendrier) */
+.afk-sidebar-card {
+    padding: 50px !important;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
+    background: #fff !important;
+    margin-bottom: 20px !important;
+}
+
+.afk-sidebar-card .afk-sidebar-title {
+    color: #da002e !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+}
+
+/* Modules menu (Inscription, Préparation) */
+.afk-sidebar-menu {
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    margin-bottom: 32px !important;
+}
+
+.afk-sidebar-menu .afk-sidebar-title {
+    color: #1a171b !important;
+    font-size: 26px !important;
+    font-weight: 500 !important;
+    margin-bottom: 12px !important;
+}
+
+@media (max-width: 991.98px) {
+    .afk-sidebar-card { padding: 30px 25px !important; }
+}
