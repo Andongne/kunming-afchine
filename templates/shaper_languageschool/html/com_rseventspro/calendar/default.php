@@ -166,9 +166,17 @@ $showColors		= $this->params->get('colors', 0); ?>
     elseif  (preg_match('/4.?5\s*pers|Groupe\s*4/i', $_afkName)) $_afkTarif = '78 ¥/h/pers.';
     else                                                         $_afkTarif = '49 ¥/h/pers.';
     // Injecter avant le dernier </div>
+    $_afkLangTag = \Joomla\CMS\Factory::getLanguage()->getTag();
+    if (strpos($_afkLangTag, 'zh') === 0) {
+        $_afkLblProf = '教师：'; $_afkLblTarif = '费用：';
+    } elseif (strpos($_afkLangTag, 'en') === 0) {
+        $_afkLblProf = 'Teacher:'; $_afkLblTarif = 'Price:';
+    } else {
+        $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :';
+    }
     $_afkExtra = '<div class=\'afk-tooltip-meta\' style=\'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.82em;line-height:1.7\'>';
-    if ($_afkTeacher) $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> '.htmlspecialchars($_afkTeacher).'<br>';
-    $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> <strong>'.htmlspecialchars($_afkTarif).'</strong>';
+    if ($_afkTeacher) $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblProf).'</strong> '.htmlspecialchars($_afkTeacher).'<br>';
+    $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblTarif).'</strong> '.htmlspecialchars($_afkTarif);
     $_afkExtra .= '</div>';
     // calendarTooltip() retourne du HTML encodé (&lt;div&gt;) — on encode aussi $extra
     $_afkExtraEnc = htmlspecialchars($_afkExtra, ENT_QUOTES | ENT_HTML5, 'UTF-8');
