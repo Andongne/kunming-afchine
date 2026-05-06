@@ -989,3 +989,15 @@ body.com-rsform .sp-column > #userForm {
 #rsepro_number_events {
     display: none !important;
 }
+
+/* Checkboxes compétences : espace entre la case et le label */
+#userForm .rsform-block-competences-tcf-quebec input[type="checkbox"],
+#userForm .rsform-block-competences-tefaq input[type="checkbox"] {
+    margin-right: 10px !important;
+}
+#userForm .rsform-block-competences-tcf-quebec .formBody label,
+#userForm .rsform-block-competences-tefaq .formBody label {
+    margin-bottom: 7px !important;
+    display: block !important;
+    line-height: 1.5 !important;
+}
