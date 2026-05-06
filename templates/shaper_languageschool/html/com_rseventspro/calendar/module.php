@@ -105,15 +105,11 @@ foreach ($this->calendar->days->weekdays as $weekday) {
     if (content && _lang.indexOf('zh') === 0) {
       content.innerHTML = localizeText(content.innerHTML);
     }
-    // Nom de groupe en gras dans la description
+    // Toute la ligne description en gras
     pop.querySelectorAll('.rsepro-calendar-tooltip-description').forEach(function (el) {
-      if (el.querySelector('.afk-group-name')) return;
-      var text = el.textContent.trim();
-      var parts = text.split(/\s*[—\-–]\s*/);
-      if (parts.length > 1) {
-        var rest = text.slice(parts[0].length);
-        el.innerHTML = '<strong class="afk-group-name">' + parts[0].trim() + '</strong>' + rest;
-      }
+      if (el.querySelector('strong')) return;
+      var text = el.innerHTML.trim();
+      el.innerHTML = '<strong>' + text + '</strong>';
     });
   }
 
