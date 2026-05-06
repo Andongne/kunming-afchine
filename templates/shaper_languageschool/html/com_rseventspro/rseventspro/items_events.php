@@ -44,8 +44,8 @@ $examType    = afkExamType($event->name);
 $sessionDate = date('d/m/Y', strtotime($event->start));
 $sep         = (strpos($afkFormBase, '?') !== false) ? '&' : '?';
 $formUrl     = $afkFormBase . $sep
-             . 'form[Choix_exam][]=' . urlencode($examType)
-             . '&form[Session][]='   . urlencode($sessionDate);
+             . 'form%5BChoix_exam%5D%5B%5D=' . urlencode($examType)
+             . '&form%5BSession%5D%5B%5D='   . urlencode($sessionDate);
 
 // Badge tarif : small_description si contient un montant, sinon valeur par défaut
 $tarif = '2 700 ¥';
