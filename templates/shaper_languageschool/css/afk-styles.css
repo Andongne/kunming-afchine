@@ -967,18 +967,18 @@ body.com-rsform .sp-column > #userForm {
     margin-top: 0 !important;
 }
 
-/* Cards inscriptions fermées : non cliquables, visuellement atténuées */
-.afk-event-card .afk-card-closed {
-    cursor: default;
-    opacity: 0.65;
-    pointer-events: none;
-}
-
-/* Cards inscriptions fermées : non cliquables via CSS :has() */
+/* Cards inscriptions fermées : grisées, sans hover, non cliquables */
 .afk-event-card:has(.rsepro-reg-closed) {
-    opacity: 0.62;
+    filter: grayscale(100%);
+    opacity: 0.55;
 }
-.afk-event-card:has(.rsepro-reg-closed) a {
+.afk-event-card:has(.rsepro-reg-closed):hover {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: inherit !important;
+}
+.afk-event-card:has(.rsepro-reg-closed) a,
+.afk-event-card:has(.rsepro-reg-closed) * {
     pointer-events: none !important;
     cursor: default !important;
 }

@@ -45,6 +45,45 @@ $_afkHasSidebar     = !empty($_afkSidebarModules);
 
 <?php echo RSFormProHelper::displayForm($this->formId); ?>
 
+<script>
+(function(){
+  // Si l'URL contient des paramètres form[...], ré-appliquer après le sessionStorage
+  var params = new URLSearchParams(window.location.search);
+  var hasFormParams = false;
+  params.forEach(function(v, k){ if(k.indexOf('form[') === 0 || k.indexOf('form%5B') === 0) hasFormParams = true; });
+  if (!hasFormParams) return;
+
+  function applyPrefill() {
+    params.forEach(function(value, key) {
+      // Décoder le nom du champ : form[Session][] -> form[Session][]
+      var decoded = decodeURIComponent(key);
+      var el = document.querySelector('[name="' + decoded + '"]');
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+        for (var i = 0; i < el.options.length; i++) {
+          if (el.options[i].value === decodeURIComponent(value)) {
+            el.selectedIndex = i;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            break;
+          }
+        }
+      } else if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = (el.value === decodeURIComponent(value));
+      } else {
+        el.value = decodeURIComponent(value);
+      }
+    });
+  }
+
+  // Lancer après le chargement complet (après sessionStorage et RSForm JS)
+  if (document.readyState === 'complete') {
+    setTimeout(applyPrefill, 50);
+  } else {
+    window.addEventListener('load', function(){ setTimeout(applyPrefill, 50); });
+  }
+})();
+</script>
+
 <?php if ($_afkHasSidebar): ?>
 </div><!-- /col-lg-9 -->
 <div class="col-lg-3 col-md-12 rse-sidebar-col">
