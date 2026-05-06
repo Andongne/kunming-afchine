@@ -52,46 +52,59 @@
 
 /**
  * Regroupe les 6 cards homepage en un seul conteneur 2-colonnes sur mobile
- * (les 6 colonnes sont dans 2 sections séparées de 3 colonnes chacune)
+ * Détection automatique des cards par structure (image + texte + bouton)
+ * Aucun ID codé en dur — résistant aux réorganisations SP Builder
  */
 (function () {
-  var COL_IDS = [
-    'column-wrap-id-f6532a75-d1c9-4b87-9c4b-fbc037ebcad9',
-    'column-wrap-id-75c55a92-5c35-469f-817a-ec46505cc0c6',
-    'column-wrap-id-eb353f01-c701-4c12-8691-dda8e365a3a2',
-    'column-wrap-id-adae435c-32b6-4d67-8445-0bcc108e3408',
-    'column-wrap-id-0cc04406-1e6e-4c36-9599-a0e920772385',
-    'column-wrap-id-41c59e95-316d-47ef-a016-aaa82d14b301',
-    'column-wrap-id-06214299-0bd0-4f18-bb67-66d79b30f265'
-  ];
-  var SEC1 = 'section-id-90427b43-0b92-4538-964b-79192deb738d';
-  var SEC2 = 'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47';
+
+  /**
+   * Détecte si un column-wrap est une "card" (contient image + texte + bouton)
+   */
+  function isCard(colWrap) {
+    return colWrap.querySelector('.addon-root-image') &&
+           colWrap.querySelector('.addon-root-text-block, .addon-root-custom-html') &&
+           colWrap.querySelector('.addon-root-button');
+  }
 
   function reorganizeCards() {
     if (window.innerWidth > 767) return;
-    if (document.getElementById('afk-cards-grid')) return; // déjà fait
+    if (document.getElementById('afk-cards-grid')) return;
 
-    var cols = COL_IDS.map(function (id) { return document.getElementById(id); });
-    if (cols.some(function (c) { return !c; })) return; // pas encore chargé
+    // Trouver toutes les colonnes-cards sur la page d'accueil
+    var pb = document.querySelector('#sp-page-builder.page-173');
+    if (!pb) return;
 
-    var sec1 = document.getElementById(SEC1);
-    var sec2 = document.getElementById(SEC2);
-    if (!sec1 || !sec2) return;
+    var allColWraps = pb.querySelectorAll('[id^="column-wrap-id-"]');
+    var cardCols = [];
+    allColWraps.forEach(function (cw) {
+      if (isCard(cw)) cardCols.push(cw);
+    });
+    if (cardCols.length < 2) return;
 
-    // Créer un conteneur flex 2-colonnes
+    // Créer la grille 2 colonnes
     var grid = document.createElement('div');
     grid.id = 'afk-cards-grid';
     grid.style.cssText = 'display:flex;flex-wrap:wrap;padding:3px 10px;background:transparent;';
 
-    // Déplacer les 6 colonnes dans ce conteneur
-    cols.forEach(function (col) {
+    // Trouver la première section parente des cards et insérer avant elle
+    var firstSection = cardCols[0].closest('[id^="section-id-"]');
+    if (!firstSection) return;
+
+    // Déplacer toutes les cards dans la grille
+    var sectionsToHide = new Set();
+    cardCols.forEach(function (col) {
+      var sec = col.closest('[id^="section-id-"]');
+      if (sec) sectionsToHide.add(sec);
       grid.appendChild(col);
     });
 
-    // Insérer avant sec1 et masquer les 2 sections vides
-    sec1.parentNode.insertBefore(grid, sec1);
-    sec1.style.display = 'none';
-    sec2.style.display = 'none';
+    // Insérer la grille avant la première section cards
+    firstSection.parentNode.insertBefore(grid, firstSection);
+
+    // Masquer les sections devenues vides + neutraliser min-height
+    sectionsToHide.forEach(function (sec) {
+      sec.style.cssText += ';display:none!important;min-height:0!important;';
+    });
   }
 
   ['DOMContentLoaded', 'load'].forEach(function (evt) {
@@ -102,28 +115,11 @@
   });
 })();
 
-/**
- * Neutralise le min-height:580px de SP Builder sur la section cards row 3
- */
 (function () {
-  var TARGET_IDS = [
-    'section-id-90427b43-0b92-4538-964b-79192deb738d',
-    'section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47'
-  ];
-
+  /* Stub vide — neutralisation min-height désormais gérée dans reorganizeCards */
   function applyFix() {
     if (window.innerWidth > 767) return;
-    var pb = document.querySelector('#sp-page-builder.page-173');
-    if (!pb) return;
-    TARGET_IDS.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) {
-        el.style.cssText += ';min-height:0!important;height:auto!important;';
-      }
-    });
   }
-
-  /* Lance au chargement et après un délai pour contrer SP Builder JS */
   ['DOMContentLoaded', 'load'].forEach(function (evt) {
     window.addEventListener(evt, applyFix);
   });
