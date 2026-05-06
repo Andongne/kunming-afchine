@@ -35,6 +35,16 @@ function afk_localize_date_list($str, $lang) {
     return $str;
 }
 
+// Retourne l'image associée à un type d'examen
+function afk_exam_image(string $name): string {
+    $name_upper = strtoupper($name);
+    if (str_contains($name_upper, 'TCF CANADA') || str_contains($name_upper, 'TCF CANADA')) return '/images/TCF-Canada.png';
+    if (str_contains($name_upper, 'TEFAQ'))   return '/images/TEFAQ.png';
+    if (str_contains($name_upper, 'TEF CANADA') || str_contains($name_upper, 'TEF ')) return '/images/TEF.png';
+    if (str_contains($name_upper, 'TCF QUÉBEC') || str_contains($name_upper, 'TCF QUEBEC')) return '/images/TCF-Quebec.png';
+    return '/components/com_rseventspro/assets/images/default/blank.png';
+}
+
 // Extrait le type d'examen depuis le nom de l'événement
 // "TCF Canada 🍁 📄 — 8 mai 2026" → "TCF Canada"
 function afk_exam_type(string $name): string {
@@ -104,7 +114,7 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         </div>
     <?php } ?>
 
-    <div class="rs_rss">
+    <?php /* rs_rss déplacé en bas de la liste */ ?>
         <?php Factory::getApplication()->triggerEvent('onrsepro_showCartIcon'); ?>
 
         <?php if (!empty($this->permissions['can_scan'])) { ?>
@@ -143,7 +153,7 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         </a>
         <?php } ?>
         <?php } ?>
-    </div>
+    <?php /* fin rs_rss masqué */ ?>
 
     <?php if ($this->params->get('search',1)) { ?>
     <form method="post" action="<?php echo $this->escape(Uri::getInstance()); ?>" name="adminForm" id="adminForm">
@@ -233,7 +243,7 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
 
             <?php if (!empty($event->options['show_icon_list'])) { ?>
             <div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
-                <img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>" alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
+                <img src="<?php echo afk_exam_image($event->name); ?>" alt="<?php echo htmlspecialchars(preg_replace('/\s*\x{2014}.*$/u','', $event->name), ENT_QUOTES, 'UTF-8'); ?>" style="width:<?php echo rseventsproHelper::layout('image-width'); ?>px; height:auto; object-fit:contain;" />
             </div>
             <?php } ?>
 
@@ -339,6 +349,33 @@ if (strpos($_tag, 'zh') === 0) {
 
     <?php rseventsproHelper::clearMonthYear('events'.$this->fid, @$lastMY); ?>
 
+    <!-- rs_rss déplacé ici, sous la liste -->
+    <div class="rs_rss rs_rss--bottom">
+        <?php Factory::getApplication()->triggerEvent('onrsepro_showCartIcon'); ?>
+        <?php if ($this->config->mysubscriptions) { ?>
+        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=subscriptions'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_VIEW_USER_SUBSCRIPTIONS')); ?>">
+            <i class="fa fa-user"></i>
+        </a>
+        <?php } ?>
+        <?php if ($rss || $ical || $this->config->timezone) { ?>
+        <?php if ($this->config->timezone) { ?>
+        <a rel="rs_timezone" <?php if (rseventsproHelper::getConfig('modaltype','int') == 1) echo ' href="#timezoneModal" data-toggle="modal" data-bs-toggle="modal"'; else echo ' href="javascript:void(0)"'; ?> class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-timezone" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_CHANGE_TIMEZONE')); ?>">
+            <i class="fa fa-clock"></i>
+        </a>
+        <?php } ?>
+        <?php if ($rss) { ?>
+        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&format=feed&type=rss'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-rss" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_RSS')); ?>">
+            <i class="fa fa-rss-square"></i>
+        </a>
+        <?php } ?>
+        <?php if ($ical) { ?>
+        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&format=raw&type=ical'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-ical" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_ICS')); ?>">
+            <i class="fa fa-calendar"></i>
+        </a>
+        <?php } ?>
+        <?php } ?>
+    </div>
+
     <div class="rs_loader" id="rs_loader" style="display:none;">
         <?php echo HTMLHelper::image('com_rseventspro/loader.gif', '', array(), true); ?>
     </div>
@@ -392,7 +429,8 @@ if (strpos($_tag, 'zh') === 0) {
 </div><!-- /col-lg-9 -->
 <div class="col-lg-3 col-md-12 rse-sidebar-col">
     <?php foreach ($_afkSidebarModules as $_afkMod): ?>
-    <div class="afk-sidebar-module">
+    <?php $_afkModClass = (strpos($_afkMod->module, 'mod_menu') !== false) ? 'afk-sidebar-module afk-sidebar-menu' : 'afk-sidebar-module afk-sidebar-card'; ?>
+    <div class="<?php echo $_afkModClass; ?>">
         <?php if ($_afkMod->showtitle): ?>
         <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkMod->title); ?></div>
         <?php endif; ?>

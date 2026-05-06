@@ -794,3 +794,30 @@ body.com-rseventspro main#sp-main-body {
 body.com-rseventspro main#sp-main-body > section#sp-main-body {
     padding-top: 35px !important;
 }
+/* ==========================================================================
+   RSEvents Pro — Cards examens : dates en rouge, rs_rss en bas
+   ========================================================================== */
+
+/* Dates des événements en rouge */
+.com-rseventspro .rsepro-event-on-block,
+.com-rseventspro .rsepro-event-from-block,
+.com-rseventspro .rsepro-event-starting-block,
+.com-rseventspro .rsepro-date-block {
+    color: #da002e !important;
+}
+.com-rseventspro .rsepro-date-block b,
+.com-rseventspro .rsepro-event-on-block b {
+    color: #da002e !important;
+}
+
+/* rs_rss en bas : aligné à droite, discret */
+.rs_rss--bottom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 12px 0 4px;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+    opacity: 0.6;
+}
+.rs_rss--bottom:hover { opacity: 1; }
