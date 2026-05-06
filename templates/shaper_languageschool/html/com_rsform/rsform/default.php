@@ -178,8 +178,11 @@ if ($_afkFormId === 6) {
   function buildWidget() {
     var target = document.querySelector('.rsform-block-format-cours');
     if (!target) { setTimeout(buildWidget, 200); return; }
+    // Insérer après le bloc format-cours complet (pas dans formControls)
     var tarifBlock = document.getElementById('afk-tarif-display');
-    var insertAfter = tarifBlock || target;
+    // S'assurer que tarifBlock est sibling de target (même parent)
+    var insertAfter = (tarifBlock && tarifBlock.parentNode === target.parentNode)
+        ? tarifBlock : target;
 
     var wrap = document.createElement('div');
     wrap.className = 'rsform-block rsform-type-freetext afk-session-block';
