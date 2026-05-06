@@ -58,6 +58,14 @@ if ($_afkFormId === 6) {
         '/4.?5|Petits/i'     => 'Petits groupes (de 4 à 5 personnes)',
     ];
     foreach ($_afkCourseRows as $_afkCR) {
+        // Délai inscription : veille à 17h (vendredi si veille = sam/dim)
+        $_afkEventTs  = strtotime($_afkCR['start']);
+        $_afkEventDay = date('Y-m-d', $_afkEventTs);
+        $_afkDeadline = strtotime($_afkEventDay . ' -1 day 17:00:00');
+        $_afkDow = (int)date('N', $_afkDeadline);
+        if ($_afkDow == 7) $_afkDeadline -= 2 * 86400;
+        if ($_afkDow == 6) $_afkDeadline -= 1 * 86400;
+        if (time() >= $_afkDeadline) continue;
         $_afkDesc = strip_tags($_afkCR['description'] ?? '');
         $_afkTch  = '';
         if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur)/u', $_afkDesc, $_afkTm))
@@ -67,8 +75,8 @@ if ($_afkFormId === 6) {
             if (preg_match($pat, $_afkCR['name'])) { $_afkFmt = $val; break; }
         }
         $_afkCourseSessions[] = [
-            'label'   => $_afkCR['name'] . ' — ' . date('d/m/Y H\hi', strtotime($_afkCR['start'])),
-            'date'    => date('d/m/Y', strtotime($_afkCR['start'])),
+            'label'   => $_afkCR['name'] . ' — ' . date('d/m/Y H\hi', $_afkEventTs),
+            'date'    => date('d/m/Y', $_afkEventTs),
             'format'  => $_afkFmt,
             'teacher' => $_afkTch,
         ];
