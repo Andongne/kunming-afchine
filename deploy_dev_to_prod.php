@@ -365,15 +365,15 @@ sleep(1);
 echo "── 4. VÉRIFICATION POST-DÉPLOIEMENT ────────\n\n";
 
 $check_pages = [
-    ['label' => 'Accueil FR', 'url' => 'https://kunming-afchine.org/', 'markers' => ['afk-event-card','Alliance Française']],
-    ['label' => 'Accueil ZH', 'url' => 'https://kunming-afchine.org/?lang=zh-CN', 'markers' => ['昆明法语联盟']],
-    ['label' => 'Cal. sessions FR', 'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions', 'markers' => ['afk-tarif-badge','formulaire-inscription']],
-    ['label' => 'Cal. sessions ZH', 'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions?lang=zh-CN', 'markers' => ['afk-tarif-badge']],
-    ['label' => 'Form. examen FR',  'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen', 'markers' => ['Choix_exam','rsf_form4_data','rse-exams-sidebar']],
-    ['label' => 'Cal. cours FR',    'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/calendrier-des-cours', 'markers' => ['rs_events_container']],
-    ['label' => 'Form. cours FR',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne', 'markers' => ['afk_cours_data','rse-calendar-sidebar','WeChat_ID']],
-    ['label' => 'Form. cours ZH',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne?lang=zh-CN', 'markers' => ['afk_cours_data']],
-    ['label' => 'Form. cours EN',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne?lang=en-GB', 'markers' => ['afk_cours_data']],
+    ['label' => 'Accueil FR',       'url' => 'https://kunming-afchine.org/',                                                                                                                               'markers' => ['sp-component','Alliance Fran']],
+    ['label' => 'Accueil ZH',       'url' => 'https://kunming-afchine.org/?lang=zh-CN',                                                                                                                   'markers' => ['sp-component']],
+    ['label' => 'Cal. sessions FR', 'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions',                                        'markers' => ['afk-tarif-badge','formulaire-inscription']],
+    ['label' => 'Cal. sessions ZH', 'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions?lang=zh-CN',                             'markers' => ['afk-tarif-badge']],
+    ['label' => 'Form. examen FR',  'url' => 'https://kunming-afchine.org/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen',                         'markers' => ['Choix_exam','rsf_form4_data','R\u00e9gler votre inscription']],
+    ['label' => 'Cal. cours FR',    'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/calendrier-des-cours',                                                          'markers' => ['rs_event_detail']],
+    ['label' => 'Form. cours FR',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne',                                                   'markers' => ['afk_cours_data','WeChat_ID','Inscription aux Cours']],
+    ['label' => 'Form. cours ZH',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne?lang=zh-CN',                                        'markers' => ['afk_cours_data','WeChat_ID']],
+    ['label' => 'Form. cours EN',   'url' => 'https://kunming-afchine.org/cours-de-francais/inscription-cours-de-francais/reservation-cours-en-ligne?lang=en-GB',                                        'markers' => ['afk_cours_data','WeChat_ID']],
 ];
 
 $all_ok = true;
