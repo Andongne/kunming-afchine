@@ -224,7 +224,13 @@ if ($_afkFormId === 6) {
     var _afkSelData = null;
     document.addEventListener('submit', function(e){
       if (!_afkSelData) return;
-      try { sessionStorage.setItem('afk_cours_data', JSON.stringify({tarif: _afkSelData.tarif})); } catch(ex){}
+      try {
+        sessionStorage.setItem('afk_cours_data', JSON.stringify({
+          tarif:  _afkSelData.tarif,
+          label:  _afkSelData.label,
+          format: _afkSelData.format
+        }));
+      } catch(ex){}
     }, true);
 
     // Bloc info type+tarif
