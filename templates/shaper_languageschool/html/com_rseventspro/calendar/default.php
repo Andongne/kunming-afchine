@@ -217,7 +217,6 @@ $showColors		= $this->params->get('colors', 0); ?>
 											<i class="fa fa-calendar"></i>
 											<span class="event-name"><?php echo $this->escape($this->calendar->events[$event]->name); ?></span>
 										</a>
-										<?php if ($_afkRegPast): ?><span class="afk-cal-badge-past">Inscription passée</span><?php endif; ?>
 									</li>
 								<?php $j++; ?>
 								<?php } ?>
