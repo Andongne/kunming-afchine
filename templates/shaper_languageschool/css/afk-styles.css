@@ -234,8 +234,10 @@
 .rsform .formContainer,
 #userForm .formContainer {
     background: #fff5f6 !important;
+    border: 1.5px solid #f0cdd2 !important;
     border-radius: 10px !important;
-    padding: 32px !important;
+    padding: 28px 32px !important;
+    box-shadow: 0 2px 12px rgba(218,0,46,.06) !important;
 }
 
 /* Inputs sur fond blanc dans le conteneur rosé */
@@ -952,9 +954,11 @@ body.com-rsform main#sp-main-body > section#sp-main-body {
 
 /* Fond rosé sur le formContainer (assure le rendu sans cache) */
 body.com-rsform #userForm .formContainer {
-    background-color: #fff5f6 !important;
+    background: #fff5f6 !important;
+    border: 1.5px solid #f0cdd2 !important;
     border-radius: 10px !important;
-    padding: 32px !important;
+    padding: 28px 32px !important;
+    box-shadow: 0 2px 12px rgba(218,0,46,.06) !important;
     margin-top: 8px !important;
 }
 
