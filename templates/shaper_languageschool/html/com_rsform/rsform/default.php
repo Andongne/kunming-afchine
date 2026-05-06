@@ -220,6 +220,13 @@ if ($_afkFormId === 6) {
       sel.appendChild(o);
     });
 
+    // Sauvegarder tarif dans sessionStorage à la soumission
+    var _afkSelData = null;
+    document.addEventListener('submit', function(e){
+      if (!_afkSelData) return;
+      try { sessionStorage.setItem('afk_cours_data', JSON.stringify({tarif: _afkSelData.tarif})); } catch(ex){}
+    }, true);
+
     // Bloc info type+tarif
     var infoDiv = document.createElement('div');
     infoDiv.id = 'afk-info-cours';
@@ -229,6 +236,7 @@ if ($_afkFormId === 6) {
     sel.addEventListener('change', function(){
       if (!this.value) { infoDiv.style.display='none'; return; }
       var d = JSON.parse(this.value);
+      _afkSelData = d;
       // Afficher type + tarif
       var lbl_type = _lang==='zh'?'课程类型：':(_lang==='en'?'Type: ':'Type : ');
       var lbl_tarif = _lang==='zh'?'费用：':(_lang==='en'?'Price: ':'Tarif : ');
