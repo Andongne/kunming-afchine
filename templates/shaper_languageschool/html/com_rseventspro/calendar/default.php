@@ -143,7 +143,7 @@ $showColors		= $this->params->get('colors', 0); ?>
     $_afkDesc = strip_tags($_afkObj->description ?? '');
     // Enseignant
     $_afkTeacher = '';
-    if (preg_match('/Enseignant[^:]*:\s*([^\n\r]+)/u', $_afkDesc, $_afkTm)) {
+    if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Durée|Niveau|$)/u', $_afkDesc, $_afkTm)) {
         $_afkTeacher = trim($_afkTm[1]);
     }
     // Tarif
