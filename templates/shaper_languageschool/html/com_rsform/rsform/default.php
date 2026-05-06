@@ -35,8 +35,20 @@ $_afkFormId = (int) Factory::getApplication()->input->getInt('formId',
 // Détecter aussi depuis l'objet formulaire si disponible
 if (isset($this->form) && isset($this->form->FormId)) $_afkFormId = (int)$this->form->FormId;
 $_afkSidebarPos     = $_afkFormId === 6 ? 'rse-calendar-sidebar' : 'rse-exams-sidebar';
-$_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
 $_afkIsPost         = ($_SERVER['REQUEST_METHOD'] === 'POST');
+// ModuleHelper::getModules() peut retourner vide dans certains contextes prod.
+// Fallback : requête directe sur les modules publiés à la bonne position.
+$_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
+if (empty($_afkSidebarModules) && !$_afkIsPost) {
+    $_afkDb2 = Factory::getDbo();
+    $_afkDb2->setQuery("SELECT m.* FROM #__modules m
+        LEFT JOIN #__modules_menu mm ON mm.moduleid=m.id
+        WHERE m.published=1 AND m.client_id=0
+        AND m.position=".$_afkDb2->quote($_afkSidebarPos)."
+        AND (mm.menuid=-1 OR mm.menuid=".(int)Factory::getApplication()->getMenu()->getActive()?->id.")  
+        ORDER BY m.ordering");
+    $_afkSidebarModules = $_afkDb2->loadObjectList();
+}
 $_afkHasSidebar     = !empty($_afkSidebarModules) && !$_afkIsPost;
 
 // Charger les sessions de cours disponibles (GET uniquement — pas sur la page de confirmation)
