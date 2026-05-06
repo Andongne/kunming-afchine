@@ -29,8 +29,13 @@ if ($_afkFalangLid) {
     }
 }
 
-// Sidebar modules
-$_afkSidebarModules = ModuleHelper::getModules('rse-exams-sidebar');
+// Sidebar modules — rse-calendar-sidebar pour cours (FormId=6), rse-exams-sidebar pour examens
+$_afkFormId = (int) Factory::getApplication()->input->getInt('formId',
+    Factory::getApplication()->input->getInt('Itemid') == 1015 ? 6 : 0);
+// Détecter aussi depuis l'objet formulaire si disponible
+if (isset($this->form) && isset($this->form->FormId)) $_afkFormId = (int)$this->form->FormId;
+$_afkSidebarPos     = $_afkFormId === 6 ? 'rse-calendar-sidebar' : 'rse-exams-sidebar';
+$_afkSidebarModules = ModuleHelper::getModules($_afkSidebarPos);
 $_afkHasSidebar     = !empty($_afkSidebarModules);
 ?>
 
