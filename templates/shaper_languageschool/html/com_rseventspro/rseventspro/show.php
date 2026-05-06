@@ -14,6 +14,24 @@ use Joomla\CMS\Factory;
 
 $details	= rseventsproHelper::details($this->event->id, null, true);
 $event		= $details['event'];
+// AFK: redirection automatique vers le formulaire pour les cours (non-examens)
+if (isset($event) && !preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
+    $_afkFormat = preg_match('/VIP\\s*3|trio/i', $event->name)  ? 'VIP3 trio (98 yuan/h par pers.)'
+        : (preg_match('/VIP\\s*2|duo/i', $event->name)           ? 'VIP2 duo (128 yuan/h par pers.)'
+        : (preg_match('/VIP/i', $event->name)                       ? 'VIP1 individuel (208 yuan/h)'
+        : 'Groupe 6-12 pers. (49 yuan/h)'));
+    $_afkDate = $event->start ? date('d/m/Y', strtotime($event->start)) : '';
+    $_afkNotes = $event->name . ($_afkDate ? ' \xe2\x80\x94 ' . $_afkDate : '');
+    $_afkLang = Factory::getLanguage()->getTag();
+    $_afkURL = \Joomla\CMS\Router\Route::_('index.php?option=com_rsform&view=rsform&formId=6&Itemid=1015', false);
+    $_afkURL = strtok($_afkURL, '?')
+        . '?form%5BFormat_cours%5D%5B%5D=' . rawurlencode($_afkFormat)
+        . '&form%5BNotes%5D=' . rawurlencode($_afkNotes);
+    if ($_afkLang && $_afkLang !== 'fr-FR') $_afkURL .= '&lang=' . rawurlencode($_afkLang);
+    Factory::getApplication()->redirect($_afkURL);
+    exit;
+}
+
 $categories = $details['categories'];
 $tags		= $details['tags'];
 $files		= $details['files'];
