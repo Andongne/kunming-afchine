@@ -117,16 +117,23 @@ foreach ($this->calendar->days->weekdays as $weekday) {
     });
   }
 
+  // Bootstrap v5 : contenu injecté après l'événement shown.bs.popover
+  document.addEventListener('shown.bs.popover', function () {
+    var pop = document.querySelector('.popover.show');
+    if (pop) processTooltip(pop);
+  });
+  // Fallback MutationObserver avec délai
   var obs = new MutationObserver(function (mutations) {
     mutations.forEach(function (m) {
       m.addedNodes.forEach(function (n) {
         if (n.nodeType !== 1) return;
-        if (n.classList && n.classList.contains('popover')) processTooltip(n);
-        else { var p = n.querySelector && n.querySelector('.popover'); if (p) processTooltip(p); }
+        if (n.classList && n.classList.contains('popover')) {
+          setTimeout(function () { processTooltip(n); }, 50);
+        }
       });
     });
   });
-  obs.observe(document.body, { childList: true, subtree: true });
+  obs.observe(document.body, { childList: true });
 })();
 </script>
 
