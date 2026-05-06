@@ -282,8 +282,14 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
       var lbl_tarif = _lang==='zh'?'费用：':(_lang==='en'?'Price: ':'Tarif : ');
       infoDiv.innerHTML = '<strong>'+lbl_type+'</strong>'+d.format+'<br><strong>'+lbl_tarif+'</strong>'+d.tarif;
       infoDiv.style.display = '';
-      // Session (caché)
-      var sf = document.querySelector("input[name='form[Session][]']");
+      // Session (caché — créé dynamiquement si absent)
+      var sf = document.querySelector("input[name='form[Session]']");
+      if (!sf) {
+        sf = document.createElement('input');
+        sf.type = 'hidden'; sf.name = 'form[Session]'; sf.value = '';
+        var frm = document.querySelector('form#userForm, form[name=rsform]');
+        if (frm) frm.appendChild(sf);
+      }
       if (sf) sf.value = d.date;
       // Format_cours (caché)
       var ff = document.querySelector("select[name='form[Format_cours][]']");
@@ -317,7 +323,7 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
   function autoSelectFromUrl() {
     var sel = document.getElementById('afk-session-sel');
     if (!sel || sel.options.length <= 1) { setTimeout(autoSelectFromUrl, 300); return; }
-    var sf = document.querySelector("input[name='form[Session][]']");
+    var sf = document.querySelector("input[name='form[Session]']");
     var preDate = (sf ? sf.value : '').trim();
     if (!preDate) {
       var m = location.search.match(/form%5BSession%5D%5B%5D=([^&]+)/i);
