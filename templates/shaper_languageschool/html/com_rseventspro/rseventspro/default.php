@@ -416,13 +416,22 @@ if ($isAltLang):
   // Générer les sélecteurs CSS pour masquer les événements hors catégorie exam
   // On cache tout #rs_events_container li.afk-event-card sauf ceux dans $_afkExamIds
   // Approche : cacher par exclusion via :not(#rs_eventXX) chainé
-  $_afkExamSelectors = implode(',', array_map(fn($id) => "#rs_events_container #rs_event{$id}", $_afkExamIds));
+  // Récupérer les IDs exam triés par date ASC pour le CSS order
+  $_afkDb2->setQuery('SELECT DISTINCT e.id FROM #__rseventspro_events e JOIN #__rseventspro_taxonomy tx ON tx.ide=e.id WHERE tx.type=' . $_afkDb2->quote('category') . ' AND tx.id IN (' . implode(',', $_afkExamCatIds) . ') AND e.published IN (1,3) ORDER BY e.start ASC');
+  $_afkExamIdsSorted = array_map('intval', array_column($_afkDb2->loadObjectList(), 'id'));
+  $_afkExamSelectors = implode(',', array_map(fn($id) => "#rs_events_container #rs_event{$id}", $_afkExamIdsSorted));
 ?>
 <style>
-/* ZH/EN : masquer les événements hors catégories exam par ID */
+/* ZH/EN : masquer les événements hors catégories exam par ID + ordre flexbox ASC */
+body.<?php echo $bodyLang; ?> #rs_events_container { display: flex !important; flex-direction: column !important; }
+body.<?php echo $bodyLang; ?> #rs_events_container li { order: 999; }
 body.<?php echo $bodyLang; ?> #rs_events_container li.afk-event-card { display: none !important; }
+body.<?php echo $bodyLang; ?> #rs_events_container .rsepro-my-grouped { display: none !important; }
 <?php if ($_afkExamSelectors): ?>
-body.<?php echo $bodyLang; ?> <?php echo $_afkExamSelectors; ?> { display: list-item !important; }
+body.<?php echo $bodyLang; ?> <?php echo $_afkExamSelectors; ?> { display: flex !important; }
+<?php foreach ($_afkExamIdsSorted as $_afkIdx => $_afkEid): ?>
+body.<?php echo $bodyLang; ?> #rs_events_container #rs_event<?php echo $_afkEid; ?> { order: <?php echo $_afkIdx + 1; ?>; }
+<?php endforeach; ?>
 <?php endif; ?>
 </style>
 <script>
