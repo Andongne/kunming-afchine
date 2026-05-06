@@ -12,14 +12,17 @@ $_afkDescMap = [];
 if (!empty($this->calendar->events)) {
     $_afkDb = \Joomla\CMS\Factory::getDbo();
     $_afkIds = implode(',', array_map('intval', array_keys($this->calendar->events)));
-    $_afkRows = $_afkDb->setQuery("SELECT id, description FROM #__rseventspro_events WHERE id IN ($_afkIds)")->loadAssocList('id');
+    $_afkRows = $_afkDb->setQuery("SELECT id, description, small_description FROM #__rseventspro_events WHERE id IN ($_afkIds)")->loadAssocList('id');
     foreach ($_afkRows as $id => $row) {
         $_afkDesc = strip_tags($row['description'] ?? '');
         $teacher = '';
         if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur\xc3\xa9e|Niveau|$)/u', $_afkDesc, $tm)) {
             $teacher = trim($tm[1]);
         }
-        $_afkDescMap[$id] = $teacher;
+        // Titre nettoyé : supprimer " — Jour DD/MM/YYYY" à la fin
+        $_afkSmall = strip_tags($row['small_description'] ?? '');
+        $_afkSmall = trim(preg_replace('/\s*[^\w\s][^\w]*\S+\s+\d{2}\/\d{2}\/\d{4}\s*$/', '', $_afkSmall));
+        $_afkDescMap[$id] = ['teacher' => $teacher, 'title' => $_afkSmall];
     }
 }
 
@@ -156,7 +159,8 @@ $showColors		= $this->params->get('colors', 0); ?>
 										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event,$this->calendar->events[$event]->name),false,rseventsproHelper::itemid($event)); ?>" class="rsttip rse_event_link <?php echo $full ? 'rs_event_full' : ''; ?> <?php echo $canceled ? 'rsepro_canceled_event_cal' : ''; ?>" data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php
     $_afkTip = rseventsproHelper::calendarTooltip($event);
     $_afkObj = $this->calendar->events[$event];
-    $_afkTeacher = $_afkDescMap[$event] ?? '';
+    $_afkTeacher = $_afkDescMap[$event]['teacher'] ?? '';
+    $_afkCourseTitleDb = $_afkDescMap[$event]['title'] ?? '';
     $_afkName = $_afkObj->name ?? '';
     if      (preg_match('/VIP\s*3|trio/i', $_afkName))           $_afkTarif = '98 ¥/h/pers.';
     elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))            $_afkTarif = '128 ¥/h/pers.';
@@ -167,15 +171,10 @@ $showColors		= $this->params->get('colors', 0); ?>
     if (strpos($_afkLangTag, 'zh') === 0)      { $_afkLblProf = '教师：';      $_afkLblTarif = '费用：'; }
     elseif (strpos($_afkLangTag, 'en') === 0)  { $_afkLblProf = 'Teacher:';   $_afkLblTarif = 'Price:'; }
     else                                       { $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :'; }
-    // Décoder tooltip pour manipulation directe
+    // Décoder tooltip + supprimer div description original
     $_afkHtml = html_entity_decode($_afkTip, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    // Extraire titre cours depuis la description (supprimer date finale)
-    $_afkCourseTitle = '';
-    if (preg_match('/<div[^>]*rsepro-calendar-tooltip-description[^>]*>\s*(.+?)\s*<\/div>/s', $_afkHtml, $_afkDm)) {
-        $_afkCourseTitle = preg_replace('/\s*[—–-]\s*\S+\s+\d{2}\/\d{2}\/\d{4}\s*$/', '', trim($_afkDm[1]));
-    }
-    // Supprimer div description original
     $_afkHtml = preg_replace('/<div[^>]*rsepro-calendar-tooltip-description[^>]*>.*?<\/div>/s', '', $_afkHtml);
+    $_afkCourseTitle = $_afkCourseTitleDb;
     // Traduction des mois (EN → langue courante)
     if (strpos($_afkLangTag, 'fr') === 0) {
         $_afkHtml = str_replace(
