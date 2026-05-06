@@ -192,7 +192,7 @@ $showColors		= $this->params->get('colors', 0); ?>
     if ($_afkTeacher) $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblProf).'</strong> '.htmlspecialchars($_afkTeacher).'<br>';
     $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblTarif).'</strong> '.htmlspecialchars($_afkTarif);
     $_afkExtra .= '</div>';
-    if ($_afkCourseTitle) $_afkExtra .= '<div style=\'margin-top:4px;font-weight:700\'>'.htmlspecialchars($_afkCourseTitle).'</div>';
+    if ($_afkCourseTitle) $_afkExtra .= '<div style=\'margin-top:4px\'><strong>'.htmlspecialchars($_afkCourseTitle).'</strong></div>';
     // Réinjecter avant dernier </div> et re-encoder
     $_afkPos = strrpos($_afkHtml, '</div>');
     if ($_afkPos !== false) $_afkHtml = substr($_afkHtml,0,$_afkPos).$_afkExtra.substr($_afkHtml,$_afkPos);
