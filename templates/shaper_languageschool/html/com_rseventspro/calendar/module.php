@@ -72,30 +72,61 @@ foreach ($this->calendar->days->weekdays as $weekday) {
 </table>
 <?php echo 'RS_DELIMITER1'; ?>
 
+
 <script>
-/* Nom de groupe en gras dans le tooltip calendrier */
+/* Tooltip calendrier : nom de groupe en gras + traduction dates en ZH */
 (function () {
-  function boldGroupName() {
-    document.querySelectorAll('.rsepro-calendar-tooltip-description').forEach(function (el) {
+  var _lang = document.documentElement.lang ? document.documentElement.lang.toLowerCase() : '';
+
+  var _monthsEN = ['January','February','March','April','May','June','July',
+                   'August','September','October','November','December'];
+  var _monthsZH = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var _daysEN   = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',
+                   'Mon','Tue','Wed','Thu','Fri','Sat','Sun',
+                   'Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  var _daysZH   = ['星期一','星期二','星期三','星期四','星期五','星期六','星期日',
+                   '周一','周二','周三','周四','周五','周六','周日',
+                   '周一','周二','周三','周四','周五','周六','周日'];
+
+  function localizeText(text) {
+    if (_lang.indexOf('zh') !== 0) return text;
+    _monthsEN.forEach(function (m, i) {
+      text = text.split(m).join(_monthsZH[i]);
+    });
+    _daysEN.forEach(function (d, i) {
+      text = text.split(d).join(_daysZH[i]);
+    });
+    return text;
+  }
+
+  function processTooltip(pop) {
+    // Traduire les dates dans le corps
+    var content = pop.querySelector('.rsepro-calendar-tooltip-content');
+    if (content && _lang.indexOf('zh') === 0) {
+      content.innerHTML = localizeText(content.innerHTML);
+    }
+    // Nom de groupe en gras dans la description
+    pop.querySelectorAll('.rsepro-calendar-tooltip-description').forEach(function (el) {
       if (el.querySelector('.afk-group-name')) return;
       var text = el.textContent.trim();
-      var parts = text.split(/\s*—\s*/);
+      var parts = text.split(/\s*[—\-–]\s*/);
       if (parts.length > 1) {
-        el.innerHTML = '<span class="afk-group-name">' + parts[0] + '</span>'
-          + ' — ' + parts.slice(1).join(' — ');
+        var rest = text.slice(parts[0].length);
+        el.innerHTML = '<strong class="afk-group-name">' + parts[0].trim() + '</strong>' + rest;
       }
     });
   }
-  // MutationObserver pour détecter l'apparition des tooltips dynamiques
+
   var obs = new MutationObserver(function (mutations) {
     mutations.forEach(function (m) {
       m.addedNodes.forEach(function (n) {
-        if (n.nodeType === 1 && (n.classList.contains('popover') || n.querySelector('.rsepro-calendar-tooltip-description'))) {
-          boldGroupName();
-        }
+        if (n.nodeType !== 1) return;
+        if (n.classList && n.classList.contains('popover')) processTooltip(n);
+        else { var p = n.querySelector && n.querySelector('.popover'); if (p) processTooltip(p); }
       });
     });
   });
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+
