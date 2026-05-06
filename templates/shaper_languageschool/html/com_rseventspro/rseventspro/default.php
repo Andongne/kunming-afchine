@@ -37,11 +37,15 @@ function afk_localize_date_list($str, $lang) {
 
 // Retourne l'image associée à un type d'examen
 function afk_exam_image(string $name): string {
-    $name_upper = strtoupper($name);
-    if (str_contains($name_upper, 'TCF CANADA') || str_contains($name_upper, 'TCF CANADA')) return '/images/TCF-Canada.png';
-    if (str_contains($name_upper, 'TEFAQ'))   return '/images/TEFAQ.png';
-    if (str_contains($name_upper, 'TEF CANADA') || str_contains($name_upper, 'TEF ')) return '/images/TEF.png';
-    if (str_contains($name_upper, 'TCF QUÉBEC') || str_contains($name_upper, 'TCF QUEBEC')) return '/images/TCF-Quebec.png';
+    $name_upper = mb_strtoupper($name, 'UTF-8');
+    // TCF Canada — FR, ZH (TCF + 加拿大), EN
+    if (str_contains($name_upper, 'TCF CANADA') || (str_contains($name_upper, 'TCF') && str_contains($name, '加拿大'))) return '/images/TCF-Canada.png';
+    // TEFAQ — FR, ZH (魁北克 ou TEFAQ), EN
+    if (str_contains($name_upper, 'TEFAQ') || str_contains($name, 'TEFAQ')) return '/images/TEFAQ.png';
+    // TCF Québec — avant TEF pour éviter faux positif
+    if (str_contains($name_upper, 'TCF QUÉBEC') || str_contains($name_upper, 'TCF QUEBEC') || str_contains($name, 'TCF魁') || str_contains($name, 'TCF 魁')) return '/images/TCF-Quebec.png';
+    // TEF Canada — FR, ZH, EN
+    if (str_contains($name_upper, 'TEF CANADA') || str_contains($name_upper, 'TEF ') || str_contains($name, 'TEF')) return '/images/TEF.png';
     return '/components/com_rseventspro/assets/images/default/blank.png';
 }
 
