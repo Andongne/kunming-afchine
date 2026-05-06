@@ -349,33 +349,6 @@ if (strpos($_tag, 'zh') === 0) {
 
     <?php rseventsproHelper::clearMonthYear('events'.$this->fid, @$lastMY); ?>
 
-    <!-- rs_rss déplacé ici, sous la liste -->
-    <div class="rs_rss rs_rss--bottom">
-        <?php Factory::getApplication()->triggerEvent('onrsepro_showCartIcon'); ?>
-        <?php if ($this->config->mysubscriptions) { ?>
-        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=subscriptions'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_VIEW_USER_SUBSCRIPTIONS')); ?>">
-            <i class="fa fa-user"></i>
-        </a>
-        <?php } ?>
-        <?php if ($rss || $ical || $this->config->timezone) { ?>
-        <?php if ($this->config->timezone) { ?>
-        <a rel="rs_timezone" <?php if (rseventsproHelper::getConfig('modaltype','int') == 1) echo ' href="#timezoneModal" data-toggle="modal" data-bs-toggle="modal"'; else echo ' href="javascript:void(0)"'; ?> class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-timezone" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_CHANGE_TIMEZONE')); ?>">
-            <i class="fa fa-clock"></i>
-        </a>
-        <?php } ?>
-        <?php if ($rss) { ?>
-        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&format=feed&type=rss'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-rss" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_RSS')); ?>">
-            <i class="fa fa-rss-square"></i>
-        </a>
-        <?php } ?>
-        <?php if ($ical) { ?>
-        <a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&format=raw&type=ical'); ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?> rsepro-ical" title="<?php echo rseventsproHelper::tooltipText(Text::_('COM_RSEVENTSPRO_ICS')); ?>">
-            <i class="fa fa-calendar"></i>
-        </a>
-        <?php } ?>
-        <?php } ?>
-    </div>
-
     <div class="rs_loader" id="rs_loader" style="display:none;">
         <?php echo HTMLHelper::image('com_rseventspro/loader.gif', '', array(), true); ?>
     </div>
