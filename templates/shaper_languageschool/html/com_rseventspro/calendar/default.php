@@ -30,10 +30,7 @@ $showColors		= $this->params->get('colors', 0); ?>
 	var rseproThousands	= '<?php echo $this->escape($this->thousands); ?>';
 </script>
 
-<?php if ($this->params->get('show_page_heading', 1)) { ?>
-<?php $title = $this->params->get('page_heading', ''); ?>
-<h1><?php echo !empty($title) ? $this->escape($title) : Text::_('COM_RSEVENTSPRO_CALENDAR'); ?></h1>
-<?php } ?>
+<?php /* AFK: titre masqué — déjà affiché par le menu item SP Builder */ ?>
 
 <form method="post" action="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar'); ?>" name="adminForm" id="adminForm">
 
@@ -151,17 +148,17 @@ $showColors		= $this->params->get('colors', 0); ?>
     }
     // Tarif
     $_afkName = $_afkObj->name ?? '';
-    if      (preg_match('/VIP\s*3|trio/i', $_afkName))         $_afkTarif = '98 \u00a5/h/pers.';
-    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))          $_afkTarif = '128 \u00a5/h/pers.';
-    elseif  (preg_match('/VIP/i', $_afkName))                   $_afkTarif = '208 \u00a5/h';
-    elseif  (preg_match('/4.?5\s*pers|Groupe\s*4/i', $_afkName)) $_afkTarif = '78 \u00a5/h/pers.';
-    else                                                         $_afkTarif = '49 \u00a5/h/pers.';
+    if      (preg_match('/VIP\s*3|trio/i', $_afkName))         $_afkTarif = '98 ¥/h/pers.';
+    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))          $_afkTarif = '128 ¥/h/pers.';
+    elseif  (preg_match('/VIP/i', $_afkName))                   $_afkTarif = '208 ¥/h';
+    elseif  (preg_match('/4.?5\s*pers|Groupe\s*4/i', $_afkName)) $_afkTarif = '78 ¥/h/pers.';
+    else                                                         $_afkTarif = '49 ¥/h/pers.';
     // Injecter avant le dernier </div>
     $_afkExtra = '<div class=\'afk-tooltip-meta\' style=\'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.82em;line-height:1.7\'>';
     if ($_afkTeacher) $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> '.htmlspecialchars($_afkTeacher).'<br>';
     $_afkExtra .= '<span style=\'color:#DA002E\'>&bull;</span> <strong>'.htmlspecialchars($_afkTarif).'</strong>';
     $_afkExtra .= '</div>';
-    $_afkPos = strrpos($_afkTip, '<\/div>');
+    $_afkPos = strrpos($_afkTip, '</div>');
     if ($_afkPos !== false) $_afkTip = substr($_afkTip,0,$_afkPos).$_afkExtra.substr($_afkTip,$_afkPos);
     echo $_afkTip;
 ?>" title="<?php echo $this->escape($this->calendar->events[$event]->name.($canceled ? ' <small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>' : '')); ?>">
