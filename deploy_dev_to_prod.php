@@ -1,6 +1,6 @@
 <?php
 /**
- * deploy_dev_to_prod.php — v2026-05-06b
+ * deploy_dev_to_prod.php — v2026-05-06c
  * Déploiement complet dev → prod, avec sync automatique des enregistrements nouveaux.
  * Usage : https://kunming-afchine.org/falang-inject/deploy_dev_to_prod.php?token=FALANG_SECRET_TOKEN_AFK_2026
  */
@@ -161,6 +161,58 @@ foreach ($new_art as $alias) {
     } catch(Exception $e) { $errors[] = "Article '$alias': ".$e->getMessage(); }
 }
 if (!$new_art) $log[] = "- Aucun nouvel article à synchroniser";
+
+// ─── 6b. FaLang — nouvelles traductions dev → prod ──────────────────────────
+try {
+    // Mapping alias → ID pour menus et articles
+    $menu_map = [];
+    $dev_menu_rows  = $pdo->query("SELECT id,alias FROM ".D."menu WHERE client_id=0")->fetchAll(PDO::FETCH_ASSOC);
+    $prod_menu_rows = $pdo->query("SELECT id,alias FROM ".P."menu WHERE client_id=0")->fetchAll(PDO::FETCH_ASSOC);
+    $prod_menu_by_alias = array_column($prod_menu_rows,'id','alias');
+    foreach ($dev_menu_rows as $dm) {
+        if (isset($prod_menu_by_alias[$dm['alias']])) $menu_map[$dm['id']] = $prod_menu_by_alias[$dm['alias']];
+    }
+    $content_map = [];
+    $dev_art_rows  = $pdo->query("SELECT id,alias FROM ".D."content WHERE state=1")->fetchAll(PDO::FETCH_ASSOC);
+    $prod_art_rows = $pdo->query("SELECT id,alias FROM ".P."content")->fetchAll(PDO::FETCH_ASSOC);
+    $prod_art_by_alias = array_column($prod_art_rows,'id','alias');
+    foreach ($dev_art_rows as $da) {
+        if (isset($prod_art_by_alias[$da['alias']])) $content_map[$da['id']] = $prod_art_by_alias[$da['alias']];
+    }
+
+    // Lire toutes les traductions dev
+    $dev_fc = $pdo->query("SELECT language_id,reference_id,reference_table,reference_field,value,original_value,published FROM ".D."falang_content")->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare("INSERT IGNORE INTO ".P."falang_content (language_id,reference_id,reference_table,reference_field,value,original_value,published) VALUES (?,?,?,?,?,?,?)");
+    $fc_ins = 0; $fc_skip = 0;
+    foreach ($dev_fc as $row) {
+        $prod_ref = match($row['reference_table']) {
+            'menu'    => $menu_map[$row['reference_id']] ?? null,
+            'content' => $content_map[$row['reference_id']] ?? null,
+            default   => $row['reference_id']
+        };
+        if (!$prod_ref) { $fc_skip++; continue; }
+        $stmt->execute([$row['language_id'],$prod_ref,$row['reference_table'],$row['reference_field'],$row['value'],$row['original_value']??'',$row['published']]);
+        $stmt->rowCount() > 0 ? $fc_ins++ : $fc_skip++;
+    }
+    $log[] = "✓ FaLang: $fc_ins traductions copiées, $fc_skip ignorées";
+} catch (Exception $e) { $errors[] = "FaLang: ".$e->getMessage(); }
+
+// ─── 6c. Rebuild menu tree (lft/rgt) ─────────────────────────────────────────
+// Items avec lft=0 ne s'affichent pas dans la nav — les insérer après le dernier enfant de leur parent
+try {
+    $orphans = $pdo->query("SELECT id,parent_id FROM ".P."menu WHERE lft=0 AND rgt=0 AND client_id=0")->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($orphans as $item) {
+        $parent = $pdo->query("SELECT rgt FROM ".P."menu WHERE id={$item['parent_id']}")->fetchColumn();
+        if (!$parent) continue;
+        $insert_pos = $parent; // insérer juste avant le rgt du parent
+        $pdo->exec("UPDATE ".P."menu SET rgt=rgt+2 WHERE rgt>=$insert_pos");
+        $pdo->exec("UPDATE ".P."menu SET lft=lft+2 WHERE lft>$insert_pos");
+        $pdo->exec("UPDATE ".P."menu SET lft=$insert_pos, rgt=".($insert_pos+1)." WHERE id={$item['id']}");
+        $log[] = "✓ Menu item {$item['id']} positionné dans l'arbre (lft=$insert_pos)";
+    }
+    if (!$orphans) $log[] = "- Aucun item de menu orphelin (lft=0)";
+} catch (Exception $e) { $errors[] = "Rebuild menu: ".$e->getMessage(); }
 
 // ─── 7. Fichiers template ────────────────────────────────────────────────────
 $root     = '/srv/data/web/vhosts/kunming-afchine.org/htdocs';
