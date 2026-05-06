@@ -62,8 +62,13 @@
     if (window.innerWidth > 767) return;
     if (document.getElementById('afk-cards-grid')) return;
 
-    // Sélectionner uniquement les colonnes marquées afk-mobile-card
-    var cardCols = Array.from(document.querySelectorAll('.afk-mobile-card'));
+    // Trouver les column-wrap parents des éléments marqués afk-mobile-card
+    // (SP Builder applique la classe sur column-id-*, pas column-wrap-id-*)
+    var marked = Array.from(document.querySelectorAll('.afk-mobile-card'));
+    if (marked.length < 2) return;
+    var cardCols = marked.map(function(el) {
+      return el.closest('[id^="column-wrap-id-"]') || el;
+    }).filter(function(el, i, arr) { return arr.indexOf(el) === i; }); // dédoublonner
     if (cardCols.length < 2) return;
 
     // Créer la grille flex 2 colonnes
