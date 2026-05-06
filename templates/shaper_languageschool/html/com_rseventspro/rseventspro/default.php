@@ -12,6 +12,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Helper\ModuleHelper;
 
 // AFK: détecter langue URL param ou cookie FaLang
 $_afk_list_lang = Factory::getApplication()->input->get('lang', '') ?: Factory::getLanguage()->getTag();
@@ -31,6 +33,16 @@ function afk_localize_date_list($str, $lang) {
         return str_replace($fr, $en, $str);
     }
     return $str;
+}
+
+// Extrait le type d'examen depuis le nom de l'événement
+// "TCF Canada 🍁 📄 — 8 mai 2026" → "TCF Canada"
+function afk_exam_type(string $name): string {
+    if (preg_match('/^([A-Za-z][A-Za-z\s]+?)(?:\s+[^\x00-\x7F]|\s+—|$)/u', $name, $m)) {
+        return trim($m[1]);
+    }
+    $parts = explode(' —', $name);
+    return trim(preg_replace('/[^\x00-\x7F]+/u', '', $parts[0]));
 }
 
 // Map lang tag → préfixe URL court
@@ -63,6 +75,17 @@ $ical = $this->params->get('ical',1); ?>
 	var rseproDecimal 	= '<?php echo $this->escape($this->decimal); ?>';
 	var rseproThousands	= '<?php echo $this->escape($this->thousands); ?>';
 </script>
+
+<?php
+// Sidebar modules
+$_afkSidebarModules = ModuleHelper::getModules('rse-exams-sidebar');
+$_afkHasSidebar = !empty($_afkSidebarModules);
+?>
+
+<?php if ($_afkHasSidebar): ?>
+<div class="row rse-with-sidebar g-0">
+<div class="col-lg-9 col-md-12">
+<?php endif; ?>
 
 <div class="rsepro-events-list-container">
 
@@ -162,12 +185,36 @@ $ical = $this->params->get('ical',1); ?>
         <?php $lastMY = rseventsproHelper::showdate($event->start,'mY'); ?>
         <?php $canEdit = (!empty($this->permissions['can_edit_events']) || $event->owner == $this->user || $event->sid == $this->user || $this->admin) && !empty($this->user); ?>
         <?php $canDelete = (!empty($this->permissions['can_delete_events']) || $event->owner == $this->user || $event->sid == $this->user || $this->admin) && !empty($this->user); ?>
+        <?php
+        // AFK: URL formulaire avec pré-remplissage
+        $_afkFormBase = Route::_('index.php?Itemid=776');
+        $_afkExamType = afk_exam_type($event->name);
+        $_afkDate     = date('d/m/Y', strtotime($event->start));
+        $_afkSep      = (strpos($_afkFormBase, '?') !== false) ? '&' : '?';
+        $_afkFormUrl  = $_afkFormBase . $_afkSep
+                      . 'rsfp_data[Choix_exam][]=' . urlencode($_afkExamType)
+                      . '&rsfp_data[Session][]='   . urlencode($_afkDate);
+        // AFK: Badge tarif (depuis small_description ou valeur par défaut)
+        $_afkTarif = '2 700 ¥';
+        if (!empty($event->small_description)) {
+            $stripped = strip_tags($event->small_description);
+            if (preg_match('/[\d\s]+\s*[¥€$￥]|[¥€$￥]\s*[\d\s]+/u', $stripped, $tm)) {
+                $_afkTarif = trim($tm[0]);
+            }
+        }
+        ?>
 
         <?php if ($monthYear = rseventsproHelper::showMonthYear($event->start, 'events'.$this->fid)) { ?>
             <li class="rsepro-my-grouped <?php echo rseventsproHelper::layout('event-grouped-by'); ?>"><span><?php echo $monthYear; ?></span></li>
         <?php } ?>
 
-        <li class="<?php echo rseventsproHelper::layout('item-container'); ?><?php echo $incomplete.$featured.$canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
+        <li class="<?php echo rseventsproHelper::layout('item-container'); ?> afk-event-card<?php echo $incomplete.$featured.$canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
+
+            <!-- Badge tarif -->
+            <span class="afk-tarif-badge"><?php echo htmlspecialchars($_afkTarif, ENT_QUOTES, 'UTF-8'); ?></span>
+
+            <!-- Lien overlay : toute la card pointe vers le formulaire -->
+            <a href="<?php echo htmlspecialchars($_afkFormUrl, ENT_QUOTES, 'UTF-8'); ?>" class="afk-card-overlay-link" aria-label="<?php echo htmlspecialchars($event->name, ENT_QUOTES, 'UTF-8'); ?>"></a>
 
             <?php if ($canEdit || $canDelete) { ?>
             <div class="rsepro-event-options <?php echo rseventsproHelper::layout('options'); ?>" style="display:none;">
@@ -186,15 +233,13 @@ $ical = $this->params->get('ical',1); ?>
 
             <?php if (!empty($event->options['show_icon_list'])) { ?>
             <div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
-                <a href="<?php echo afk_event_url($event->id,$event->name,$_afk_list_lang); ?>" class="thumbnail" aria-label="<?php echo $event->name; ?>">
-                    <img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>" alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
-                </a>
+                <img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>" alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
             </div>
             <?php } ?>
 
             <div class="<?php echo rseventsproHelper::layout('event-details-container'); ?>">
                 <div itemprop="name" class="<?php echo rseventsproHelper::layout('event-title'); ?>">
-                    <a itemprop="url" href="<?php echo afk_event_url($event->id,$event->name,$_afk_list_lang); ?>" class="<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></a>
+                    <span class="rs_event_name<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo preg_replace('/\s*\x{2014}.*$/u', '', $event->name); ?></span>
                     <?php if ($_regClosed): ?>
                         <span class="rsepro-reg-closed" style="display:inline-block;margin-left:8px;padding:2px 8px;background:#da002e;color:#fff;border-radius:3px;font-size:0.78rem;font-weight:600;vertical-align:middle;"><?php echo (strpos(Factory::getApplication()->getLanguage()->getTag(),'zh')===0) ? '报名已截止' : 'Inscriptions fermées'; ?></span>
                     <?php elseif ($_endReg > 0): ?>
@@ -342,3 +387,20 @@ if (strpos($_tag, 'zh') === 0) {
 		<?php } ?>
 	});
 </script>
+
+<?php if ($_afkHasSidebar): ?>
+</div><!-- /col-lg-9 -->
+<div class="col-lg-3 col-md-12 rse-sidebar-col">
+    <?php foreach ($_afkSidebarModules as $_afkMod): ?>
+    <div class="afk-sidebar-module">
+        <?php if ($_afkMod->showtitle): ?>
+        <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkMod->title); ?></div>
+        <?php endif; ?>
+        <div class="afk-sidebar-content">
+            <?php echo ModuleHelper::renderModule($_afkMod, ['style'=>'none']); ?>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div><!-- /rse-sidebar-col -->
+</div><!-- /row rse-with-sidebar -->
+<?php endif; ?>
