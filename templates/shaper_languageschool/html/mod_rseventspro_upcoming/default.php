@@ -15,12 +15,11 @@ $_lang = Factory::getLanguage()->getTag();
 $_lang_param = ($_lang && $_lang !== 'fr-FR' && $_lang !== '*') ? '&lang=' . htmlspecialchars($_lang) : '';
 
 // AFK: URL du formulaire d'inscription selon la langue
+// Sur dev, les préfixes /zh/ et /en/ n'existent pas → utiliser ?lang= comme fallback
 if (!function_exists('afk_form_base_url')) {
     function afk_form_base_url($lang) {
         $base = '/certifications-et-diplomes/inscription-aux-tests-et-certifications/formulaire-inscription-aux-examen';
-        if (strpos($lang, 'zh') !== false) return '/zh' . $base;
-        if (strpos($lang, 'en') !== false) return '/en' . $base;
-        return $base;
+        return $base; // Le paramètre lang est ajouté dans afk_form_url si besoin
     }
 }
 
@@ -44,6 +43,8 @@ if (!function_exists('afk_form_url')) {
         $url = afk_form_base_url($lang)
              . '?form%5BChoix_exam%5D%5B%5D=' . urlencode($exam_type);
         if ($dt) $url .= '&form%5BSession%5D%5B%5D=' . urlencode($dt);
+        // Ajouter lang= si besoin (dev n'a pas de préfixes /zh/ /en/)
+        if ($lang && $lang !== 'fr-FR' && $lang !== '*') $url .= '&lang=' . urlencode($lang);
         return $url;
     }
 }
