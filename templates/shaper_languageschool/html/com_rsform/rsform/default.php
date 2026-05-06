@@ -46,7 +46,6 @@ if ($_afkFormId === 6) {
         "SELECT id, name, start, description FROM #__rseventspro_events
          WHERE published=1 AND start > NOW()
          AND name NOT LIKE '%TCF%' AND name NOT LIKE '%TEF%'
-         AND name NOT LIKE '%Porte ouverte%'
          AND (force_close IS NULL OR force_close=0)
          AND (registration_closed IS NULL OR registration_closed=0)
          ORDER BY start ASC LIMIT 60"
@@ -74,10 +73,19 @@ if ($_afkFormId === 6) {
         foreach ($__afkFmtMap as $pat => $val) {
             if (preg_match($pat, $_afkCR['name'])) { $_afkFmt = $val; break; }
         }
+        // Tarif + Porte ouverte
+        if (preg_match('/porte.ouverte|essai|gratuit/i', $_afkCR['name'])) {
+            $_afkTarifStr = 'Gratuit'; $_afkFmt = "Cours d'essai (gratuit)";
+        } elseif (preg_match('/VIP\\s*3|trio/i', $_afkCR['name']))  $_afkTarifStr = '98 ¥/h/pers.';
+        elseif  (preg_match('/VIP\\s*2|duo/i', $_afkCR['name']))   $_afkTarifStr = '128 ¥/h/pers.';
+        elseif  (preg_match('/VIP/i', $_afkCR['name']))               $_afkTarifStr = '208 ¥/h';
+        elseif  (preg_match('/4.?5|Petits/i', $_afkCR['name']))      $_afkTarifStr = '78 ¥/h/pers.';
+        else                                                           $_afkTarifStr = '49 ¥/h/pers.';
         $_afkCourseSessions[] = [
             'label'   => $_afkCR['name'] . ' — ' . date('d/m/Y H\hi', $_afkEventTs),
             'date'    => date('d/m/Y', $_afkEventTs),
             'format'  => $_afkFmt,
+            'tarif'   => $_afkTarifStr,
             'teacher' => $_afkTch,
         ];
     }
@@ -178,6 +186,10 @@ if ($_afkFormId === 6) {
   function buildWidget() {
     var target = document.querySelector('.rsform-block-format-cours');
     if (!target) { setTimeout(buildWidget, 200); return; }
+    // Masquer le bloc Format_cours (soumis en caché)
+    target.style.display = 'none';
+    var tarifBlock = document.getElementById('afk-tarif-display');
+    if (tarifBlock) tarifBlock.style.display = 'none'; // masquer aussi l'ancien bloc tarif
     // Insérer après le bloc format-cours complet (pas dans formControls)
     var tarifBlock = document.getElementById('afk-tarif-display');
     // S'assurer que tarifBlock est sibling de target (même parent)
@@ -208,21 +220,31 @@ if ($_afkFormId === 6) {
       sel.appendChild(o);
     });
 
+    // Bloc info type+tarif
+    var infoDiv = document.createElement('div');
+    infoDiv.id = 'afk-info-cours';
+    infoDiv.style.cssText = 'display:none;background:#fff5f6;border:1px solid #f0cdd2;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:0.92em;line-height:1.8';
+    wrap.appendChild(infoDiv);
+
     sel.addEventListener('change', function(){
-      if (!this.value) return;
+      if (!this.value) { infoDiv.style.display='none'; return; }
       var d = JSON.parse(this.value);
-      // Session
+      // Afficher type + tarif
+      var lbl_type = _lang==='zh'?'课程类型：':(_lang==='en'?'Type: ':'Type : ');
+      var lbl_tarif = _lang==='zh'?'费用：':(_lang==='en'?'Price: ':'Tarif : ');
+      infoDiv.innerHTML = '<strong>'+lbl_type+'</strong>'+d.format+'<br><strong>'+lbl_tarif+'</strong>'+d.tarif;
+      infoDiv.style.display = '';
+      // Session (caché)
       var sf = document.querySelector("input[name='form[Session][]']");
       if (sf) sf.value = d.date;
-      // Format_cours
+      // Format_cours (caché)
       var ff = document.querySelector("select[name='form[Format_cours][]']");
       if (ff) {
         for (var i=0;i<ff.options.length;i++){
           if (ff.options[i].value===d.format){ff.selectedIndex=i;break;}
         }
-        ff.dispatchEvent(new Event('change'));
       }
-      // Professeur — matching insensible à la casse
+      // Professeur
       var pf = document.querySelector("select[name='form[Professeur][]'],input[name='form[Professeur][]']");
       if (pf && d.teacher) {
         if (pf.tagName==='SELECT') {
