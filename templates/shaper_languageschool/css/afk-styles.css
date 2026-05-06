@@ -805,12 +805,16 @@ a.afk-card-overlay-link {
     margin-bottom: 20px !important;
 }
 
-/* Boutons compacts dans la sidebar */
-.afk-sidebar-card .sppb-btn {
-    font-size: 0.78rem !important;
-    padding: 5px 14px !important;
+/* Boutons sidebar : compacts, fins */
+.afk-sidebar-card .sppb-btn,
+.afk-sidebar-content .sppb-btn {
+    font-size: 0.8rem !important;
+    padding: 6px 16px !important;
     font-weight: 600 !important;
     line-height: 1.4 !important;
+    display: inline-block !important;
+    width: auto !important;
+    white-space: normal !important;
 }
 
 /* Modules menu (Inscription, Préparation) */
@@ -887,25 +891,16 @@ body.com-rseventspro main#sp-main-body > section#sp-main-body {
     padding: 25px 28px !important;
 }
 
-/* Boutons SP Builder — style identique aux boutons du site */
+/* Boutons sidebar SP Builder — styles de base */
 .afk-sidebar-content .sppb-btn {
-    display: block !important;
+    display: inline-block !important;
     text-align: center !important;
     text-decoration: none !important;
     font-family: 'Nunito Sans', sans-serif !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    padding: 14px 30px !important;
-    line-height: 1.25 !important;
-    vertical-align: middle !important;
     cursor: pointer !important;
-    user-select: none !important;
     border: 1px solid transparent !important;
     border-radius: 0 !important;
-    transition: all .15s ease-in-out !important;
-    white-space: normal !important;
-    position: relative !important;
-    overflow: hidden !important;
+    transition: background-color .15s ease-in-out !important;
 }
 .afk-sidebar-content .sppb-btn-primary {
     background-color: #da002e !important;
@@ -1000,4 +995,30 @@ body.com-rsform .sp-column > #userForm {
     margin-bottom: 7px !important;
     display: block !important;
     line-height: 1.5 !important;
+}
+
+/* Boutons sidebar paiement (sppb-btn-flat sans sppb-btn) */
+.afk-sidebar-content a.sppb-btn-flat,
+.afk-sidebar-content .sppb-btn-flat {
+    display: block !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    padding: 7px 20px !important;
+    line-height: 1.4 !important;
+    background-color: #da002e !important;
+    color: #fff !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: background-color .15s ease-in-out !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+.afk-sidebar-content a.sppb-btn-flat:hover,
+.afk-sidebar-content .sppb-btn-flat:hover {
+    background-color: #98111f !important;
+    color: #fff !important;
+    text-decoration: none !important;
 }
