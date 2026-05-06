@@ -25,15 +25,31 @@ try {
     $pdo->exec("SET NAMES utf8mb4");
 } catch (Exception $e) { die("DB: ".$e->getMessage()); }
 
-// ─── 1. SPPB pages ───────────────────────────────────────────────────────────
-foreach ([173] as $pid) {
-    $row = $pdo->query("SELECT content,text FROM ".D."sppagebuilder WHERE id=$pid")->fetch(PDO::FETCH_ASSOC);
-    if (!$row) { $errors[] = "SPPB $pid absent en dev"; continue; }
-    $pdo->prepare("UPDATE ".P."sppagebuilder SET content=?,text=? WHERE id=?")->execute([$row['content'],$row['text'],$pid]);
-    $lid = $pdo->query("SELECT id FROM ".P."sppagebuilder_versions WHERE page_id=$pid ORDER BY id DESC LIMIT 1")->fetchColumn();
-    if ($lid) $pdo->prepare("UPDATE ".P."sppagebuilder_versions SET content=? WHERE id=?")->execute([$row['text'],$lid]);
-    $log[] = "✓ SPPB page $pid";
-}
+// ─── 1. SPPB pages — sync toutes les pages modifiées dev → prod ─────────────
+// Nouvelles pages (existent en dev mais pas en prod)
+try {
+    $pdo->exec("INSERT IGNORE INTO ".P."sppagebuilder SELECT * FROM ".D."sppagebuilder");
+    $log[] = "✓ SPPB: nouvelles pages copiées";
+} catch (Exception $e) { $errors[] = "SPPB insert: ".$e->getMessage(); }
+
+// Mettre à jour les pages existantes des deux côtés (MD5 différent = contenu modifié)
+try {
+    $dev_pages  = $pdo->query("SELECT id, MD5(content) as h FROM ".D."sppagebuilder")->fetchAll(PDO::FETCH_ASSOC);
+    $prod_pages = $pdo->query("SELECT id, MD5(content) as h FROM ".P."sppagebuilder")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $updated = 0;
+    foreach ($dev_pages as $dp) {
+        if (!isset($prod_pages[$dp['id']])) continue; // nouveau, déjà copié
+        if ($prod_pages[$dp['id']] === $dp['h']) continue; // identique
+        $row = $pdo->query("SELECT content,text,title FROM ".D."sppagebuilder WHERE id={$dp['id']}")->fetch(PDO::FETCH_ASSOC);
+        $pdo->prepare("UPDATE ".P."sppagebuilder SET content=?,text=?,title=? WHERE id=".$dp['id'])
+            ->execute([$row['content'],$row['text'],$row['title']]);
+        $lid = $pdo->query("SELECT id FROM ".P."sppagebuilder_versions WHERE page_id={$dp['id']} ORDER BY id DESC LIMIT 1")->fetchColumn();
+        if ($lid) $pdo->prepare("UPDATE ".P."sppagebuilder_versions SET content=? WHERE id=?")->execute([$row['text'],$lid]);
+        $updated++;
+        $log[] = "✓ SPPB page {$dp['id']} mis à jour ({$row['title']})";
+    }
+    if (!$updated) $log[] = "- SPPB: aucune page à mettre à jour";
+} catch (Exception $e) { $errors[] = "SPPB update: ".$e->getMessage(); }
 
 // ─── 2. RSForm — champs critiques des formulaires ────────────────────────────
 $form_fields = ['JS','FormLayout','Thankyou',
