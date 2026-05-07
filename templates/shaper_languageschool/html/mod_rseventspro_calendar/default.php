@@ -102,13 +102,7 @@ foreach ($calendar->days->weekdays as $weekday) {
 			<tr>
 		<?php } ?>
 				<td class="<?php echo $day->class; ?>">
-					<?php
-					$_cal_lang = \Joomla\CMS\Factory::getApplication()->getLanguage()->getTag();
-					$_cal_href = !empty($day->events)
-					    ? afk_calendar_event_url($day->events, $_cal_lang, $itemid)
-					    : rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y').'&mid='.$module->id, true, $itemid);
-					?>
-					<a <?php echo $nofollow; ?> href="<?php echo $_cal_href; ?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(afk_calendar_tooltip_text($day->events)); ?>">
+					<a href="javascript:void(0);" style="cursor:default;" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(afk_calendar_tooltip_text($day->events)); ?>">
 						<span class="rs_calendar_date"><?php echo $unixdate->format('j'); ?></span>
 					</a>
 				</td>

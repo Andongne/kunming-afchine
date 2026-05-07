@@ -62,7 +62,7 @@ foreach ($this->calendar->days->weekdays as $weekday) {
 		<tr>
 	<?php } ?>
 			<td class="<?php echo $day->class; ?>">
-				<a <?php echo $this->nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y').'&mid='.$this->module,true,$this->itemid);?>" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(modRseventsProCalendar::getDetailsSmall($day->events)); ?>">
+				<a href="javascript:void(0);" style="cursor:default;" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(modRseventsProCalendar::getDetailsSmall($day->events)); ?>">
 					<span class="rs_calendar_date"><?php echo $unixdate->format('j'); ?></span>
 				</a>
 			</td>
