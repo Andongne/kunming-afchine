@@ -330,9 +330,24 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
       if (m) preDate = decodeURIComponent(m[1].replace(/\+/g,' '));
     }
     if (!preDate) return;
+    // Lire le professeur depuis l'URL pour départager deux cours le même jour
+    var preTeacher = '';
+    var mt = location.search.match(/form%5BProfesseur%5D%5B%5D=([^&]*)/i);
+    if (mt) preTeacher = decodeURIComponent(mt[1].replace(/\+/g,' ')).toLowerCase().trim();
+    var firstDateMatch = -1;
     for (var i = 1; i < sel.options.length; i++) {
-      try { var d = JSON.parse(sel.options[i].value); if (d.date === preDate) { sel.selectedIndex=i; sel.dispatchEvent(new Event('change')); break; } } catch(e){}
+      try {
+        var d = JSON.parse(sel.options[i].value);
+        if (d.date === preDate) {
+          if (firstDateMatch === -1) firstDateMatch = i;
+          if (!preTeacher || (d.teacher && d.teacher.toLowerCase().trim() === preTeacher)) {
+            sel.selectedIndex = i; sel.dispatchEvent(new Event('change')); return;
+          }
+        }
+      } catch(e){}
     }
+    // Fallback : premier match par date uniquement
+    if (firstDateMatch > -1) { sel.selectedIndex = firstDateMatch; sel.dispatchEvent(new Event('change')); }
   }
   setTimeout(autoSelectFromUrl, 500);
 })();

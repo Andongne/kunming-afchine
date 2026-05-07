@@ -191,6 +191,14 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         $_afkFormUrl  = $_afkFormBase . $_afkSep
                       . 'form%5BChoix_exam%5D%5B%5D=' . urlencode($_afkExamType)
                       . '&form%5BSession%5D%5B%5D='   . urlencode($_afkDate);
+        // AFK: ajouter le professeur pour distinguer deux cours le même jour
+        $_afkTeacher = '';
+        if (!empty($event->description)) {
+            $_afkDescRaw = strip_tags($event->description);
+            if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur|\n|$)/u', $_afkDescRaw, $_afkTm))
+                $_afkTeacher = trim($_afkTm[1]);
+        }
+        if ($_afkTeacher) $_afkFormUrl .= '&form%5BProfesseur%5D%5B%5D=' . urlencode($_afkTeacher);
         // AFK: Badge tarif (depuis small_description ou valeur par défaut)
         $_afkTarif = '2 700 ¥';
         if (!empty($event->small_description)) {

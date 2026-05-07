@@ -26,7 +26,7 @@ if (isset($event) && !preg_match('/TCF|TEF|TEFAQ/i', $event->name)) {
     // Enseignant depuis la description
     $_afkDesc = strip_tags($event->description ?? '');
     $_afkTeacher = '';
-    if (preg_match('/Enseignant[^:]*:\s*([^\n\r]+)/u', $_afkDesc, $_afkTm)) {
+    if (preg_match('/Enseignant[^:]*:\s*(.+?)(?=Tarif|VooV|Dur)/u', $_afkDesc, $_afkTm)) {
         $_afkTeacher = trim($_afkTm[1]);
     }
     // Langue
