@@ -259,6 +259,35 @@ $showColors		= $this->params->get('colors', 0); ?>
 	<input type="hidden" name="view" value="calendar" />
 </form>
 
+<?php
+// AFK : bloc CTA sous le calendrier des cours (fallback direct DB)
+$_afkCtaMods = \Joomla\CMS\Helper\ModuleHelper::getModules('rse-calendar-cta');
+if (empty($_afkCtaMods)) {
+    $_afkCtaDb = \Joomla\CMS\Factory::getDbo();
+    $_afkCtaRows = $_afkCtaDb->setQuery(
+        "SELECT m.* FROM #__modules m
+         JOIN #__modules_menu mm ON mm.moduleid = m.id
+         WHERE m.published = 1 AND m.client_id = 0
+         AND m.position = 'rse-calendar-cta'
+         AND (mm.menuid = 0 OR mm.menuid = " . (int)\Joomla\CMS\Factory::getApplication()->getMenu()->getActive()->id . ")
+         ORDER BY m.ordering"
+    )->loadObjectList();
+    $_afkCtaMods = $_afkCtaRows ?: [];
+}
+if (!empty($_afkCtaMods)):
+?>
+<div class="afk-cta-row row g-3 mt-4 mb-2">
+<?php foreach ($_afkCtaMods as $_afkCtaMod): ?>
+  <div class="col-lg-4 col-md-12 afk-cta-col">
+    <div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;">
+      <h3 style="font-size:1.15rem;font-weight:700;margin:0 0 16px;"><?php echo htmlspecialchars($_afkCtaMod->title); ?></h3>
+      <?php echo \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkCtaMod); ?>
+    </div>
+  </div>
+<?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <?php if ($this->config->timezone) { ?>
 <?php echo rseventsproHelper::timezoneModal(); ?>
 <?php } ?>
@@ -279,6 +308,14 @@ $showColors		= $this->params->get('colors', 0); ?>
 		});
 		<?php } ?>
 		jQuery('.rsttip').popover({trigger: 'hover', animation: false, html : true, placement : 'bottom' });
+
+		// AFK: hauteur égale pour les cartes CTA
+		var ctaCols = jQuery('.afk-cta-row .afk-cta-col');
+		if (ctaCols.length) {
+			var maxH = 0;
+			ctaCols.each(function(){ maxH = Math.max(maxH, jQuery(this).outerHeight()); });
+			ctaCols.css('height', maxH + 'px');
+		}
 		
 		<?php if ($showSearch) { ?>
 		var options = {};

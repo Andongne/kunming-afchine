@@ -675,16 +675,17 @@ html[lang^="zh"] .com-rseventspro .rsepro-calendar thead th:nth-child(8) .hidden
 
 /* ── Titre de module — identique .sppb-addon-title ────────────── */
 .afk-sidebar-title {
-    font-size: 1.625rem;     /* 26px */
-    font-weight: 500;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: #1a171b;
     text-transform: none;
     line-height: 1.3;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     padding: 0;
     background: none;
     border: none;
     letter-spacing: normal;
+    text-align: center;
 }
 
 /* ── Contenu module sidebar ────────────────────────────────────── */
@@ -798,11 +799,27 @@ a.afk-card-overlay-link {
 }
 
 .afk-sidebar-card .afk-sidebar-title {
-    color: #da002e !important;
-    font-size: 26px !important;
-    font-weight: 600 !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1a171b !important;
     text-align: center !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 1rem !important;
+}
+
+/* ── Cartes CTA sous le calendrier des cours ──────────────────── */
+.afk-cta-card {
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
+    background: #fff !important;
+    border: none !important;
+    margin-bottom: 30px !important;
+}
+
+.afk-cta-card h3 {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1a171b !important;
+    text-align: center !important;
+    margin-bottom: 1rem !important;
 }
 
 /* Boutons sidebar : compacts, fins */
