@@ -551,7 +551,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <main id="sp-main-body" role="main">
             <?php
             // AFK: CTA avant le footer — pages cours de français
-            $_afkCtaMenuIds = [439,440,441,442,453,454,541,547,566,567,742,746,747,748,749,750,870,1015,1016];
+            $_afkCtaMenuIds = [166,439,440,441,442,453,454,541,547,566,567,742,746,747,748,749,750,870,1016];
             $_afkActiveMenu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
             $_afkInjectCta = $_afkActiveMenu && in_array((int)$_afkActiveMenu->id, $_afkCtaMenuIds);
             if ($_afkInjectCta):
