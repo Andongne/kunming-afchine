@@ -814,7 +814,7 @@ a.afk-card-overlay-link {
     margin-bottom: 30px !important;
 }
 
-.afk-cta-card h3 {
+.afk-cta-card .afk-sidebar-title {
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     color: #1a171b !important;
