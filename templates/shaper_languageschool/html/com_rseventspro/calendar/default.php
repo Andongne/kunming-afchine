@@ -307,6 +307,13 @@ if (!empty($_afkCtaMods)):
 			});
 		});
 		<?php } ?>
+		// AFK: nettoyer les URLs du commutateur de langue (supprimer segments RSEvents /daily/ /monthly/ /yearly/)
+		jQuery('a[href]').filter(function(){
+			return /\/(daily|monthly|yearly)\//.test(this.href);
+		}).each(function(){
+			this.href = this.href.replace(/\/(daily|monthly|yearly)\/[^?#]*/g, '');
+		});
+
 		jQuery('.rsttip').popover({trigger: 'hover', animation: false, html : true, placement : 'bottom' });
 
 		// AFK: hauteur égale pour les cartes CTA
