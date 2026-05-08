@@ -531,7 +531,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050811">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050812">
 </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -561,7 +561,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $theme->render_layout();
             if ($_afkInjectCta && !empty($_afkCtaMods)):
                 $_afkLayout = ob_get_clean();
-                $_afkCtaHtml = '<div class="afk-cta-section"><div class="afk-cta-inner container"><div class="afk-cta-row row">';
+                $_afkCtaHtml = '<div class="afk-cta-section"><div class="afk-cta-inner sppb-container-inner"><div class="afk-cta-row row">';
                 foreach ($_afkCtaMods as $_afkMod) {
                     $_afkCtaHtml .= '<div class="col-lg-4 col-md-4 col-sm-12 afk-cta-col"><div class="afk-cta-card h-100"><h3 class="sppb-addon-title afk-cta-title">' . htmlspecialchars($_afkMod->title) . '</h3>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
                 }
