@@ -561,11 +561,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             $theme->render_layout();
             if ($_afkInjectCta && !empty($_afkCtaMods)):
                 $_afkLayout = ob_get_clean();
-                $_afkCtaHtml = '<div class="container"><div class="afk-cta-row row g-3 mt-4 mb-4">';
+                $_afkCtaHtml = '<div class="sppb-section" style="padding:30px 0 10px;"><div class="sppb-container-inner"><div class="afk-cta-row row g-3">';
                 foreach ($_afkCtaMods as $_afkMod) {
                     $_afkCtaHtml .= '<div class="col-lg-4 col-md-12 afk-cta-col"><div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;"><div class="afk-sidebar-title">' . htmlspecialchars($_afkMod->title) . '</div>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
                 }
-                $_afkCtaHtml .= '</div></div>';
+                $_afkCtaHtml .= '</div></div></div>';
                 // Insérer avant la section bottom-top ou bottom, sinon avant <footer
                 $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom-top["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
                 if (!$count) $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
