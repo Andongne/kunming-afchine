@@ -811,6 +811,10 @@ a.afk-card-overlay-link {
     padding: 20px 0 75px 0;
 }
 .afk-cta-inner {
+    max-width: 795px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
     padding-left: 15px;
     padding-right: 15px;
 }
