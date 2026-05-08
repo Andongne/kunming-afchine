@@ -839,28 +839,30 @@ a.afk-card-overlay-link {
     margin-bottom: 1rem !important;
 }
 
-/* Bouton CTA natif — reproduit sppb-btn-default rouge arrondi */
+/* Bouton CTA — reproduit exactement .sppb-btn.sppb-btn-default.sppb-btn-rounded */
 .afk-cta-btn {
-    display: block;
-    width: 100%;
-    padding: 11px 18px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    line-height: 1.4;
+    display: inline-block;
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
     color: #da002e;
     background-color: transparent;
-    border: 2px solid #da002e;
-    border-radius: 30px;
-    text-decoration: none;
+    border: 1px solid #dbdbdb;
+    border-radius: 0;
     text-align: center;
+    white-space: pre-line;
+    vertical-align: middle;
+    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.25s ease, color 0.25s ease;
-    letter-spacing: 0.02em;
-    box-sizing: border-box;
+    user-select: none;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 .afk-cta-btn:hover,
 .afk-cta-btn:focus {
-    background-color: #da002e;
+    background-color: #1a171b;
+    border-color: #1a171b;
     color: #fff !important;
     text-decoration: none;
 }
