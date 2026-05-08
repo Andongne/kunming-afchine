@@ -807,8 +807,14 @@ a.afk-card-overlay-link {
 }
 
 /* ── Cartes CTA sous le calendrier des cours ──────────────────── */
+.afk-cta-row {
+    overflow: visible !important;
+}
+.afk-cta-col {
+    overflow: visible !important;
+}
 .afk-cta-card {
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.12) !important;
     background: #fff !important;
     border: none !important;
     margin-bottom: 30px !important;
