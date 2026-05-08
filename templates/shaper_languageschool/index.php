@@ -531,7 +531,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050819">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050820">
 </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -550,32 +550,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <?php echo $theme->getHeaderStyle(); ?>
             <main id="sp-main-body" role="main">
             <?php
-            // AFK: CTA avant le footer — pages cours de français
-            $_afkCtaMenuIds = [166,439,440,441,442,453,454,541,547,566,567,742,746,747,748,749,750,870,1016];
-            $_afkActiveMenu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
-            $_afkInjectCta = $_afkActiveMenu && in_array((int)$_afkActiveMenu->id, $_afkCtaMenuIds);
-            if ($_afkInjectCta):
-                $_afkCtaMods = \Joomla\CMS\Helper\ModuleHelper::getModules('rse-calendar-cta');
-                ob_start();
-            endif;
             $theme->render_layout();
-            if ($_afkInjectCta && !empty($_afkCtaMods)):
-                $_afkLayout = ob_get_clean();
-                $_afkCtaHtml = '<div class="afk-cta-section"><div class="afk-cta-inner"><div class="afk-cta-row row">';
-                foreach ($_afkCtaMods as $_afkMod) {
-                    $_afkCtaHtml .= '<div class="col-lg-4 col-md-4 col-sm-12 afk-cta-col"><div class="afk-cta-card h-100"><h3 class="afk-cta-title">' . htmlspecialchars($_afkMod->title) . '</h3>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
-                }
-                $_afkCtaHtml .= '</div></div></div>';
-                // Aligner CTA : gauche=bord gauche secs[1], droite=bord droit du sppb-row parent (contenu+sidebar)
-                $_afkCtaHtml .= '<script>(function(){var secs=document.querySelectorAll("#sp-page-builder .sppb-section");var s1=secs[1]||secs[0];var el=s1,mainRow=null;while(el&&el.id!=="sp-page-builder"){if(el.classList.contains("sppb-row")&&!el.classList.contains("sppb-nested-row")){mainRow=el;break;}el=el.parentElement;}var c=document.querySelector(".afk-cta-inner");if(s1&&c){var s1R=s1.getBoundingClientRect();var pR=c.parentElement.getBoundingClientRect();var rightEdge=mainRow?mainRow.getBoundingClientRect().right:s1R.right;c.style.width=(rightEdge-s1R.left)+"px";c.style.marginLeft=(s1R.left-pR.left)+"px";c.style.marginRight="0";}})()</script>';
-                // Insérer avant la section bottom-top ou bottom, sinon avant <footer
-                $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom-top["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
-                if (!$count) $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
-                if (!$count) $injected = preg_replace('/<footer(\b)/i', $_afkCtaHtml . '<footer$1', $_afkLayout, 1);
-                echo $injected;
-            elseif ($_afkInjectCta):
-                ob_end_flush();
-            endif;
             ?>
             </main>
         </div>
