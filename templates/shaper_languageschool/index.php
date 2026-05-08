@@ -531,7 +531,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050815">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050816">
 </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -566,8 +566,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     $_afkCtaHtml .= '<div class="col-lg-4 col-md-4 col-sm-12 afk-cta-col"><div class="afk-cta-card h-100"><h3 class="afk-cta-title">' . htmlspecialchars($_afkMod->title) . '</h3>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
                 }
                 $_afkCtaHtml .= '</div></div></div>';
-                // Aligner dynamiquement la largeur CTA sur le container SP Builder réel
-                $_afkCtaHtml .= '<script>(function(){var s=document.querySelector("#sp-page-builder .sppb-container-inner");var c=document.querySelector(".afk-cta-inner");if(s&&c){c.style.maxWidth=s.offsetWidth+"px";c.style.marginLeft="auto";c.style.marginRight="auto";}})()</script>';
+                // Aligner CTA sur la section SP Builder de référence (2e section = colonne contenu)
+                $_afkCtaHtml .= '<script>document.addEventListener("DOMContentLoaded",function(){var secs=document.querySelectorAll("#sp-page-builder .sppb-section");var ref=secs[1]||secs[0];var c=document.querySelector(".afk-cta-inner");if(ref&&c){var rR=ref.getBoundingClientRect();var pR=c.parentElement.getBoundingClientRect();c.style.width=ref.offsetWidth+"px";c.style.marginLeft=(rR.left-pR.left)+"px";c.style.marginRight="auto";}})</script>';
                 // Insérer avant la section bottom-top ou bottom, sinon avant <footer
                 $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom-top["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
                 if (!$count) $injected = preg_replace('/(<section[^>]+id=["\']sp-bottom["\'][^>]*>)/i', $_afkCtaHtml . '$1', $_afkLayout, 1, $count);
