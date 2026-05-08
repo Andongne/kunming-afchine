@@ -829,8 +829,9 @@ a.afk-card-overlay-link {
     text-align: center !important;
 }
 
-.afk-cta-card .afk-sidebar-title {
-    font-size: 1.15rem !important;
+.afk-cta-card .afk-sidebar-title,
+.afk-cta-title {
+    font-size: 1.4rem !important;
     font-weight: 700 !important;
     color: #1a171b !important;
     text-align: center !important;
