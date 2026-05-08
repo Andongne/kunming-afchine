@@ -549,27 +549,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="body-innerwrapper">
             <?php echo $theme->getHeaderStyle(); ?>
             <main id="sp-main-body" role="main">
-            <?php $theme->render_layout(); ?>
             <?php
-            // AFK: CTA sous le contenu — pages cours de français
+            // AFK: CTA avant le footer — pages cours de français
             $_afkCtaMenuIds = [439,440,441,442,453,454,541,547,566,567,742,746,747,748,749,750,870,1015,1016];
             $_afkActiveMenu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
-            if ($_afkActiveMenu && in_array((int)$_afkActiveMenu->id, $_afkCtaMenuIds)):
+            $_afkInjectCta = $_afkActiveMenu && in_array((int)$_afkActiveMenu->id, $_afkCtaMenuIds);
+            if ($_afkInjectCta):
                 $_afkCtaMods = \Joomla\CMS\Helper\ModuleHelper::getModules('rse-calendar-cta');
-                if (!empty($_afkCtaMods)): ?>
-            <div class="container">
-              <div class="afk-cta-row row g-3 mt-4 mb-4">
-              <?php foreach ($_afkCtaMods as $_afkMod): ?>
-                <div class="col-lg-4 col-md-12 afk-cta-col">
-                  <div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;">
-                    <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkMod->title); ?></div>
-                    <?php echo \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod); ?>
-                  </div>
-                </div>
-              <?php endforeach; ?>
-              </div>
-            </div>
-            <?php endif; endif; ?>
+                ob_start();
+            endif;
+            $theme->render_layout();
+            if ($_afkInjectCta && !empty($_afkCtaMods)):
+                $_afkLayout = ob_get_clean();
+                $_afkCtaHtml = '<div class="container"><div class="afk-cta-row row g-3 mt-4 mb-4">';
+                foreach ($_afkCtaMods as $_afkMod) {
+                    $_afkCtaHtml .= '<div class="col-lg-4 col-md-12 afk-cta-col"><div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;"><div class="afk-sidebar-title">' . htmlspecialchars($_afkMod->title) . '</div>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
+                }
+                $_afkCtaHtml .= '</div></div>';
+                echo preg_replace('/<footer(\b)/i', $_afkCtaHtml . '<footer$1', $_afkLayout, 1);
+            elseif ($_afkInjectCta):
+                ob_end_flush();
+            endif;
+            ?>
             </main>
         </div>
     </div>
