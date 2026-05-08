@@ -811,9 +811,6 @@ a.afk-card-overlay-link {
     padding: 20px 0 75px 0;
 }
 .afk-cta-inner {
-    max-width: 795px;
-    margin-left: auto;
-    margin-right: auto;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
@@ -829,7 +826,7 @@ a.afk-card-overlay-link {
     background: #fff !important;
     border: none !important;
     margin-bottom: 30px !important;
-    padding: 50px !important;
+    padding: 30px 24px !important;
     text-align: center !important;
 }
 
@@ -844,11 +841,12 @@ a.afk-card-overlay-link {
 
 /* Bouton CTA natif — reproduit sppb-btn-default rouge arrondi */
 .afk-cta-btn {
-    display: inline-block;
-    padding: 10px 28px;
-    font-size: 0.9rem;
+    display: block;
+    width: 100%;
+    padding: 11px 18px;
+    font-size: 0.88rem;
     font-weight: 600;
-    line-height: 1.5;
+    line-height: 1.4;
     color: #da002e;
     background-color: transparent;
     border: 2px solid #da002e;
@@ -858,6 +856,7 @@ a.afk-card-overlay-link {
     cursor: pointer;
     transition: background-color 0.25s ease, color 0.25s ease;
     letter-spacing: 0.02em;
+    box-sizing: border-box;
 }
 .afk-cta-btn:hover,
 .afk-cta-btn:focus {
