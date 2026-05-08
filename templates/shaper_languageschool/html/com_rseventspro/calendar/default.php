@@ -280,7 +280,7 @@ if (!empty($_afkCtaMods)):
 <?php foreach ($_afkCtaMods as $_afkCtaMod): ?>
   <div class="col-lg-4 col-md-12 afk-cta-col">
     <div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;">
-      <h3 style="font-size:1.15rem;font-weight:700;margin:0 0 16px;"><?php echo htmlspecialchars($_afkCtaMod->title); ?></h3>
+      <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkCtaMod->title); ?></div>
       <?php echo \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkCtaMod); ?>
     </div>
   </div>
