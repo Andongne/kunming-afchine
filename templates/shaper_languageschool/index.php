@@ -550,6 +550,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <?php echo $theme->getHeaderStyle(); ?>
             <main id="sp-main-body" role="main">
             <?php $theme->render_layout(); ?>
+            <?php
+            // AFK: CTA sous le contenu — pages cours de français
+            $_afkCtaMenuIds = [439,440,441,442,453,454,541,547,566,567,742,746,747,748,749,750,870,1015,1016];
+            $_afkActiveMenu = \Joomla\CMS\Factory::getApplication()->getMenu()->getActive();
+            if ($_afkActiveMenu && in_array((int)$_afkActiveMenu->id, $_afkCtaMenuIds)):
+                $_afkCtaMods = \Joomla\CMS\Helper\ModuleHelper::getModules('rse-calendar-cta');
+                if (!empty($_afkCtaMods)): ?>
+            <div class="container">
+              <div class="afk-cta-row row g-3 mt-4 mb-4">
+              <?php foreach ($_afkCtaMods as $_afkMod): ?>
+                <div class="col-lg-4 col-md-12 afk-cta-col">
+                  <div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;">
+                    <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkMod->title); ?></div>
+                    <?php echo \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod); ?>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+              </div>
+            </div>
+            <?php endif; endif; ?>
             </main>
         </div>
     </div>
