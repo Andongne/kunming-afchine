@@ -531,7 +531,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
 <script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050804">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050805">
 </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -563,7 +563,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 $_afkLayout = ob_get_clean();
                 $_afkCtaHtml = '<div class="afk-cta-section"><div class="afk-cta-inner"><div class="afk-cta-row row g-3">';
                 foreach ($_afkCtaMods as $_afkMod) {
-                    $_afkCtaHtml .= '<div class="col-lg-4 col-md-12 afk-cta-col"><div class="afk-cta-card h-100" style="padding:28px 24px;text-align:center;background:#fff;"><div class="afk-sidebar-title">' . htmlspecialchars($_afkMod->title) . '</div>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
+                    $_afkCtaHtml .= '<div class="col-lg-4 col-md-12 afk-cta-col"><div class="afk-cta-card h-100" style="padding:50px;text-align:center;background:#fff;"><div class="afk-sidebar-title">' . htmlspecialchars($_afkMod->title) . '</div>' . \Joomla\CMS\Helper\ModuleHelper::renderModule($_afkMod) . '</div></div>';
                 }
                 $_afkCtaHtml .= '</div></div></div>';
                 // Insérer avant la section bottom-top ou bottom, sinon avant <footer
