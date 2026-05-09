@@ -529,9 +529,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <style>
     </style>
     
-<script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
-<script src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050821">
+<script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
+<script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026050901">
+<?php if (isset($isHome) && $isHome) : ?>
+  <link rel="preload" as="image" href="<?php echo $this->baseurl ?>/images/2026/04/24/background_header_2.webp" fetchpriority="high">
+<?php endif; ?>
 </head>
     <body class="<?php echo $theme->bodyClass(); ?>">
      <!-- Google Tag Manager (noscript) -->
@@ -559,7 +562,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Off Canvas Menu -->
     <div class="offcanvas-overlay"></div>
     <div class="offcanvas-menu">
-        <a href="#" class="close-offcanvas"><span class="fa fa-remove"></span></a>
+        <a href="#" class="close-offcanvas" aria-label="Fermer le menu de navigation"><span class="fa fa-remove" aria-hidden="true"></span></a>
         <div class="offcanvas-inner">
             <?php if ($this->countModules('offcanvas')) : ?>
                 <jdoc:include type="modules" name="offcanvas" style="sp_xhtml" />

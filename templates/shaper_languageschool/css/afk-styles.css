@@ -475,7 +475,7 @@
 
 /* ── "Voir plus" ───────────────────────────────────────────────── */
 .com-rseventspro .rsepro-calendar .rsepro-calendar-events a:not(.rse_event_link) {
-    color: #888 !important;
+    color: #767676 !important; /* WCAG AA: 4.54:1 */
     font-size: 0.73rem !important;
     font-style: italic !important;
 }
@@ -636,7 +636,7 @@ html[lang^="zh"] .com-rseventspro .rsepro-calendar thead th:nth-child(8) .hidden
 /* ── Numéro de semaine ─────────────────────────────────────────── */
 .com-rseventspro .rsepro-calendar td.week {
     background-color: #f5f5f5 !important;
-    color: #888 !important;
+    color: #5e5e5e !important; /* WCAG AA sur #f5f5f5 */
     font-size: 0.75rem !important;
     font-weight: 600 !important;
     text-align: center !important;
@@ -1213,7 +1213,7 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
 /* Badge "Inscription passée / fermée" sur les cartes cours */
 .afk-badge-closed {
   display: inline-block;
-  background: #888;
+  background: #5e5e5e; /* WCAG AA */
   color: #fff;
   font-size: 0.72em;
   font-weight: 600;
@@ -1228,7 +1228,7 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
 .afk-cal-badge-past {
   display: block;
   font-size: 0.65em;
-  color: #888;
+  color: #767676; /* WCAG AA */
   font-style: italic;
   line-height: 1.3;
   margin-top: 1px;
