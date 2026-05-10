@@ -1236,3 +1236,12 @@ body.view-calendar .popover .rsepro-calendar-tooltip-description,
 li.event.afk-reg-past a.afk-reg-past-link {
   opacity: 0.6;
 }
+
+/* ==========================================================================
+   Sidebar RSE — masquée sur mobile
+   ========================================================================== */
+@media (max-width: 767px) {
+  .rse-sidebar-col {
+    display: none !important;
+  }
+}
