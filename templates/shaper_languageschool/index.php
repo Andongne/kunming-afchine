@@ -518,7 +518,21 @@ if ($custom_js = $this->params->get('custom_js'))
         <!-- Preload Font Awesome woff2 (critical path) -->
         <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.woff2" as="font" type="font/woff2" crossorigin>
-        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />         
+        <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />
+        <!-- Baidu Auto Push — soumission automatique des URLs au crawl Baidu -->
+        <script>
+        (function(){
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            } else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+        </script>
           <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
