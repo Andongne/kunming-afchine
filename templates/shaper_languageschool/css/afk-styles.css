@@ -1,4 +1,61 @@
 /* ==========================================================================
+   Font Awesome — font-display: swap override (PageSpeed / ARIA a11y fix)
+   Les fichiers core SP Page Builder utilisent font-display:block.
+   On redéclare ici avec swap pour éviter le blocage rendu.
+   ========================================================================== */
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-regular-400-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-regular-400-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-regular-400-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-regular-400-6.ttf') format('truetype');
+}
+@font-face {
+  font-family: FontAwesome;
+  font-display: swap;
+  src: url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2') format('woff2'),
+       url('/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.ttf') format('truetype');
+}
+
+/* ==========================================================================
    TCF - Cartes interactives
    ========================================================================== */
 .tcf-cards-container {
