@@ -58,9 +58,9 @@
 /* ==========================================================================
    Sidebar modules — alignement titre à gauche
    ========================================================================== */
-.rse-exams-sidebar .sp-module-title,
-.rse-calendar-sidebar .sp-module-title {
-  text-align: left;
+#sp-rse-exams-sidebar .sp-module-title,
+#sp-rse-calendar-sidebar .sp-module-title {
+  text-align: left !important;
 }
 
 /* ==========================================================================
