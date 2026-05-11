@@ -583,5 +583,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="#" class="sp-scroll-up" aria-label="Scroll Up"><span class="fa fa-chevron-up" aria-hidden="true"></span></a>
     <?php endif; ?>
 
+    <script>
+    /* ARIA fix — SP Page Builder slider nav-control spans lack role="button" */
+    (function fixSliderAria() {
+        function patchNavControls() {
+            document.querySelectorAll('.nav-control').forEach(function(el) {
+                if (!el.getAttribute('role')) {
+                    el.setAttribute('role', 'button');
+                    el.setAttribute('tabindex', '0');
+                }
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', patchNavControls);
+        } else {
+            patchNavControls();
+        }
+        /* Aussi après le chargement complet (au cas où le slider init en dernier) */
+        window.addEventListener('load', patchNavControls);
+    })();
+    </script>
     </body>
 </html>
