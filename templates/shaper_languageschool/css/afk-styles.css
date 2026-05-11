@@ -56,6 +56,14 @@
 }
 
 /* ==========================================================================
+   Sidebar modules — alignement titre à gauche
+   ========================================================================== */
+.rse-exams-sidebar .sp-module-title,
+.rse-calendar-sidebar .sp-module-title {
+  text-align: left;
+}
+
+/* ==========================================================================
    CLS fix — réserver l'espace du logo avant chargement (PageSpeed)
    ========================================================================== */
 img.logo-image {
