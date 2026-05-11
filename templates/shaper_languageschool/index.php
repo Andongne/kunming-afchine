@@ -515,9 +515,9 @@ if ($custom_js = $this->params->get('custom_js'))
             echo $before_head . "\n";
         }
         ?>
-        <!-- Preconnect Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- Preload Font Awesome woff2 (critical path) -->
+        <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.woff2" as="font" type="font/woff2" crossorigin>
         <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />         
           <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
