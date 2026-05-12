@@ -545,7 +545,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260505a"></script>
 <script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026051102">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=2026051201">
 <?php if (isset($isHome) && $isHome) : ?>
   <link rel="preload" as="image" href="<?php echo $this->baseurl ?>/images/2026/04/24/background_header_2.webp" fetchpriority="high">
 <?php endif; ?>
@@ -598,6 +598,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <?php endif; ?>
 
     <script>
+    /* CLS fix — SP Page Builder lazy images: set width/height from natural dimensions
+       before the placeholder.svg is swapped to the real image. This prevents layout
+       shifts because the browser reserves correct space from first paint. */
+    (function fixLazyImageDimensions() {
+        function patchLazyImages() {
+            document.querySelectorAll('img.sppb-element-lazy[data-large]').forEach(function(img) {
+                if (img.width && img.height) return; /* already set */
+                var realSrc = img.getAttribute('data-large') || img.getAttribute('data-src');
+                if (!realSrc) return;
+                var probe = new Image();
+                probe.onload = function() {
+                    if (probe.naturalWidth && probe.naturalHeight) {
+                        img.setAttribute('width',  probe.naturalWidth);
+                        img.setAttribute('height', probe.naturalHeight);
+                        img.style.aspectRatio = probe.naturalWidth + '/' + probe.naturalHeight;
+                    }
+                };
+                probe.src = realSrc;
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', patchLazyImages);
+        } else {
+            patchLazyImages();
+        }
+    })();
+
     /* ARIA fix — SP Page Builder slider nav-control spans lack role="button" */
     (function fixSliderAria() {
         function patchNavControls() {

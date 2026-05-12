@@ -1319,3 +1319,26 @@ li.event.afk-reg-past a.afk-reg-past-link {
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   CLS — dimensions explicites sur images sans width/height (PageSpeed fix)
+   ========================================================================== */
+
+/* Flags FaLang : 18×12 px */
+img[src*="/media/mod_falang/images/"] {
+  width: 18px;
+  height: 12px;
+}
+
+/* SP Builder lazy images : réserve l'espace avant swap placeholder → real img */
+img.sppb-element-lazy {
+  aspect-ratio: attr(width) / attr(height);
+  min-height: 1px;
+}
+
+/* Logos partenaires : forcer height: auto en CSS (l'attribut HTML suffit pour le ratio) */
+img.ambassade-logo,
+img.filtered-logo {
+  height: auto;
+  max-width: 100%;
+}
