@@ -519,18 +519,22 @@ if ($custom_js = $this->params->get('custom_js'))
         <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-solid-900-6.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/components/com_sppagebuilder/assets/webfonts/fa-brands-400-6.woff2" as="font" type="font/woff2" crossorigin>
         <meta name="baidu-site-verification" content="codeva-66wEH8Semh" />
-        <!-- Baidu Auto Push — soumission automatique des URLs au crawl Baidu -->
+        <!-- Baidu Auto Push — différé après interaction (invisible hors Chine / PageSpeed) -->
         <script>
         (function(){
+          var _baiduLoaded = false;
+          function _loadBaidu() {
+            if (_baiduLoaded) return; _baiduLoaded = true;
             var bp = document.createElement('script');
-            var curProtocol = window.location.protocol.split(':')[0];
-            if (curProtocol === 'https') {
-                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-            } else {
-                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-            }
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(bp, s);
+            bp.src = (window.location.protocol === 'https:') ?
+              'https://zz.bdstatic.com/linksubmit/push.js' :
+              'http://push.zhanzhang.baidu.com/push.js';
+            document.head.appendChild(bp);
+          }
+          ['scroll','mousemove','touchstart','click'].forEach(function(e){
+            window.addEventListener(e, _loadBaidu, {once:true, passive:true});
+          });
+          setTimeout(_loadBaidu, 8000);
         })();
         </script>
 <!-- Google Tag Manager (deferred — chargé après la première interaction) -->
