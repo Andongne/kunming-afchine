@@ -1342,3 +1342,19 @@ img.filtered-logo {
   height: auto;
   max-width: 100%;
 }
+
+/* ==========================================================================
+   WCAG — Contraste insuffisant (PageSpeed a11y)
+   ========================================================================== */
+
+/* #sp-bottom links : opacity:0.6 (template.css) + #a2a2a2 sur #171717 = 3.65:1 → fail
+   Correction : opacity 1 (#a2a2a2 sur #171717 = 7:1 sans opacity) */
+#sp-bottom a {
+  opacity: 1 !important;
+}
+
+/* .reg-closed-item : opacity:0.55 sur les liens fermés → ratio ~3.5:1 → fail
+   Correction : 0.7 → ratio ~5.0:1 sur fond blanc */
+#rsepro-upcoming-module .reg-closed-item {
+  opacity: 0.7 !important;
+}
