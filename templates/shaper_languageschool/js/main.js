@@ -26,25 +26,7 @@ jQuery(function ($) {
                         $('.nav-placeholder').height('inherit');
                     }
                 }
-            
-    'Notre méthode':'Our Teaching Method',
-    'Nos tests de français':'Our French Language Tests',
-    'Notre équipe':'Our Team',
-    'Qui sommes-nous ?':'Who are we?',
-    'Qui sommes-nous ':'Who are we?',
-    'Nous rejoindre':'Join Us',
-    'On parle de nous':'In the News',
-    'Nos Événements !':'Our Events!',
-    'Notre offre de cours':'Our Course Offering',
-    'Certifications et diplômes':'Certifications & Diplomas',
-    'S’entrainer au TCF Canada':'Practise for TCF Canada',
-    'Entraînement au TCF (Canada/Québec)':'TCF Canada & Québec Practice',
-    'Entraînement au TEF (Canada/Québec)':'TEF Canada & TEFAQ Practice',
-    'Blog TCF Canada':'TCF Canada Blog',
-    'Actualités':'News',
-    'Formulaire d’inscription':'Registration Form',
-    'Nos Blogs':'Our Blog',
-  };
+            };
             stickyHeader();
             $(window).scroll(function () {
                 stickyHeader();
@@ -96,7 +78,7 @@ jQuery(function ($) {
         event.preventDefault();
         $('.offcanvas-init').removeClass('offcanvas-active');
     });
-    
+
     $(document).on('click', '.offcanvas-inner .menu-toggler', function(event){
         event.preventDefault();
         $(this).closest('.menu-parent').toggleClass('menu-parent-open').find('>.menu-child').slideToggle(400);
@@ -156,10 +138,10 @@ jQuery(function ($) {
     //  Cookie consent
     $('.sp-cookie-allow').on('click', function(event) {
         event.preventDefault();
-        
+
         var date = new Date();
         date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-        var expires = "; expires=" + date.toGMTString();               
+        var expires = "; expires=" + date.toGMTString();
         document.cookie = "spcookie_status=ok" + expires + "; path=/";
 
         $(this).closest('.sp-cookie-consent').fadeOut();
@@ -261,7 +243,7 @@ jQuery(function ($) {
     'Entra\u00eenement au TEF (Canada/Qu\u00e9bec)':'TEF Canada & TEFAQ Practice',
     'Pr\u00e9paration TCF Canada':'TCF Canada Preparation',
     'Inscription aux Tests de Langue':'Language Test Registration',
-    
+
     'Test officiel de fran\u00e7ais pour l\u2019immigration et la citoyennet\u00e9 au Canada':'Official French test for immigration and Canadian citizenship.',
     'Test officiel de fran\u00e7ais pour l\u2019immigration et la citoyennet\u00e9 canadienne':'Official French test for immigration and Canadian citizenship.',
     'Test officiel de fran\u00e7ais pour l\u2019immigration au Qu\u00e9bec':'Official French test for immigration to Qu\u00e9bec.',
