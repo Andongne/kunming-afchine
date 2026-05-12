@@ -178,15 +178,22 @@ $showColors		= $this->params->get('colors', 0); ?>
     $_afkTeacher = $_afkDescMap[$event]['teacher'] ?? '';
     $_afkCourseTitleDb = $_afkDescMap[$event]['title'] ?? '';
     $_afkName = $_afkObj->name ?? '';
-    if      (preg_match('/VIP\s*3|trio/i', $_afkName))     $_afkTarif = '98 ¥/h/pers.';
+    if      (preg_match('/essai|porte ouverte/i', $_afkName)) $_afkTarif = 'Gratuit';
+    elseif  (preg_match('/VIP\s*3|trio/i', $_afkName))     $_afkTarif = '98 ¥/h/pers.';
     elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))      $_afkTarif = '128 ¥/h/pers.';
     elseif  (preg_match('/VIP/i', $_afkName))                $_afkTarif = '208 ¥/h';
     elseif  (preg_match('/4.?5|Petits/i', $_afkName))        $_afkTarif = '78 ¥/h/pers.';
     else                                                      $_afkTarif = '49 ¥/h/pers.';
     $_afkLangTag = \Joomla\CMS\Factory::getLanguage()->getTag();
-    if (strpos($_afkLangTag, 'zh') === 0)      { $_afkLblProf = '教师：';      $_afkLblTarif = '费用：'; }
-    elseif (strpos($_afkLangTag, 'en') === 0)  { $_afkLblProf = 'Teacher:';   $_afkLblTarif = 'Price:'; }
-    else                                       { $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :'; }
+    if (strpos($_afkLangTag, 'zh') === 0) {
+        $_afkLblProf = '教师：'; $_afkLblTarif = '费用：';
+        if ($_afkTarif === 'Gratuit') $_afkTarif = '免费';
+    } elseif (strpos($_afkLangTag, 'en') === 0) {
+        $_afkLblProf = 'Teacher:'; $_afkLblTarif = 'Price:';
+        if ($_afkTarif === 'Gratuit') $_afkTarif = 'Free';
+    } else {
+        $_afkLblProf = 'Professeur :'; $_afkLblTarif = 'Tarif :';
+    }
     // Décoder tooltip + supprimer div description original
     $_afkHtml = html_entity_decode($_afkTip, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $_afkHtml = preg_replace('/<div[^>]*rsepro-calendar-tooltip-description[^>]*>.*?<\/div>/s', '', $_afkHtml);
