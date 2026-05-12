@@ -1353,8 +1353,13 @@ img.filtered-logo {
   opacity: 1 !important;
 }
 
-/* .reg-closed-item : opacity:0.55 sur les liens fermés → ratio ~3.5:1 → fail
-   Correction : 0.7 → ratio ~5.0:1 sur fond blanc */
+/* .reg-closed-item : opacity:0.55 détruit le contraste du badge (#fff sur #da002e devenu semi-transparent sur fond blanc)
+   Correction : supprimer l'opacity du parent, cibler le texte du lien en #767676 (4.54:1 sur blanc) */
 #rsepro-upcoming-module .reg-closed-item {
-  opacity: 0.7 !important;
+  opacity: 1 !important;
+}
+#rsepro-upcoming-module .reg-closed-item a.rse_event_link {
+  color: #767676 !important; /* WCAG AA: 4.54:1 sur fond blanc */
+  pointer-events: none !important;
+  cursor: default !important;
 }
