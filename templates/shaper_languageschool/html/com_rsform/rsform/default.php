@@ -312,14 +312,11 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
       // Construire affichage tarif avec total selon langue
       var tarifDisplay = d.tarif; // fallback: chaîne PHP
       if (d.total > 0 && d.rate > 0 && d.durH > 1) {
-        var pp = d.perPers ? (_lang==='zh'?'/人':'/pers.') : '';
-        var durStr = Number.isInteger(d.durH) ? d.durH+'h' : d.durH+'h';
+        var durStr = d.durH+'h';
         if (_lang==='zh') {
-          tarifDisplay = d.rate+'¥/小时'+(d.perPers?'/人':'')+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
-        } else if (_lang==='en') {
-          tarifDisplay = d.rate+'¥/h'+pp+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
+          tarifDisplay = d.rate+'¥/小时'+(d.perPers?'/人':'')+' × '+durStr+' = <strong>'+d.total+'¥</strong>';
         } else {
-          tarifDisplay = d.rate+'¥/h'+pp+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
+          tarifDisplay = d.rate+'¥/h'+(d.perPers?'/pers.':'')+' × '+durStr+' = <strong>'+d.total+'¥</strong>';
         }
       } else if (d.tarif === 'Gratuit' || d.tarif === 'Free' || d.tarif === '免费') {
         tarifDisplay = _lang==='zh'?'免费':(_lang==='en'?'Free':'Gratuit');

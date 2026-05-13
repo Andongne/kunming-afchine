@@ -228,8 +228,6 @@ $showColors		= $this->params->get('colors', 0); ?>
             $_afkDurLabel = ($_afkDurH == floor($_afkDurH)) ? (int)$_afkDurH . 'h' : number_format($_afkDurH, 1) . 'h';
             if ($_afkDurH > 1) {
                 $_afkTarifDisplay = $_afkTarif . ' × ' . $_afkDurLabel . ' = <strong>' . $_afkTotal . ' ¥</strong>';
-                // Suffix /pers. si applicable
-                if (strpos($_afkTarif, '/pers') !== false) $_afkTarifDisplay = $_afkTarif . ' × ' . $_afkDurLabel . ' = <strong>' . $_afkTotal . ' ¥/pers.</strong>';
             }
         }
     }
