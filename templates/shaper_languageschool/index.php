@@ -565,6 +565,8 @@ if ($custom_js = $this->params->get('custom_js'))
     
 <script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/mobile-menu.js?v=20260513b"></script>
 <script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
+  <link rel="stylesheet" href="/components/com_sppagebuilder/assets/css/font-awesome-6.min.css">
+  <link rel="stylesheet" href="/components/com_sppagebuilder/assets/css/font-awesome-v4-shims.css">
   <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=20260513c">
 <?php if (isset($isHome) && $isHome) : ?>
   <link rel="preload" as="image" href="<?php echo $this->baseurl ?>/images/2026/04/24/background_header_2.webp" fetchpriority="high">
