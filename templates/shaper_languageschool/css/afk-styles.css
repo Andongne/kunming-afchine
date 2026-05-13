@@ -1391,3 +1391,14 @@ img.filtered-logo {
     font-size: 22px !important;
   }
 }
+
+/* === Hamburger mobile : glyphe FA + position fixe ===
+   Fournit l'icône fa-bars sur toutes les pages (com_content, com_rsform).
+   FA6 (chargé sur SP Builder) a même spécificité mais chargé après → override correct. */
+.fa.fa-bars::before {
+  display: inline-block;
+  font-family: 'Font Awesome 6 Free' !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  content: "\f0c9" !important;
+}
