@@ -1347,9 +1347,15 @@ img.filtered-logo {
    WCAG — Contraste insuffisant (PageSpeed a11y)
    ========================================================================== */
 
-/* #sp-bottom links : opacity:0.6 (template.css) + #a2a2a2 sur #171717 = 3.65:1 → fail
-   Correction : opacity 1 (#a2a2a2 sur #171717 = 7:1 sans opacity) */
+/* #sp-bottom links : couleur #87888a sur #1D252D = 4.37:1 → fail WCAG AA
+   + opacity:0.6 aggrave encore le contraste
+   Correction : couleur #a0a0a0 (5.93:1) + opacity:1 */
 #sp-bottom a {
+  color: #a0a0a0 !important; /* WCAG AA: 5.93:1 sur #1D252D */
+  opacity: 1 !important;
+}
+#sp-bottom a:hover {
+  color: #ffffff !important;
   opacity: 1 !important;
 }
 
