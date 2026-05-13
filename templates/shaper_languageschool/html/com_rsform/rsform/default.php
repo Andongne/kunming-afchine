@@ -59,7 +59,7 @@ $_afkCourseSessions = [];
 if ($_afkFormId === 6 && !$_afkIsPost) {
     $_afkDb = \Joomla\CMS\Factory::getDbo();
     $_afkCourseRows = $_afkDb->setQuery(
-        "SELECT id, name, start, description FROM #__rseventspro_events
+        "SELECT id, name, start, end, description FROM #__rseventspro_events
          WHERE published=1 AND start > NOW()
          AND name NOT LIKE '%TCF%' AND name NOT LIKE '%TEF%'
          AND (force_close IS NULL OR force_close=0)
@@ -89,19 +89,44 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
         foreach ($__afkFmtMap as $pat => $val) {
             if (preg_match($pat, $_afkCR['name'])) { $_afkFmt = $val; break; }
         }
+        // Durée en heures
+        $_afkDurH = 0;
+        if (!empty($_afkCR['end'])) {
+            $_afkDurSec = strtotime($_afkCR['end']) - $_afkEventTs;
+            if ($_afkDurSec > 0) $_afkDurH = round($_afkDurSec / 3600, 1);
+        }
+        $_afkDurLabel = ($_afkDurH > 0 && $_afkDurH == floor($_afkDurH)) ? (int)$_afkDurH . 'h' : ($_afkDurH > 0 ? $_afkDurH . 'h' : '');
+
         // Tarif + Porte ouverte
         if (preg_match('/porte.ouverte|essai|gratuit/i', $_afkCR['name'])) {
             $_afkTarifStr = 'Gratuit'; $_afkFmt = "Cours d'essai (gratuit)";
-        } elseif (preg_match('/VIP\\s*3|trio/i', $_afkCR['name']))  $_afkTarifStr = '98 ¥/h/pers.';
-        elseif  (preg_match('/VIP\\s*2|duo/i', $_afkCR['name']))   $_afkTarifStr = '128 ¥/h/pers.';
-        elseif  (preg_match('/VIP/i', $_afkCR['name']))               $_afkTarifStr = '208 ¥/h';
-        elseif  (preg_match('/4.?5|Petits/i', $_afkCR['name']))      $_afkTarifStr = '78 ¥/h/pers.';
-        else                                                           $_afkTarifStr = '49 ¥/h/pers.';
+        } elseif (preg_match('/VIP\\s*3|trio/i', $_afkCR['name']))  { $_afkRate = 98;  $_afkTarifStr = '98 ¥/h/pers.'; }
+        elseif  (preg_match('/VIP\\s*2|duo/i', $_afkCR['name']))   { $_afkRate = 128; $_afkTarifStr = '128 ¥/h/pers.'; }
+        elseif  (preg_match('/VIP/i', $_afkCR['name']))             { $_afkRate = 208; $_afkTarifStr = '208 ¥/h'; }
+        elseif  (preg_match('/4.?5|Petits/i', $_afkCR['name']))    { $_afkRate = 78;  $_afkTarifStr = '78 ¥/h/pers.'; }
+        else                                                        { $_afkRate = 49;  $_afkTarifStr = '49 ¥/h/pers.'; }
+
+        // Calcul total si durée > 1h et cours payant
+        $_afkRateNum = isset($_afkRate) ? (int)$_afkRate : 0;
+        $_afkTotalNum = 0;
+        $_afkPersPart = '';
+        if ($_afkRateNum > 0 && $_afkDurH > 1 && $_afkDurLabel) {
+            $_afkTotalNum = (int)round($_afkRateNum * $_afkDurH);
+            $_afkPersPart = (strpos($_afkTarifStr, '/pers') !== false) ? '/pers.' : '';
+            $_afkTarifStr = $_afkTarifStr . ' × ' . $_afkDurLabel . ' = ' . $_afkTotalNum . ' ¥' . $_afkPersPart;
+        }
+        unset($_afkRate);
+        // Données structurées pour localisation JS
+        $_afkPerPers = ($_afkPersPart !== '');
         $_afkCourseSessions[] = [
             'label'   => $_afkCR['name'] . ' — ' . date('d/m/Y H\hi', $_afkEventTs),
             'date'    => date('d/m/Y', $_afkEventTs),
             'format'  => $_afkFmt,
             'tarif'   => $_afkTarifStr,
+            'rate'    => $_afkRateNum,
+            'durH'    => $_afkDurH,
+            'total'   => $_afkTotalNum,
+            'perPers' => $_afkPerPers,
             'teacher' => $_afkTch,
         ];
     }
@@ -260,9 +285,13 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
       if (!_afkSelData) return;
       try {
         sessionStorage.setItem('afk_cours_data', JSON.stringify({
-          tarif:  _afkSelData.tarif,
-          label:  _afkSelData.label,
-          format: _afkSelData.format
+          tarif:   _afkSelData.tarif,
+          label:   _afkSelData.label,
+          format:  _afkSelData.format,
+          rate:    _afkSelData.rate    || 0,
+          durH:    _afkSelData.durH    || 0,
+          total:   _afkSelData.total   || 0,
+          perPers: _afkSelData.perPers || false
         }));
       } catch(ex){}
     }, true);
@@ -277,10 +306,25 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
       if (!this.value) { infoDiv.style.display='none'; return; }
       var d = JSON.parse(this.value);
       _afkSelData = d;
-      // Afficher type + tarif
-      var lbl_type = _lang==='zh'?'课程类型：':(_lang==='en'?'Type: ':'Type : ');
-      var lbl_tarif = _lang==='zh'?'费用：':(_lang==='en'?'Price: ':'Tarif : ');
-      infoDiv.innerHTML = '<strong>'+lbl_type+'</strong>'+d.format+'<br><strong>'+lbl_tarif+'</strong>'+d.tarif;
+      // Afficher type + tarif localisé
+      var lbl_type  = _lang==='zh'?'课程类型：':(_lang==='en'?'Type: ':'Type : ');
+      var lbl_tarif = _lang==='zh'?'费用：':(_lang==='en'?'Price: ':'Tarif : ');
+      // Construire affichage tarif avec total selon langue
+      var tarifDisplay = d.tarif; // fallback: chaîne PHP
+      if (d.total > 0 && d.rate > 0 && d.durH > 1) {
+        var pp = d.perPers ? (_lang==='zh'?'/人':'/pers.') : '';
+        var durStr = Number.isInteger(d.durH) ? d.durH+'h' : d.durH+'h';
+        if (_lang==='zh') {
+          tarifDisplay = d.rate+'¥/小时'+(d.perPers?'/人':'')+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
+        } else if (_lang==='en') {
+          tarifDisplay = d.rate+'¥/h'+pp+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
+        } else {
+          tarifDisplay = d.rate+'¥/h'+pp+' × '+durStr+' = <strong>'+d.total+'¥'+pp+'</strong>';
+        }
+      } else if (d.tarif === 'Gratuit' || d.tarif === 'Free' || d.tarif === '免费') {
+        tarifDisplay = _lang==='zh'?'免费':(_lang==='en'?'Free':'Gratuit');
+      }
+      infoDiv.innerHTML = '<strong>'+lbl_type+'</strong>'+d.format+'<br><strong>'+lbl_tarif+'</strong>'+tarifDisplay;
       infoDiv.style.display = '';
       // Session (caché — créé dynamiquement si absent)
       var sf = document.querySelector("input[name='form[Session]']");
