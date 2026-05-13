@@ -211,9 +211,31 @@ $showColors		= $this->params->get('colors', 0); ?>
             $_afkHtml);
     }
     // Bloc méta + titre en bas
+    // Calcul durée → prix total
+    $_afkDurH = 0;
+    if (!empty($_afkObj->start) && !empty($_afkObj->end)) {
+        $_afkDurSec = strtotime($_afkObj->end) - strtotime($_afkObj->start);
+        if ($_afkDurSec > 0) $_afkDurH = $_afkDurSec / 3600;
+    }
+    // Construire l'affichage du tarif avec total si durée > 1h et cours payant
+    $_afkTarifDisplay = $_afkTarif;
+    if ($_afkDurH > 0 && $_afkTarif !== 'Gratuit' && $_afkTarif !== '免费' && $_afkTarif !== 'Free') {
+        // Extraire le taux numérique (ex: 49, 78, 98, 128, 208)
+        if (preg_match('/^(\d+)/', $_afkTarif, $_afkRm)) {
+            $_afkRate = (int)$_afkRm[1];
+            $_afkTotal = round($_afkRate * $_afkDurH);
+            // Label durée
+            $_afkDurLabel = ($_afkDurH == floor($_afkDurH)) ? (int)$_afkDurH . 'h' : number_format($_afkDurH, 1) . 'h';
+            if ($_afkDurH > 1) {
+                $_afkTarifDisplay = $_afkTarif . ' × ' . $_afkDurLabel . ' = <strong>' . $_afkTotal . ' ¥</strong>';
+                // Suffix /pers. si applicable
+                if (strpos($_afkTarif, '/pers') !== false) $_afkTarifDisplay = $_afkTarif . ' × ' . $_afkDurLabel . ' = <strong>' . $_afkTotal . ' ¥/pers.</strong>';
+            }
+        }
+    }
     $_afkExtra  = '<div style=\'margin-top:8px;padding-top:8px;border-top:1px solid #f0cdd2;font-size:0.82em;line-height:1.7\'>';
     if ($_afkTeacher) $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblProf).'</strong> '.htmlspecialchars($_afkTeacher).'<br>';
-    $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblTarif).'</strong> '.htmlspecialchars($_afkTarif);
+    $_afkExtra .= '<strong>'.htmlspecialchars($_afkLblTarif).'</strong> '.$_afkTarifDisplay;
     $_afkExtra .= '</div>';
     if ($_afkCourseTitle) $_afkExtra .= '<div style=\'margin-top:4px\'><strong>'.htmlspecialchars($_afkCourseTitle).'</strong></div>';
     // Réinjecter avant dernier </div> et re-encoder
