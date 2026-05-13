@@ -1369,3 +1369,25 @@ img.filtered-logo {
   pointer-events: none !important;
   cursor: default !important;
 }
+
+/* === Hamburger mobile — position absolue garantie (toutes pages) ===
+   Évite les conflits avec le top-bar et le logo qui débordent du header 140px */
+@media (max-width: 991px) {
+  #sp-header {
+    position: relative !important;
+  }
+  #offcanvas-toggler {
+    position: absolute !important;
+    top: 0 !important;
+    right: 15px !important;
+    height: 80px !important;
+    line-height: 80px !important;
+    width: 60px !important;
+    text-align: center !important;
+    float: none !important;
+    z-index: 200 !important;
+    color: #1a171b !important;
+    padding: 0 !important;
+    font-size: 22px !important;
+  }
+}
