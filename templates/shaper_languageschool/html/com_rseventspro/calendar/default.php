@@ -179,11 +179,11 @@ $showColors		= $this->params->get('colors', 0); ?>
     $_afkCourseTitleDb = $_afkDescMap[$event]['title'] ?? '';
     $_afkName = $_afkObj->name ?? '';
     if      (preg_match('/essai|porte ouverte/i', $_afkName)) $_afkTarif = 'Gratuit';
-    elseif  (preg_match('/VIP\s*3|trio/i', $_afkName))     $_afkTarif = '98 ¥/h/pers. (3 élèves)';
-    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))      $_afkTarif = '128 ¥/h/pers. (2 élèves)';
+    elseif  (preg_match('/VIP\s*3|trio/i', $_afkName))     $_afkTarif = '98 ¥/h (3 élèves)';
+    elseif  (preg_match('/VIP\s*2|duo/i', $_afkName))      $_afkTarif = '128 ¥/h (2 élèves)';
     elseif  (preg_match('/VIP/i', $_afkName))               $_afkTarif = '208 ¥/h (1 élève)';
-    elseif  (preg_match('/4.?5|Petits/i', $_afkName))        $_afkTarif = '78 ¥/h/pers.';
-    else                                                      $_afkTarif = '49 ¥/h/pers.';
+    elseif  (preg_match('/4.?5|Petits/i', $_afkName))        $_afkTarif = '78 ¥/h';
+    else                                                      $_afkTarif = '49 ¥/h';
     $_afkLangTag = \Joomla\CMS\Factory::getLanguage()->getTag();
     if (strpos($_afkLangTag, 'zh') === 0) {
         $_afkLblProf = '教师：'; $_afkLblTarif = '费用：';

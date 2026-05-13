@@ -100,11 +100,11 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
         // Tarif + Porte ouverte
         if (preg_match('/porte.ouverte|essai|gratuit/i', $_afkCR['name'])) {
             $_afkTarifStr = 'Gratuit'; $_afkFmt = "Cours d'essai (gratuit)";
-        } elseif (preg_match('/VIP\\s*3|trio/i', $_afkCR['name']))  { $_afkRate = 98;  $_afkTarifStr = '98 ¥/h/pers.'; }
-        elseif  (preg_match('/VIP\\s*2|duo/i', $_afkCR['name']))   { $_afkRate = 128; $_afkTarifStr = '128 ¥/h/pers.'; }
+        } elseif (preg_match('/VIP\\s*3|trio/i', $_afkCR['name']))  { $_afkRate = 98;  $_afkTarifStr = '98 ¥/h'; }
+        elseif  (preg_match('/VIP\\s*2|duo/i', $_afkCR['name']))   { $_afkRate = 128; $_afkTarifStr = '128 ¥/h'; }
         elseif  (preg_match('/VIP/i', $_afkCR['name']))             { $_afkRate = 208; $_afkTarifStr = '208 ¥/h'; }
-        elseif  (preg_match('/4.?5|Petits/i', $_afkCR['name']))    { $_afkRate = 78;  $_afkTarifStr = '78 ¥/h/pers.'; }
-        else                                                        { $_afkRate = 49;  $_afkTarifStr = '49 ¥/h/pers.'; }
+        elseif  (preg_match('/4.?5|Petits/i', $_afkCR['name']))    { $_afkRate = 78;  $_afkTarifStr = '78 ¥/h'; }
+        else                                                        { $_afkRate = 49;  $_afkTarifStr = '49 ¥/h'; }
 
         // Calcul total si durée > 1h et cours payant
         $_afkRateNum = isset($_afkRate) ? (int)$_afkRate : 0;
@@ -112,7 +112,7 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
         $_afkPersPart = '';
         if ($_afkRateNum > 0 && $_afkDurH > 1 && $_afkDurLabel) {
             $_afkTotalNum = (int)round($_afkRateNum * $_afkDurH);
-            $_afkPersPart = (strpos($_afkTarifStr, '/pers') !== false) ? '/pers.' : '';
+            $_afkPersPart = ''; // /pers. supprimé du total
             $_afkTarifStr = $_afkTarifStr . ' × ' . $_afkDurLabel . ' = ' . $_afkTotalNum . ' ¥' . $_afkPersPart;
         }
         unset($_afkRate);
@@ -316,7 +316,7 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
         if (_lang==='zh') {
           tarifDisplay = d.rate+'¥/小时'+(d.perPers?'/人':'')+' × '+durStr+' = <strong>'+d.total+'¥</strong>';
         } else {
-          tarifDisplay = d.rate+'¥/h'+(d.perPers?'/pers.':'')+' × '+durStr+' = <strong>'+d.total+'¥</strong>';
+          tarifDisplay = d.rate+'¥/h × '+durStr+' = <strong>'+d.total+'¥</strong>';
         }
       } else if (d.tarif === 'Gratuit' || d.tarif === 'Free' || d.tarif === '免费') {
         tarifDisplay = _lang==='zh'?'免费':(_lang==='en'?'Free':'Gratuit');
