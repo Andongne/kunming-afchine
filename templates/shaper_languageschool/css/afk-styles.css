@@ -1369,23 +1369,3 @@ img.filtered-logo {
   pointer-events: none !important;
   cursor: default !important;
 }
-
-/* === Contact mobile footer — visible sur mobile (<992px) ===
-   sp-bottom et sp-bottom-top sont d-lg-block uniquement.
-   On force sp-bottom3 visible sur mobile en affichant le conteneur parent
-   et en cachant les colonnes desktop-only (bottom1, bottom2, bottom4). */
-@media (max-width: 991px) {
-  #sp-bottom {
-    display: block !important;
-  }
-  #sp-bottom1,
-  #sp-bottom2,
-  #sp-bottom4 {
-    display: none !important;
-  }
-  #sp-bottom3 {
-    display: block !important;
-    width: 100% !important;
-    text-align: center;
-  }
-}
