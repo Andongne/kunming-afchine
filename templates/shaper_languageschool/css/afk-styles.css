@@ -1403,9 +1403,7 @@ img.filtered-logo {
   content: "\f0c9" !important;
 }
 /* === Blog : titre "Tous les articles" aligné à gauche === */
-.blog .items-more h3,
-.blog-items h3,
-#sp-main-body h3 {
+.article-list h3 {
   text-align: left !important;
 }
 
