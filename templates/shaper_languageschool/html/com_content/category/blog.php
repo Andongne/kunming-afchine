@@ -102,7 +102,7 @@ $afterDisplayContent = trim(implode("\n", $results));
 			<?php $blogClass .= 'cols-' . (int) $this->params->get('num_columns'); ?>	
 		<?php endif; ?>
 		<div class="article-list">
-			<h3> <?php
+			<h3 style="text-align:left"> <?php
 $_lang = Factory::getApplication()->getLanguage()->getTag();
 if ($_lang === 'zh-CN') echo '所有文章';
 elseif (strpos($_lang, 'fr') === 0) echo 'Tous les articles';
@@ -134,7 +134,7 @@ else echo Text::_('HELIX_ALL_STORIES');
 	<?php if ($this->maxLevel != 0 && !empty($this->children[$this->category->id])) : ?>
 		<div class="cat-children mb-4">
 			<?php if ($this->params->get('show_category_heading_title_text', 1) == 1) : ?>
-				<h3> <?php echo Text::_('JGLOBAL_SUBCATEGORIES'); ?> </h3>
+				<h3 style="text-align:left"> <?php echo Text::_('JGLOBAL_SUBCATEGORIES'); ?> </h3>
 			<?php endif; ?>
 			<?php echo $this->loadTemplate('children'); ?>
 		</div>
