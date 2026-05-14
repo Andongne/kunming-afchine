@@ -1402,6 +1402,13 @@ img.filtered-logo {
   font-style: normal !important;
   content: "\f0c9" !important;
 }
+/* === Blog : titre "Tous les articles" aligné à gauche === */
+.blog .items-more h3,
+.blog-items h3,
+#sp-main-body h3 {
+  text-align: left !important;
+}
+
 /* === Footer mobile : masquer sp-footer et sp-bottom-top ===
    Sur mobile, seul le module Contact (bottom3) s'affiche. */
 @media (max-width: 991px) {
