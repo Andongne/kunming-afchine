@@ -1402,6 +1402,15 @@ img.filtered-logo {
   font-style: normal !important;
   content: "\f0c9" !important;
 }
+/* === Footer mobile : masquer sp-footer et sp-bottom-top ===
+   Sur mobile, seul le module Contact (bottom3) s'affiche. */
+@media (max-width: 991px) {
+  #sp-footer,
+  #sp-bottom-top {
+    display: none !important;
+  }
+}
+
 /* === Module Contact mobile (id=258, position bottom3) ===
    #sp-bottom est d-none d-lg-block → masque tout le footer sur mobile.
    On force l'affichage du bloc bottom3 uniquement, sans le reste du footer. */
