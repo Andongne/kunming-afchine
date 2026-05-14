@@ -1430,7 +1430,8 @@ img.filtered-logo {
   #sp-bottom4 {
     display: none !important;
   }
-  #sp-bottom3 {
+  #sp-bottom3,
+  #sp-bottom3 .sp-module {
     display: block !important;
     width: 100% !important;
     flex: none !important;
