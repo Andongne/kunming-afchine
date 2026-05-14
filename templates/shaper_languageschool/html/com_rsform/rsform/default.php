@@ -143,6 +143,23 @@ if ($_afkFormId === 6 && !$_afkIsPost) {
 <?php endif; ?>
 
 <?php echo RSFormProHelper::displayForm($this->formId); ?>
+<script>
+// Anti-spam honeypot : injecte un champ invisible via JS
+// Les bots HTTP simples ne voient pas ce champ ; les bots JS le remplissent
+(function(){
+  var f = document.querySelector('form.rsform');
+  if (!f) return;
+  var hp = document.createElement('input');
+  hp.type = 'text';
+  hp.name = 'form[hp_field]';
+  hp.value = '';
+  hp.autocomplete = 'off';
+  hp.setAttribute('tabindex', '-1');
+  hp.setAttribute('aria-hidden', 'true');
+  hp.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0;';
+  f.appendChild(hp);
+})();
+</script>
 
 <?php if ($_afkFormId === 6): ?>
 <script>
