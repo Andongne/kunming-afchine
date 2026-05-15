@@ -102,9 +102,13 @@ foreach ($calendar->days->weekdays as $weekday) {
 			<tr>
 		<?php } ?>
 				<td class="<?php echo $day->class; ?>">
+					<?php if (!empty($day->events)): ?>
 					<a href="javascript:void(0);" style="cursor:default;" class="<?php echo rseventsproHelper::tooltipClass(); ?>" title="<?php echo rseventsproHelper::tooltipText(afk_calendar_tooltip_text($day->events)); ?>">
 						<span class="rs_calendar_date"><?php echo $unixdate->format('j'); ?></span>
 					</a>
+					<?php else: ?>
+					<span class="rs_calendar_date"><?php echo $unixdate->format('j'); ?></span>
+					<?php endif; ?>
 				</td>
 			<?php if ($day->day == $calendar->weekend) { ?></tr><?php } ?>
 			<?php } ?>
