@@ -261,3 +261,18 @@ jQuery(function ($) {
   }
   document.addEventListener('DOMContentLoaded',function(){walk(document.body);});
 })();
+
+// AFK: nettoyer les URLs du commutateur de langue sur toutes les pages RSEvents Pro
+// Supprime les segments de vue jour/mois/an pour revenir à la vue calendrier de base
+(function(){
+  function cleanRseUrls(){
+    var pattern = /\/(daily|monthly|yearly|day|jour|jours|COM_RSEVENTSPRO_CALENDAR_DAY_SEF|COM_RSEVENTSPRO_CALENDAR_MONTH_SEF|COM_RSEVENTSPRO_CALENDAR_YEAR_SEF)(\/[^?#]*)?/g;
+    document.querySelectorAll('a[href]').forEach(function(a){
+      if(pattern.test(a.href)){
+        a.href = a.href.replace(pattern, '');
+      }
+      pattern.lastIndex = 0;
+    });
+  }
+  document.addEventListener('DOMContentLoaded', cleanRseUrls);
+})();
