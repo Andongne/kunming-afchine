@@ -334,11 +334,11 @@ if (!empty($_afkCtaMods)):
 			});
 		});
 		<?php } ?>
-		// AFK: nettoyer les URLs du commutateur de langue (supprimer segments RSEvents /daily/ /monthly/ /yearly/)
+		// AFK: nettoyer les URLs du commutateur de langue (supprimer segments RSEvents /daily/ /monthly/ /yearly/ + day SEF)
 		jQuery('a[href]').filter(function(){
-			return /\/(daily|monthly|yearly)\//.test(this.href);
+			return /\/(daily|monthly|yearly|day|jour|jours|COM_RSEVENTSPRO_CALENDAR_DAY_SEF|COM_RSEVENTSPRO_CALENDAR_MONTH_SEF|COM_RSEVENTSPRO_CALENDAR_YEAR_SEF)\//.test(this.href);
 		}).each(function(){
-			this.href = this.href.replace(/\/(daily|monthly|yearly)\/[^?#]*/g, '');
+			this.href = this.href.replace(/\/(daily|monthly|yearly|day|jour|jours|COM_RSEVENTSPRO_CALENDAR_DAY_SEF|COM_RSEVENTSPRO_CALENDAR_MONTH_SEF|COM_RSEVENTSPRO_CALENDAR_YEAR_SEF)\/[^?#]*/g, '');
 		});
 
 		jQuery('.rsttip').popover({trigger: 'hover', animation: false, html : true, placement : 'bottom' });
