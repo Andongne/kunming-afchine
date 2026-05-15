@@ -99,19 +99,19 @@
     width: 50% !important;
     flex: 0 0 50% !important;
     max-width: 50% !important;
-    padding: 0 4px !important;
-    margin-bottom: 8px !important;
+    padding: 0 6px !important;
+    margin-bottom: 14px !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
   }
 
-  /* === COLUMN : fond blanc + bordure rouge === */
+  /* === COLUMN : fond blanc + bordure rouge atténuée === */
   #afk-cards-grid > [id^="column-wrap-id-"] > [id^="column-id-"] {
     background: #ffffff !important;
-    border: 1.5px solid #DA002E !important;
+    border: 1.5px solid rgba(192,57,90,0.6) !important;
     border-radius: 8px !important;
-    box-shadow: 0 2px 8px rgba(218,0,46,0.10) !important;
+    box-shadow: 0 2px 8px rgba(192,57,90,0.10) !important;
     overflow: hidden !important;
     padding: 0 !important;
     display: flex !important;
@@ -173,9 +173,9 @@
     vertical-align: top !important;
   }
 
-  /* === TITRE : étiquette rouge en bas === */
+  /* === TITRE : étiquette rouge atténuée en bas === */
   #afk-cards-grid .addon-root-text-block {
-    background: #DA002E !important;
+    background: rgba(192,57,90,0.92) !important;
     margin: 0 !important;
     padding: 0 !important;
     height: 44px !important;
