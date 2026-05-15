@@ -94,6 +94,17 @@
     margin: 0 !important;
   }
 
+  /* Espacement de la grille cards : tirer vers le haut et vers le bas */
+  #afk-cards-grid {
+    margin-top: -8px !important;
+    margin-bottom: -8px !important;
+  }
+
+  /* Section CTA "S'inscrire" au-dessus : réduire le padding bas */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    padding-bottom: 0 !important;
+  }
+
   /* === COLUMN WRAP : 50% === */
   #afk-cards-grid > [id^="column-wrap-id-"] {
     width: 50% !important;
@@ -222,8 +233,8 @@
 
   /* === BLOG TCF CANADA + ON PARLE DE NOUS === */
   #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea {
-    padding-top: 6px !important;
-    padding-bottom: 10px !important;
+    padding-top: 4px !important;
+    padding-bottom: 6px !important;
   }
 
   #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6,
