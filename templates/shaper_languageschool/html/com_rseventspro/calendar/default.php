@@ -259,7 +259,7 @@ $showColors		= $this->params->get('colors', 0); ?>
 							
 								<ul class="rsepro-calendar-events">
 									<li class="event">
-										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y'));?>" class="rsttip" data<?php echo rseventsproHelper::isJ4() ? '-bs' : ''; ?>-content="<?php echo $this->getDetailsSmall($day->events); ?>">
+										<a <?php echo $nofollow; ?> href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&view=calendar&layout=day&date='.$unixdate->format('m-d-Y'));?>">
 											<i class="fa fa-calendar"></i> 
 											<?php echo count($day->events).' '.Text::plural('COM_RSEVENTSPRO_CALENDAR_EVENTS',count($day->events)); ?>
 										</a>
