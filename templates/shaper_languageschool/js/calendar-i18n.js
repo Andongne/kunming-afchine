@@ -23,6 +23,25 @@
       });
     }
 
+    // Fix dates FR→EN dans les tooltips (translatedate() retourne toujours fr-FR côté serveur)
+    if (lang === 'en') {
+      var frToEn = {
+        'janvier':'January','février':'February','mars':'March','avril':'April',
+        'mai':'May','juin':'June','juillet':'July','août':'August',
+        'septembre':'September','octobre':'October','novembre':'November','décembre':'December'
+      };
+      document.querySelectorAll('[data-bs-content],[data-content]').forEach(function(el) {
+        var attr = el.hasAttribute('data-bs-content') ? 'data-bs-content' : 'data-content';
+        var val = el.getAttribute(attr);
+        if (!val) return;
+        var updated = val;
+        Object.keys(frToEn).forEach(function(fr) {
+          updated = updated.replace(new RegExp(fr, 'gi'), frToEn[fr]);
+        });
+        if (updated !== val) el.setAttribute(attr, updated);
+      });
+    }
+
     // Italique sur la partie (groupe) dans les noms d'événements
     document.querySelectorAll('.rsepro-calendar .event-name, .rsepro-calendar .rse_event_link').forEach(function(el) {
       if (!el.querySelector('em') && (el.textContent||'').indexOf('(') > -1) {
