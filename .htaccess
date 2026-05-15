@@ -132,6 +132,15 @@ Options -Indexes
     RewriteRule ^sitemap\.xml$ /index.php?option=com_jmap&view=sitemap&format=xml [R=301,L]
 
     ## SEF Frontend
+
+    # AFK: Rediriger les vues RSEvents Pro jour/semaine vers le calendrier de base
+    # FR : /calendrier-sessions/jour/... → /calendrier-sessions/
+    RewriteRule ^(.*calendrier-sessions)/(jour|semaine|ann[eé]e|day|week|year|COM_RSEVENTSPRO_CALENDAR_[A-Z_]+_SEF)(/.*)? $1/ [R=302,L]
+    # EN : /session-calendar/day/... → /session-calendar/
+    RewriteRule ^(en/.*session-calendar)/(jour|semaine|ann[eé]e|day|week|year|COM_RSEVENTSPRO_CALENDAR_[A-Z_]+_SEF)(/.*)? $1/ [R=302,L]
+    # ZH : même chose
+    RewriteRule ^(zh/.*session-calendar)/(jour|semaine|ann[eé]e|day|week|year|COM_RSEVENTSPRO_CALENDAR_[A-Z_]+_SEF)(/.*)? $1/ [R=302,L]
+
     RewriteCond %{REQUEST_URI} !^/index\.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
