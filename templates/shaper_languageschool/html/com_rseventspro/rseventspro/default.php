@@ -479,6 +479,7 @@ if (strpos($_tag, 'zh') === 0) {
         <div class="afk-sidebar-title"><?php echo htmlspecialchars($_afkTitle); ?></div>
         <?php endif; ?>
         <div class="afk-sidebar-content">
+            <?php $_afkMod->showtitle = 0; // évite le double titre via chrome ?>
             <?php echo ModuleHelper::renderModule($_afkMod, ['style'=>'none']); ?>
         </div>
     </div>
