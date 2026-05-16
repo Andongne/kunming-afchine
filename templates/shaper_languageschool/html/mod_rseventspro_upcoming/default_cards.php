@@ -10,6 +10,19 @@ use Joomla\CMS\Uri\Uri;
 
 $_lang = Factory::getLanguage()->getTag();
 
+// Cache des noms de lieux (évite les requêtes répétées)
+$_loc_cache = [];
+function afk_get_location_name($location_id) {
+    global $_loc_cache;
+    $id = intval($location_id);
+    if (!$id) return '';
+    if (isset($_loc_cache[$id])) return $_loc_cache[$id];
+    $db = Factory::getDbo();
+    $db->setQuery('SELECT name FROM #__rseventspro_locations WHERE id=' . $id . ' AND published=1');
+    $_loc_cache[$id] = (string) $db->loadResult();
+    return $_loc_cache[$id];
+}
+
 function afk_cards_fmt($start, $end, $lang) {
     $ts_s = strtotime($start);
     $ts_e = $end ? strtotime($end) : null;
@@ -56,7 +69,7 @@ $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
 
         $img_url  = $ev->icon ? $base_img . htmlspecialchars($ev->icon) : null;
         $date_str = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
-        $loc      = htmlspecialchars(trim(preg_replace('/\s+/',' ', $ev->location ?? '')));
+        $loc      = htmlspecialchars(trim(afk_get_location_name($ev->location)));
         $ts       = strtotime($ev->start);
 
         // Icône calendrier : mois + jour
