@@ -1,28 +1,16 @@
 <?php
 /**
- * RSEvents!Pro — Override items_events.php
- * AF Kunming : card cliquable vers formulaire + badge tarif
+ * @package RSEvents!Pro — Override AF Kunming
+ * items_events.php : supprime tarif + liens loc/date pour catégorie Événements (54)
  */
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Route;
 
-// Itemid du formulaire d'inscription aux examens (lang=*)
-$afkFormItemId = 776;
-$afkFormBase   = Route::_('index.php?Itemid=' . $afkFormItemId);
-
-// Extrait le type d'examen depuis le nom de l'evenement
-// "TCF Canada 🍁 📄 — 8 mai 2026" → "TCF Canada"
-function afkExamType(string $name): string {
-    // Lettre ASCII + espaces, avant emoji ou tiret long
-    if (preg_match('/^([A-Za-z][A-Za-z\s]+?)(?:\s+[^\x00-\x7F]|\s+\xe2\x80\x94|$)/u', $name, $m)) {
-        return trim($m[1]);
-    }
-    $parts = explode(' —', $name);
-    return trim(preg_replace('/[^\x00-\x7F]+/u', '', $parts[0]));
-}
-
+// Détecter si on est sur la page Événements (cat 54 uniquement)
+$_active_cats = (array) $this->params->get('categories', []);
+$_is_evenements = (count($_active_cats) === 1 && in_array('54', array_map('strval', $_active_cats)))
+                || (count($_active_cats) === 1 && in_array(54, $_active_cats));
 ?>
 
 <?php if (!empty($this->events)) { ?>
@@ -31,134 +19,109 @@ function afkExamType(string $name): string {
 <?php foreach($this->events as $details) { ?>
 <?php if (isset($details['event']) && !empty($details['event'])) $event = $details['event']; else continue; ?>
 <?php if (!rseventsproHelper::canview($event->id) && $event->owner != $this->user) continue; ?>
-<?php $full       = rseventsproHelper::eventisfull($event->id); ?>
-<?php $ongoing    = rseventsproHelper::ongoing($event->id); ?>
+<?php $full = rseventsproHelper::eventisfull($event->id); ?>
+<?php $ongoing = rseventsproHelper::ongoing($event->id); ?>
+<?php $categories = (isset($details['categories']) && !empty($details['categories'])) ? Text::_('COM_RSEVENTSPRO_GLOBAL_CATEGORIES').': '.$details['categories'] : '';  ?>
+<?php $tags = (isset($details['tags']) && !empty($details['tags'])) ? Text::_('COM_RSEVENTSPRO_GLOBAL_TAGS').': '.$details['tags'] : '';  ?>
 <?php $incomplete = !$event->completed ? ' rs_incomplete' : ''; ?>
-<?php $featured   = $event->featured   ? ' rs_featured'   : ''; ?>
-<?php $canceled   = $event->published == 3 ? ' rsepro_canceled_event_block' : ''; ?>
-<?php $lastMY     = rseventsproHelper::showdate($event->start, 'mY'); ?>
-
-<?php
-// URL formulaire avec pré-remplissage type d'examen + date
-$examType    = afkExamType($event->name);
-$_dt = new DateTime($event->start, new DateTimeZone('UTC'));
-$_dt->setTimezone(new DateTimeZone('Asia/Shanghai'));
-$sessionDate = $_dt->format('d/m/Y');
-$sep         = (strpos($afkFormBase, '?') !== false) ? '&' : '?';
-$formUrl     = $afkFormBase . $sep
-             . 'form%5BChoix_exam%5D%5B%5D=' . urlencode($examType)
-             . '&form%5BSession%5D%5B%5D='   . urlencode($sessionDate);
-
-// Badge tarif : small_description si contient un montant, sinon valeur par défaut
-$tarif = '2 700 ¥';
-if (!empty($event->small_description)) {
-    $stripped = strip_tags($event->small_description);
-    if (preg_match('/[\d\s]+\s*[¥€$￥]|[¥€$￥]\s*[\d\s]+/u', $stripped, $tm)) {
-        $tarif = trim($tm[0]);
-    }
-}
-
-// Badge inscription fermée / passée
-$regClosed = !empty($event->registration_closed);
-// Délai d'inscription passé (même logique que le sélecteur de séances)
-$_afkRegPast = false;
-if (!$regClosed && !empty($event->start)) {
-    $_afkEvTs   = strtotime($event->start);
-    $_afkEvDay  = date('Y-m-d', $_afkEvTs);
-    $_afkDl     = strtotime($_afkEvDay . ' -1 day 17:00:00');
-    $_afkDow    = (int)date('N', $_afkDl);
-    if ($_afkDow == 7) $_afkDl -= 2 * 86400;
-    if ($_afkDow == 6) $_afkDl -= 1 * 86400;
-    if (time() >= $_afkDl) $_afkRegPast = true;
-}
-?>
+<?php $featured = $event->featured ? ' rs_featured' : ''; ?>
+<?php $canceled = $event->published == 3 ? ' rsepro_canceled_event_block' : ''; ?>
+<?php $repeats = rseventsproHelper::getRepeats($event->id); ?>
+<?php $lastMY = rseventsproHelper::showdate($event->start,'mY'); ?>
+<?php $canEdit = (!empty($this->permissions['can_edit_events']) || $event->owner == $this->user || $event->sid == $this->user || $this->admin) && !empty($this->user); ?>
+<?php $canDelete = (!empty($this->permissions['can_delete_events']) || $event->owner == $this->user || $event->sid == $this->user || $this->admin) && !empty($this->user); ?>
 
 <?php if ($monthYear = rseventsproHelper::showMonthYear($event->start, 'events'.$this->fid, 'items')) { ?>
-<li class="rsepro-my-grouped <?php echo rseventsproHelper::layout('event-grouped-by'); ?>">
-    <span><?php echo $monthYear; ?></span>
-</li>
+	<li class="rsepro-my-grouped <?php echo rseventsproHelper::layout('event-grouped-by'); ?>"><span><?php echo $monthYear; ?></span></li>
 <?php } ?>
 
-<li class="<?php echo rseventsproHelper::layout('item-container'); ?> afk-event-card<?php echo $incomplete.$featured.$canceled; ?>"
-    id="rs_event<?php echo $event->id; ?>"
-    itemscope itemtype="http://schema.org/Event">
+<li class="<?php echo rseventsproHelper::layout('item-container'); ?><?php echo $incomplete.$featured.$canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
 
-    <!-- Badge tarif -->
-    <span class="afk-tarif-badge"><?php echo htmlspecialchars($tarif, ENT_QUOTES, 'UTF-8'); ?></span>
-    <?php if ($regClosed || $_afkRegPast): ?>
-    <span class="afk-badge-closed">
-      <?php echo $regClosed ? 'Inscriptions fermées' : 'Inscription passée'; ?>
-    </span>
-    <?php endif; ?>
+	<?php if ($canEdit || $canDelete) { ?>
+	<div class="rsepro-event-options <?php echo rseventsproHelper::layout('options'); ?>" style="display:none;">
+		<?php if ($canEdit) { ?><a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=edit&id='.rseventsproHelper::sef($event->id,$event->name)); ?>"><i class="fa fa-edit"></i></a><?php } ?>
+		<?php if ($canDelete) { ?><a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&task=rseventspro.remove&id='.rseventsproHelper::sef($event->id,$event->name)); ?>" onclick="return confirm('<?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_DELETE_CONFIRMATION'); ?>');"><i class="fa fa-trash"></i></a><?php } ?>
+	</div>
+	<?php } ?>
 
-    <!-- Card cliquable (désactivée si inscriptions fermées ou passée) -->
-    <?php if ($regClosed || $_afkRegPast): ?>
-    <div class="afk-card-link afk-card-closed">
-    <?php else: ?>
-    <a href="<?php echo htmlspecialchars($formUrl, ENT_QUOTES, 'UTF-8'); ?>"
-       class="afk-card-link"
-       itemprop="url"
-       aria-label="<?php echo htmlspecialchars($event->name, ENT_QUOTES, 'UTF-8'); ?>">
-    <?php endif; ?>
+	<?php if (!empty($event->options['show_icon_list'])) { ?>
+	<div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
+		<a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="rs_event_link thumbnail" aria-label="<?php echo $event->name; ?>">
+			<img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>" alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
+		</a>
+	</div>
+	<?php } ?>
 
-        <?php if (!empty($event->options['show_icon_list'])) { ?>
-        <div class="<?php echo rseventsproHelper::layout('image-container'); ?>" itemprop="image">
-            <img src="<?php echo rseventsproHelper::thumb($event->id, rseventsproHelper::layout('image-width')); ?>"
-                 alt="" width="<?php echo rseventsproHelper::layout('image-width'); ?>" />
-        </div>
-        <?php } ?>
+	<div class="<?php echo rseventsproHelper::layout('event-details-container'); ?>">
+		<div itemprop="name" class="<?php echo rseventsproHelper::layout('event-title'); ?>">
+			<a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id)); ?>" class="rs_event_link<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>"><?php echo $event->name; ?></a>
+			<?php if (!$event->completed) echo Text::_('COM_RSEVENTSPRO_GLOBAL_INCOMPLETE_EVENT'); ?>
+			<?php if (!$event->published) echo Text::_('COM_RSEVENTSPRO_GLOBAL_UNPUBLISHED_EVENT'); ?>
+			<?php if ($event->published == 3) echo '<small class="text-error">('.Text::_('COM_RSEVENTSPRO_EVENT_CANCELED_TEXT').')</small>'; ?>
+		</div>
 
-        <div class="<?php echo rseventsproHelper::layout('event-details-container'); ?>">
+		<?php if (!$_is_evenements) : // — DATE : affiché normalement pour examens — ?>
+		<div class="<?php echo rseventsproHelper::layout('event-date'); ?>">
+			<?php if ($event->allday) { ?>
+			<?php if (!empty($event->options['start_date_list'])) { ?>
+			<span class="rsepro-event-on-block"><?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_ON'); ?> <b><?php echo rseventsproHelper::showdate($event->start,$this->config->global_date,true); ?></b></span>
+			<?php } ?>
+			<?php } else { ?>
+			<?php if (!empty($event->options['start_date_list']) || !empty($event->options['start_time_list'])) { ?>
+			<span class="rsepro-event-from-block"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_FROM'); ?> <b><?php echo rseventsproHelper::showdate($event->start,rseventsproHelper::showMask('list_start',$event->options),true); ?></b></span>
+			<?php } ?>
+			<?php if (!empty($event->options['end_date_list']) || !empty($event->options['end_time_list'])) { ?>
+			<span class="rsepro-event-until-block"><?php echo Text::_('COM_RSEVENTSPRO_EVENT_UNTIL'); ?> <b><?php echo rseventsproHelper::showdate($event->end,rseventsproHelper::showMask('list_end',$event->options),true); ?></b></span>
+			<?php } ?>
+			<?php } ?>
+		</div>
+		<?php else : // — DATE : texte simple pour Événements, sans lien — ?>
+		<div class="rsepro-event-date-plain" style="font-size:.88rem;color:#5a5a5a;margin:.25rem 0;">
+			<span>📅 </span><span><?php echo rseventsproHelper::showdate($event->start, 'd F Y · H\hi', true); ?></span>
+			<?php if ($event->end && $event->end !== $event->start) : ?>
+			<span> – <?php echo rseventsproHelper::showdate($event->end, 'H\hi', true); ?></span>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
 
-            <!-- Titre -->
-            <div itemprop="name" class="<?php echo rseventsproHelper::layout('event-title'); ?>">
-                <span class="rs_event_link<?php echo $full ? ' rs_event_full' : ''; ?><?php echo $ongoing ? ' rs_event_ongoing' : ''; ?>">
-                    <?php echo $event->name; ?>
-                </span>
-                <?php if ($regClosed) { ?>
-                <span class="rsepro-reg-closed"
-                      style="display:inline-block;margin-left:8px;padding:2px 8px;background:#da002e;color:#fff;border-radius:3px;font-size:0.78rem;font-weight:600;vertical-align:middle;">
-                    <?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_REGISTRATION_CLOSED'); ?>
-                </span>
-                <?php } ?>
-            </div>
+		<?php if (!empty($event->options['show_location_list']) || !empty($event->options['show_categories_list']) || !empty($event->options['show_tags_list'])) { ?>
+		<div class="<?php echo rseventsproHelper::layout('event-taxonomy'); ?>">
+			<?php if ($event->locationid && $event->lpublished && !empty($event->options['show_location_list'])) { ?>
+			<span class="rsepro-event-location-block" itemprop="location" itemscope itemtype="http://schema.org/Place">
+				<?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_AT'); ?>
+				<?php if (!$_is_evenements) : // lien pour examens ?>
+				<a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=location&id='.rseventsproHelper::sef($event->locationid,$event->location)); ?>"><span itemprop="name"><?php echo $event->location; ?></span></a>
+				<?php else : // texte simple pour Événements ?>
+				<span itemprop="name"><?php echo $event->location; ?></span>
+				<?php endif; ?>
+				<span itemprop="address" style="display:none;"><?php echo $event->address; ?></span>
+			</span>
+			<?php } ?>
+			<?php if (!empty($event->options['show_categories_list'])) { ?>
+			<span class="rsepro-event-categories-block"><?php echo $categories; ?></span>
+			<?php } ?>
+			<?php if (!empty($event->options['show_tags_list'])) { ?>
+			<span class="rsepro-event-tags-block"><?php echo $tags; ?></span>
+			<?php } ?>
+		</div>
+		<?php } ?>
 
-            <!-- Date -->
-            <div class="<?php echo rseventsproHelper::layout('event-date'); ?>">
-                <?php if ($event->allday) { ?>
-                    <?php if (!empty($event->options['start_date_list'])) { ?>
-                    <span class="rsepro-event-on-block">
-                        <?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_ON'); ?>
-                        <b><?php echo rseventsproHelper::showdate($event->start, $this->config->global_date, true); ?></b>
-                    </span>
-                    <?php } ?>
-                <?php } else { ?>
-                    <?php if (!empty($event->options['start_date_list']) || !empty($event->options['start_time_list'])) { ?>
-                    <span class="rsepro-event-on-block">
-                        <?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_ON'); ?>
-                        <b><?php echo rseventsproHelper::showdate($event->start, rseventsproHelper::showMask('list_start', $event->options), true); ?></b>
-                    </span>
-                    <?php } ?>
-                <?php } ?>
-            </div>
+		<?php if (!empty($event->small_description)) { ?>
+		<div class="<?php echo rseventsproHelper::layout('event-description'); ?>">
+			<?php echo $event->small_description; ?>
+		</div>
+		<?php } ?>
 
-            <!-- Description courte -->
-            <?php if (!empty($event->small_description)) { ?>
-            <div class="<?php echo rseventsproHelper::layout('event-description'); ?>">
-                <?php echo $event->small_description; ?>
-            </div>
-            <?php } ?>
+		<?php // Tarif : masqué pour catégorie Événements ?>
+		<?php if (!$_is_evenements && $this->params->get('repeatcounter',1) && $repeats) { ?>
+		<div class="<?php echo rseventsproHelper::layout('event-repeats'); ?>">
+			(<a href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=default&parent='.rseventsproHelper::sef($event->id,$event->name)); ?>"><?php echo Text::sprintf('COM_RSEVENTSPRO_GLOBAL_REPEATS',$repeats); ?></a>)
+		</div>
+		<?php } ?>
+	</div>
 
-        </div><!-- /event-details -->
-
-    <?php if ($regClosed): ?>
-    </div><!-- /afk-card-closed -->
-    <?php else: ?>
-    </a><!-- /afk-card-link -->
-    <?php endif; ?>
-
-    <meta content="<?php echo rseventsproHelper::showdate($event->start, 'Y-m-d H:i:s'); ?>" itemprop="startDate" />
-
+	<meta content="<?php echo rseventsproHelper::showdate($event->start,'Y-m-d H:i:s'); ?>" itemprop="startDate" />
+	<?php if (!$event->allday) { ?><meta content="<?php echo rseventsproHelper::showdate($event->end,'Y-m-d H:i:s'); ?>" itemprop="endDate" /><?php } ?>
 </li>
 <?php } ?>
 <?php } ?>
