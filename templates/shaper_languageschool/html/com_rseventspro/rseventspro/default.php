@@ -151,6 +151,11 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
     <?php } ?>
     <?php } ?>
 
+    <?php
+    // AFK: détecter page Événements (cat 54 uniquement) — pas de tarif, pas de liens loc/date
+    $_afk_cats = (array) $this->params->get('categories', []);
+    $_afk_is_evenements = (count($_afk_cats) === 1 && in_array('54', array_map('strval', $_afk_cats)));
+    ?>
     <?php if (!empty($this->events)) { ?>
     <ul class="<?php echo rseventsproHelper::layout('container'); ?>" id="rs_events_container">
         <?php $eventIds = rseventsproHelper::getEventIds($this->events, 'id'); ?>
@@ -215,8 +220,10 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
 
         <li class="<?php echo rseventsproHelper::layout('item-container'); ?> afk-event-card<?php echo $incomplete.$featured.$canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
 
-            <!-- Badge tarif -->
+            <!-- Badge tarif (masqué pour cat Événements) -->
+            <?php if (!$_afk_is_evenements) : ?>
             <span class="afk-tarif-badge"><?php echo htmlspecialchars($_afkTarif, ENT_QUOTES, 'UTF-8'); ?></span>
+            <?php endif; ?>
 
             <!-- Lien overlay : toute la card pointe vers le formulaire -->
             <a href="<?php echo htmlspecialchars($_afkFormUrl, ENT_QUOTES, 'UTF-8'); ?>" class="afk-card-overlay-link" aria-label="<?php echo htmlspecialchars($event->name, ENT_QUOTES, 'UTF-8'); ?>"></a>
@@ -308,7 +315,7 @@ if (strpos($_tag, 'zh') === 0) {
                 <?php if (!empty($event->options['show_location_list']) || !empty($event->options['show_categories_list']) || !empty($event->options['show_tags_list'])) { ?>
                 <div class="<?php echo rseventsproHelper::layout('event-taxonomy'); ?>">
                     <?php if ($event->locationid && $event->lpublished && !empty($event->options['show_location_list'])) { ?>
-                    <span class="rsepro-event-location-block" itemprop="location" itemscope itemtype="http://schema.org/Place"><?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_AT'); ?> <a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=location&id='.rseventsproHelper::sef($event->locationid,$event->location)); ?>"><span itemprop="name"><?php echo $event->location; ?></span></a>
+                    <span class="rsepro-event-location-block" itemprop="location" itemscope itemtype="http://schema.org/Place"><?php echo Text::_('COM_RSEVENTSPRO_GLOBAL_AT'); ?> <?php if (!$_afk_is_evenements) : ?><a itemprop="url" href="<?php echo rseventsproHelper::route('index.php?option=com_rseventspro&layout=location&id='.rseventsproHelper::sef($event->locationid,$event->location)); ?>"><span itemprop="name"><?php echo $event->location; ?></span></a><?php else : ?><span itemprop="name"><?php echo $event->location; ?></span><?php endif; ?>
                     <span itemprop="address" style="display:none;"><?php echo $event->address; ?></span>
                     </span>
                     <?php } ?>
