@@ -218,14 +218,59 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
             <li class="rsepro-my-grouped <?php echo rseventsproHelper::layout('event-grouped-by'); ?>"><span><?php echo $monthYear; ?></span></li>
         <?php } ?>
 
+        <?php if ($_afk_is_evenements) :
+        // ══════════════════════════════════════════════════════════
+        // CARTE ÉVÉNEMENT (cat 54) — image + date plain + lieu plain
+        // ══════════════════════════════════════════════════════════
+        $_evt_img = !empty($event->icon)
+            ? Uri::root(true) . '/components/com_rseventspro/assets/images/events/' . htmlspecialchars($event->icon)
+            : null;
+        $_evt_ts  = strtotime($event->start);
+        $_evt_tse = $event->end ? strtotime($event->end) : null;
+        $_evt_lang = Factory::getLanguage()->getTag();
+        $_months_fr = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+        $_evt_date_str = intval(date('j',$_evt_ts)) . ' ' . $_months_fr[intval(date('n',$_evt_ts))] . ' ' . date('Y',$_evt_ts)
+            . ' · ' . date('G\\hi', $_evt_ts)
+            . ($_evt_tse ? '–' . date('G\\hi', $_evt_tse) : '');
+        if (strpos($_evt_lang,'en') !== false) {
+            $en_months = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+            $_evt_date_str = $en_months[intval(date('n',$_evt_ts))] . ' ' . date('j, Y',$_evt_ts)
+                . ', ' . date('g:ia',$_evt_ts) . ($_evt_tse ? '–'.date('g:ia',$_evt_tse) : '');
+        } elseif (strpos($_evt_lang,'zh') !== false) {
+            $_evt_date_str = date('Y',$_evt_ts).'年'.intval(date('n',$_evt_ts)).'月'.intval(date('j',$_evt_ts)).'日 '
+                . date('G:i',$_evt_ts) . ($_evt_tse ? '–'.date('G:i',$_evt_tse) : '');
+        }
+        $_evt_loc = htmlspecialchars(trim(preg_replace('/\s+/',' ', $event->location ?? '')));
+        $_evt_desc = strip_tags($event->small_description ?? '');
+        $_evt_lbl = strpos($_evt_lang,'zh')!==false ? '了解更多' : (strpos($_evt_lang,'en')!==false ? 'Learn more' : 'En savoir plus');
+        $_evt_url = rseventsproHelper::route('index.php?option=com_rseventspro&layout=show&id='.rseventsproHelper::sef($event->id,$event->name),false,rseventsproHelper::itemid($event->id));
+        ?>
+        <li class="afk-evt-page-card<?php echo $canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
+            <?php if ($_evt_img) : ?>
+            <a href="<?php echo $_evt_url; ?>" class="afk-evt-page-card__imgwrap">
+                <img class="afk-evt-page-card__img" src="<?php echo $_evt_img; ?>" alt="<?php echo htmlspecialchars($event->name); ?>" loading="lazy" />
+            </a>
+            <?php endif; ?>
+            <div class="afk-evt-page-card__body">
+                <h3 class="afk-evt-page-card__title"><a href="<?php echo $_evt_url; ?>"><?php echo htmlspecialchars($event->name); ?></a></h3>
+                <p class="afk-evt-page-card__date"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><?php echo $_evt_date_str; ?></p>
+                <?php if ($_evt_loc) : ?><p class="afk-evt-page-card__loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><?php echo $_evt_loc; ?></p><?php endif; ?>
+                <?php if ($_evt_desc) : ?><p class="afk-evt-page-card__desc"><?php echo htmlspecialchars($_evt_desc); ?></p><?php endif; ?>
+                <a class="afk-evt-page-card__btn" href="<?php echo $_evt_url; ?>"><?php echo $_evt_lbl; ?></a>
+            </div>
+            <meta content="<?php echo rseventsproHelper::showdate($event->start,'Y-m-d H:i:s'); ?>" itemprop="startDate" />
+        </li>
+        <?php else :
+        // ══════════════════════════════════════════════════════════
+        // CARTE EXAMEN (comportement existant)
+        // ══════════════════════════════════════════════════════════
+        ?>
         <li class="<?php echo rseventsproHelper::layout('item-container'); ?> afk-event-card<?php echo $incomplete.$featured.$canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
 
-            <!-- Badge tarif (masqué pour cat Événements) -->
-            <?php if (!$_afk_is_evenements) : ?>
+            <!-- Badge tarif -->
             <span class="afk-tarif-badge"><?php echo htmlspecialchars($_afkTarif, ENT_QUOTES, 'UTF-8'); ?></span>
-            <?php endif; ?>
 
-            <!-- Lien overlay : toute la card pointe vers le formulaire -->
+            <!-- Lien overlay -->
             <a href="<?php echo htmlspecialchars($_afkFormUrl, ENT_QUOTES, 'UTF-8'); ?>" class="afk-card-overlay-link" aria-label="<?php echo htmlspecialchars($event->name, ENT_QUOTES, 'UTF-8'); ?>"></a>
 
             <?php if ($canEdit || $canDelete) { ?>
@@ -346,8 +391,31 @@ if (strpos($_tag, 'zh') === 0) {
             <meta content="<?php echo rseventsproHelper::showdate($event->start,'Y-m-d H:i:s'); ?>" itemprop="startDate" />
             <?php if (!$event->allday) { ?><meta content="<?php echo rseventsproHelper::showdate($event->end,'Y-m-d H:i:s'); ?>" itemprop="endDate" /><?php } ?>
         </li>
+        <?php endif; // fin if/else cat54 vs examens ?>
         <?php } ?>
     </ul>
+
+<?php if ($_afk_is_evenements) : ?>
+<style>
+/* — Grille cartes Événements page actualités — */
+#rs_events_container { display:flex !important; flex-wrap:wrap; gap:24px; padding:0; list-style:none; margin:0; }
+.afk-evt-page-card { flex:1 1 calc(33.333% - 24px); min-width:260px; background:#fff; border:1.5px solid rgba(192,57,90,0.3); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow .2s; }
+.afk-evt-page-card:hover { box-shadow:0 4px 20px rgba(192,57,90,0.15); }
+.afk-evt-page-card__imgwrap { display:block; }
+.afk-evt-page-card__img { width:100%; height:200px; object-fit:cover; display:block; }
+.afk-evt-page-card__body { padding:16px 18px; flex:1; display:flex; flex-direction:column; gap:8px; }
+.afk-evt-page-card__title { font-size:1.05rem; font-weight:700; color:#1a171b; line-height:1.35; margin:0; }
+.afk-evt-page-card__title a { color:inherit; text-decoration:none; }
+.afk-evt-page-card__title a:hover { color:rgba(192,57,90,0.92); }
+.afk-evt-page-card__date { font-size:.84rem; color:#444; margin:0; }
+.afk-evt-page-card__loc { font-size:.84rem; color:#5a5a5a; margin:0; }
+.afk-evt-page-card__desc { font-size:.83rem; color:#555; line-height:1.5; margin:4px 0 0; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.afk-evt-page-card__btn { display:inline-block; margin-top:auto; padding:7px 16px; background:rgba(192,57,90,0.92); color:#fff !important; border-radius:4px; font-size:.83rem; font-weight:600; text-decoration:none; transition:background .2s; align-self:flex-start; }
+.afk-evt-page-card__btn:hover { background:rgba(160,40,70,1); }
+@media(max-width:767px){ .afk-evt-page-card { flex:1 1 100%; } }
+@media(min-width:768px) and (max-width:991px){ .afk-evt-page-card { flex:1 1 calc(50% - 24px); } }
+</style>
+<?php endif; ?>
 
     <?php rseventsproHelper::clearMonthYear('events'.$this->fid, @$lastMY); ?>
 
