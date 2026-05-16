@@ -1438,5 +1438,6 @@ img.filtered-logo {
 
 /* Module 283 — section homepage : padding-bottom pour éviter débordement */
 #section-id-45e37eda-23f3-4410-8b19-0829a003133d {
-  padding-bottom: 50px !important;
+  padding-bottom: 80px !important;
+  overflow: hidden;
 }

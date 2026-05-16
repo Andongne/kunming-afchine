@@ -24,16 +24,20 @@ function afk_cards_fmt($start, $end, $lang) {
     $dt_s = new DateTime($start, $utc); $dt_s->setTimezone($tz);
     $dt_e = $end ? (new DateTime($end, $utc))->setTimezone($tz) : null;
     if (strpos($lang,'zh') !== false) {
-        return $dt_s->format('Y').'年'.(int)$dt_s->format('n').'月'.(int)$dt_s->format('j').'日 '
-             . $dt_s->format('G:i').($dt_e ? '–'.$dt_e->format('G:i') : '');
+        $d = $dt_s->format('Y').'年'.(int)$dt_s->format('n').'月'.(int)$dt_s->format('j').'日';
+        $h = $dt_s->format('G:i').($dt_e ? '–'.$dt_e->format('G:i') : '');
+        return $d . '<br><span style="opacity:.8">' . $h . '</span>';
     }
     if (strpos($lang,'en') !== false) {
         $m = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
-        return $m[(int)$dt_s->format('n')].' '.$dt_s->format('j, Y').', '.$dt_s->format('g:ia').($dt_e ? '–'.$dt_e->format('g:ia') : '');
+        $d = $m[(int)$dt_s->format('n')].' '.$dt_s->format('j, Y');
+        $h = $dt_s->format('g:ia').($dt_e ? '–'.$dt_e->format('g:ia') : '');
+        return $d . '<br><span style="opacity:.8">' . $h . '</span>';
     }
     $m = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-    return (int)$dt_s->format('j').' '.$m[(int)$dt_s->format('n')].' '.$dt_s->format('Y')
-         .' · '.$dt_s->format('G\\hi').($dt_e ? '–'.$dt_e->format('G\\hi') : '');
+    $d = (int)$dt_s->format('j').' '.$m[(int)$dt_s->format('n')].' '.$dt_s->format('Y');
+    $h = $dt_s->format('G\\hi').($dt_e ? '–'.$dt_e->format('G\\hi') : '');
+    return $d . '<br><span style="opacity:.8">' . $h . '</span>';
 }
 
 $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
@@ -59,9 +63,10 @@ if (strpos($_lang,'zh') !== false) {
 .afk-upcoming-item__thumb-ph { width:90px; height:100%; background:linear-gradient(135deg,#f5e8ec,#e8d0d7); display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
 .afk-upcoming-item__body { flex:1; padding:12px 14px; display:flex; flex-direction:column; gap:4px; min-width:0; }
 .afk-upcoming-item__title { font-size:.95rem; font-weight:700; color:#1a171b; line-height:1.3; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.afk-upcoming-item__meta { font-size:.78rem; color:#5a5a5a; display:flex; flex-direction:column; gap:4px; margin:4px 0 0; }
-.afk-upcoming-item__meta-row { display:flex; align-items:flex-start; gap:5px; }
-.afk-upcoming-item__meta-row svg { flex-shrink:0; margin-top:1px; }
+.afk-upcoming-item__meta { font-size:.75rem; color:#5a5a5a; display:flex; flex-direction:column; gap:3px; margin:4px 0 0; }
+.afk-upcoming-item__meta-row { display:flex; align-items:flex-start; gap:4px; line-height:1.35; }
+.afk-upcoming-item__meta-row svg { flex-shrink:0; margin-top:2px; }
+.afk-upcoming-item__date { word-break:break-word; }
 .afk-upcoming-item__cal { flex-shrink:0; width:52px; background:rgba(192,57,90,0.06); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 4px; gap:0; border-left:1px solid rgba(192,57,90,0.15); }
 .afk-upcoming-item__cal-month { font-size:.62rem; font-weight:700; text-transform:uppercase; color:rgba(192,57,90,0.9); letter-spacing:.04em; }
 .afk-upcoming-item__cal-day { font-size:1.5rem; font-weight:800; color:#1a171b; line-height:1; }
