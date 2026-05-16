@@ -256,7 +256,7 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
                 <p class="afk-evt-page-card__date"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><?php echo $_evt_date_str; ?></p>
                 <?php if ($_evt_loc) : ?><p class="afk-evt-page-card__loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><?php echo $_evt_loc; ?></p><?php endif; ?>
                 <?php if ($_evt_desc) : ?><p class="afk-evt-page-card__desc"><?php echo htmlspecialchars($_evt_desc); ?></p><?php endif; ?>
-                <a class="afk-evt-page-card__btn" href="<?php echo $_evt_url; ?>"><?php echo $_evt_lbl; ?></a>
+
             </div>
             <meta content="<?php echo rseventsproHelper::showdate($event->start,'Y-m-d H:i:s'); ?>" itemprop="startDate" />
         </li>
@@ -399,7 +399,7 @@ if (strpos($_tag, 'zh') === 0) {
 <style>
 /* — Grille cartes Événements page actualités — */
 #rs_events_container { display:flex !important; flex-wrap:wrap; gap:24px; padding:0; list-style:none; margin:0; }
-.afk-evt-page-card { flex:1 1 calc(33.333% - 24px); min-width:260px; background:#fff; border:1.5px solid rgba(192,57,90,0.3); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow .2s; }
+.afk-evt-page-card { flex:1 1 calc(50% - 24px); min-width:260px; background:#fff; border:1.5px solid rgba(192,57,90,0.3); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow .2s; }
 .afk-evt-page-card:hover { box-shadow:0 4px 20px rgba(192,57,90,0.15); }
 .afk-evt-page-card__imgwrap { display:block; }
 .afk-evt-page-card__img { width:100%; height:200px; object-fit:cover; display:block; }
@@ -413,7 +413,7 @@ if (strpos($_tag, 'zh') === 0) {
 .afk-evt-page-card__btn { display:inline-block; margin-top:auto; padding:7px 16px; background:rgba(192,57,90,0.92); color:#fff !important; border-radius:4px; font-size:.83rem; font-weight:600; text-decoration:none; transition:background .2s; align-self:flex-start; }
 .afk-evt-page-card__btn:hover { background:rgba(160,40,70,1); }
 @media(max-width:767px){ .afk-evt-page-card { flex:1 1 100%; } }
-@media(min-width:768px) and (max-width:991px){ .afk-evt-page-card { flex:1 1 calc(50% - 24px); } }
+
 </style>
 <?php endif; ?>
 
