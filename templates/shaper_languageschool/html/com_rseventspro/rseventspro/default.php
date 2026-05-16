@@ -247,12 +247,12 @@ $_afkHasSidebar = !empty($_afkSidebarModules);
         ?>
         <li class="afk-evt-page-card<?php echo $canceled; ?>" id="rs_event<?php echo $event->id; ?>" itemscope itemtype="http://schema.org/Event">
             <?php if ($_evt_img) : ?>
-            <a href="<?php echo $_evt_url; ?>" class="afk-evt-page-card__imgwrap">
+            <div class="afk-evt-page-card__imgwrap">
                 <img class="afk-evt-page-card__img" src="<?php echo $_evt_img; ?>" alt="<?php echo htmlspecialchars($event->name); ?>" loading="lazy" />
-            </a>
+            </div>
             <?php endif; ?>
             <div class="afk-evt-page-card__body">
-                <h3 class="afk-evt-page-card__title"><a href="<?php echo $_evt_url; ?>"><?php echo htmlspecialchars($event->name); ?></a></h3>
+                <h3 class="afk-evt-page-card__title"><?php echo htmlspecialchars($event->name); ?></h3>
                 <p class="afk-evt-page-card__date"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><?php echo $_evt_date_str; ?></p>
                 <?php if ($_evt_loc) : ?><p class="afk-evt-page-card__loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><?php echo $_evt_loc; ?></p><?php endif; ?>
                 <?php if ($_evt_desc) : ?><p class="afk-evt-page-card__desc"><?php echo htmlspecialchars($_evt_desc); ?></p><?php endif; ?>
@@ -399,7 +399,7 @@ if (strpos($_tag, 'zh') === 0) {
 <style>
 /* — Grille cartes Événements page actualités — */
 #rs_events_container { display:flex !important; flex-wrap:wrap; gap:24px; padding:0; list-style:none; margin:0; }
-.afk-evt-page-card { flex:1 1 calc(50% - 24px); min-width:260px; background:#fff; border:1.5px solid rgba(192,57,90,0.3); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow .2s; }
+.afk-evt-page-card { flex:1 1 100%; min-width:260px; background:#fff; border:1.5px solid rgba(192,57,90,0.3); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow .2s; }
 .afk-evt-page-card:hover { box-shadow:0 4px 20px rgba(192,57,90,0.15); }
 .afk-evt-page-card__imgwrap { display:block; }
 .afk-evt-page-card__img { width:100%; height:200px; object-fit:cover; display:block; }
