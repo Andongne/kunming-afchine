@@ -19,8 +19,12 @@ foreach (($_db->loadObjectList() ?: []) as $_lr) {
 }
 
 function afk_cards_fmt($start, $end, $lang) {
-    $ts_s = strtotime($start);
-    $ts_e = $end ? strtotime($end) : null;
+    // Convertir en heure de Kunming (UTC+8)
+    $tz = new DateTimeZone('Asia/Shanghai');
+    $dt_s = new DateTime($start, new DateTimeZone('UTC')); $dt_s->setTimezone($tz);
+    $dt_e = $end ? (new DateTime($end, new DateTimeZone('UTC')))->setTimezone($tz) : null;
+    $ts_s = $dt_s->getTimestamp();
+    $ts_e = $dt_e ? $dt_e->getTimestamp() : null;
     if (strpos($lang,'zh') !== false) {
         return date('Y',$ts_s).'年'.intval(date('n',$ts_s)).'月'.intval(date('j',$ts_s)).'日 '
              . date('G:i',$ts_s).($ts_e ? '–'.date('G:i',$ts_e) : '');
@@ -35,13 +39,18 @@ function afk_cards_fmt($start, $end, $lang) {
 }
 
 $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
+
+// URL de la page Actualités selon la langue (menu 1036)
+$_pfx = strpos($_lang,'zh')!==false ? '/zh' : (strpos($_lang,'en')!==false ? '/en' : '');
+$_actu_url = $_pfx . '/evenements/actualites-evenements';
 ?>
 
 <?php if ($items) : ?>
 <style>
 .afk-upcoming-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
-.afk-upcoming-item { display:flex; align-items:stretch; gap:0; background:#fff; border:1.5px solid rgba(192,57,90,0.25); border-radius:7px; overflow:hidden; transition:box-shadow .2s; }
-.afk-upcoming-item:hover { box-shadow:0 3px 14px rgba(192,57,90,0.12); }
+.afk-upcoming-item { position:relative; display:flex; align-items:stretch; gap:0; background:#fff; border:1.5px solid rgba(192,57,90,0.25); border-radius:7px; overflow:hidden; transition:box-shadow .2s; }
+.afk-upcoming-item:hover { box-shadow:0 3px 14px rgba(192,57,90,0.12); cursor:pointer; }
+.afk-upcoming-item__link { position:absolute; inset:0; z-index:1; }
 .afk-upcoming-item__thumb { width:90px; flex-shrink:0; }
 .afk-upcoming-item__thumb img { width:100%; height:100%; object-fit:cover; display:block; }
 .afk-upcoming-item__thumb-ph { width:90px; height:100%; background:linear-gradient(135deg,#f5e8ec,#e8d0d7); display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
@@ -79,6 +88,7 @@ $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
         $cal_day = date('j',$ts);
 ?>
 <li class="afk-upcoming-item">
+    <a href="<?= $_actu_url ?>" class="afk-upcoming-item__link" aria-label="<?= htmlspecialchars($ev->name) ?>"></a>
     <?php if ($img_url) : ?>
     <div class="afk-upcoming-item__thumb"><img src="<?= $img_url ?>" alt="<?= htmlspecialchars($ev->name) ?>" loading="lazy" /></div>
     <?php else : ?>
