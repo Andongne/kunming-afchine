@@ -39,8 +39,13 @@ function afk_cards_fmt($start, $end, $lang) {
 $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
 
 // URL de la page Actualités selon la langue (menu 1036)
-$_pfx = strpos($_lang,'zh')!==false ? '/zh' : (strpos($_lang,'en')!==false ? '/en' : '');
-$_actu_url = $_pfx . '/evenements/actualites-evenements';
+if (strpos($_lang,'zh') !== false) {
+    $_actu_url = '/zh/wen-hua-huo-dong/huo-dong-zi-xun';
+} elseif (strpos($_lang,'en') !== false) {
+    $_actu_url = '/en/events/news-events';
+} else {
+    $_actu_url = '/evenements/actualites-evenements';
+}
 ?>
 
 <?php if ($items) : ?>
