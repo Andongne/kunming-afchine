@@ -10,17 +10,12 @@ use Joomla\CMS\Uri\Uri;
 
 $_lang = Factory::getLanguage()->getTag();
 
-// Cache des noms de lieux (évite les requêtes répétées)
-$_loc_cache = [];
-function afk_get_location_name($location_id) {
-    global $_loc_cache;
-    $id = intval($location_id);
-    if (!$id) return '';
-    if (isset($_loc_cache[$id])) return $_loc_cache[$id];
-    $db = Factory::getDbo();
-    $db->setQuery('SELECT name FROM #__rseventspro_locations WHERE id=' . $id . ' AND published=1');
-    $_loc_cache[$id] = (string) $db->loadResult();
-    return $_loc_cache[$id];
+// Charger tous les lieux RSEvents Pro en une seule requête
+$_db = Factory::getDbo();
+$_db->setQuery('SELECT id, name FROM #__rseventspro_locations WHERE published=1');
+$_loc_map = [];
+foreach (($_db->loadObjectList() ?: []) as $_lr) {
+    $_loc_map[(int)$_lr->id] = $_lr->name;
 }
 
 function afk_cards_fmt($start, $end, $lang) {
@@ -52,7 +47,7 @@ $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
 .afk-upcoming-item__thumb-ph { width:90px; height:100%; background:linear-gradient(135deg,#f5e8ec,#e8d0d7); display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
 .afk-upcoming-item__body { flex:1; padding:12px 14px; display:flex; flex-direction:column; gap:4px; min-width:0; }
 .afk-upcoming-item__title { font-size:.95rem; font-weight:700; color:#1a171b; line-height:1.3; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.afk-upcoming-item__meta { font-size:.78rem; color:#5a5a5a; display:flex; flex-direction:column; gap:2px; margin:0; }
+.afk-upcoming-item__meta { font-size:.78rem; color:#5a5a5a; display:flex; flex-direction:column; gap:4px; margin:4px 0 0; }
 .afk-upcoming-item__meta-row { display:flex; align-items:flex-start; gap:5px; }
 .afk-upcoming-item__meta-row svg { flex-shrink:0; margin-top:1px; }
 .afk-upcoming-item__cal { flex-shrink:0; width:52px; background:rgba(192,57,90,0.06); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 4px; gap:0; border-left:1px solid rgba(192,57,90,0.15); }
@@ -69,7 +64,7 @@ $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
 
         $img_url  = $ev->icon ? $base_img . htmlspecialchars($ev->icon) : null;
         $date_str = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
-        $loc      = htmlspecialchars(trim(afk_get_location_name($ev->location)));
+        $loc      = htmlspecialchars(trim($_loc_map[intval($ev->location)] ?? ''));
         $ts       = strtotime($ev->start);
 
         // Icône calendrier : mois + jour
