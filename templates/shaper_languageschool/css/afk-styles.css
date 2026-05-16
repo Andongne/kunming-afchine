@@ -1439,5 +1439,14 @@ img.filtered-logo {
 /* Module 283 — section homepage : padding-bottom pour éviter débordement */
 #section-id-45e37eda-23f3-4410-8b19-0829a003133d {
   padding-bottom: 80px !important;
-  overflow: hidden;
+  height: auto !important;
+  min-height: 0 !important;
+}
+/* Colonne upcoming events : pas de débordement */
+#column-wrap-id-affe6879-bb8c-4bac-a08b-d3b512522792 {
+  overflow: visible !important;
+}
+/* S'assure que la row SPB s'étire sur la hauteur du contenu */
+#section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-row {
+  align-items: stretch;
 }
