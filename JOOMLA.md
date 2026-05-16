@@ -7,7 +7,7 @@ read_when:
 # JOOMLA.md — Contexte projet kunming-afchine.org
 
 ## Stack
-- **Joomla** : 4.x (production) / PHP 8.1
+- **Joomla** : 5.4 (production) / PHP 8.1
 - **Template** : Helix Ultimate — `shaper_languageschool` (style_id=10)
 - **Page builder** : SP Page Builder (table `bwhwo_sppagebuilder`)
 - **DB prefix** : `bwhwo_`

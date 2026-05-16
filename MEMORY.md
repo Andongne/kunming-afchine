@@ -18,7 +18,7 @@
 ## Projet principal : kunming-afchine.org
 
 ### Stack
-- Joomla 4.x, PHP 8.1
+- Joomla 5.4, PHP 8.1
 - Template : Helix Ultimate `shaper_languageschool` (style_id=10)
 - Page builder : SP Page Builder (table `bwhwo_sppagebuilder`, homepage id=173)
 - DB prefix : `bwhwo_`
