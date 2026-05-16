@@ -19,23 +19,21 @@ foreach (($_db->loadObjectList() ?: []) as $_lr) {
 }
 
 function afk_cards_fmt($start, $end, $lang) {
-    // Convertir en heure de Kunming (UTC+8)
-    $tz = new DateTimeZone('Asia/Shanghai');
-    $dt_s = new DateTime($start, new DateTimeZone('UTC')); $dt_s->setTimezone($tz);
-    $dt_e = $end ? (new DateTime($end, new DateTimeZone('UTC')))->setTimezone($tz) : null;
-    $ts_s = $dt_s->getTimestamp();
-    $ts_e = $dt_e ? $dt_e->getTimestamp() : null;
+    $tz  = new DateTimeZone('Asia/Shanghai');
+    $utc = new DateTimeZone('UTC');
+    $dt_s = new DateTime($start, $utc); $dt_s->setTimezone($tz);
+    $dt_e = $end ? (new DateTime($end, $utc))->setTimezone($tz) : null;
     if (strpos($lang,'zh') !== false) {
-        return date('Y',$ts_s).'年'.intval(date('n',$ts_s)).'月'.intval(date('j',$ts_s)).'日 '
-             . date('G:i',$ts_s).($ts_e ? '–'.date('G:i',$ts_e) : '');
+        return $dt_s->format('Y').'年'.(int)$dt_s->format('n').'月'.(int)$dt_s->format('j').'日 '
+             . $dt_s->format('G:i').($dt_e ? '–'.$dt_e->format('G:i') : '');
     }
     if (strpos($lang,'en') !== false) {
         $m = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
-        return $m[intval(date('n',$ts_s))].' '.date('j, Y',$ts_s).', '.date('g:ia',$ts_s).($ts_e ? '–'.date('g:ia',$ts_e) : '');
+        return $m[(int)$dt_s->format('n')].' '.$dt_s->format('j, Y').', '.$dt_s->format('g:ia').($dt_e ? '–'.$dt_e->format('g:ia') : '');
     }
     $m = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-    return intval(date('j',$ts_s)).' '.$m[intval(date('n',$ts_s))].' '.date('Y',$ts_s)
-         .' · '.date('G\hi',$ts_s).($ts_e ? '–'.date('G\hi',$ts_e) : '');
+    return (int)$dt_s->format('j').' '.$m[(int)$dt_s->format('n')].' '.$dt_s->format('Y')
+         .' · '.$dt_s->format('G\\hi').($dt_e ? '–'.$dt_e->format('G\\hi') : '');
 }
 
 $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
@@ -74,18 +72,18 @@ $_actu_url = $_pfx . '/evenements/actualites-evenements';
         $img_url  = $ev->icon ? $base_img . htmlspecialchars($ev->icon) : null;
         $date_str = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
         $loc      = htmlspecialchars(trim($_loc_map[intval($ev->location)] ?? ''));
-        $ts       = strtotime($ev->start);
-
-        // Icône calendrier : mois + jour
+        // Icône calendrier en heure Kunming
+        $_tz_km = new DateTimeZone('Asia/Shanghai');
+        $_dt_km = new DateTime($ev->start, new DateTimeZone('UTC')); $_dt_km->setTimezone($_tz_km);
         if (strpos($_lang,'zh') !== false) {
-            $cal_month = intval(date('n',$ts)).'月';
+            $cal_month = (int)$_dt_km->format('n').'月';
         } elseif (strpos($_lang,'en') !== false) {
-            $cal_month = strtoupper(date('M',$ts));
+            $cal_month = strtoupper($_dt_km->format('M'));
         } else {
             $cal_months = ['','JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
-            $cal_month = $cal_months[intval(date('n',$ts))];
+            $cal_month = $cal_months[(int)$_dt_km->format('n')];
         }
-        $cal_day = date('j',$ts);
+        $cal_day = (int)$_dt_km->format('j');
 ?>
 <li class="afk-upcoming-item">
     <a href="<?= $_actu_url ?>" class="afk-upcoming-item__link" aria-label="<?= htmlspecialchars($ev->name) ?>"></a>
