@@ -303,7 +303,7 @@
     border: 1px solid rgba(218,0,46,0.22) !important;
     border-radius: 12px !important;
     background: #ffffff !important;
-    padding: 10px 14px 12px !important;
+    padding: 10px 22px 12px !important;
     box-shadow: 0 1px 8px rgba(218,0,46,0.06) !important;
   }
 
@@ -359,7 +359,7 @@
   }
 
   #rsepro-upcoming-module ul.rsepro_upcoming li a {
-    font-size: 0.63rem !important;
+    font-size: 0.42rem !important;
     font-weight: 600 !important;
     color: #1a1a1a !important;
     text-decoration: none !important;
@@ -577,4 +577,15 @@
 
 @media (max-width: 991.98px) {
     .afk-sidebar-card { padding: 30px 25px !important; }
+}
+/* === Petits écrans (≤420px, incl. iPhone 15 393px) : module examens compact === */
+@media (max-width: 420px) {
+  #rsepro-upcoming-module ul.rsepro_upcoming li a {
+    font-size: 0.40rem !important;
+  }
+  #rsepro-upcoming-module .reg-closed-badge {
+    font-size: 0.40rem !important;
+    max-width: 62px !important;
+    padding: 1px 4px !important;
+  }
 }

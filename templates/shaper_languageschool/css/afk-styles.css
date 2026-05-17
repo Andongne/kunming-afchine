@@ -433,10 +433,19 @@ img.logo-image {
         align-items: center !important;
         justify-content: space-between !important;
     }
-    #rsepro-upcoming-module ul.rsepro_upcoming li a {
+    #rsepro-upcoming-module {
+        -webkit-text-size-adjust: none !important;
+        text-size-adjust: none !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li a,
+    #rsepro-upcoming-module ul.rsepro_upcoming li a:link,
+    #rsepro-upcoming-module ul.rsepro_upcoming li a:visited,
+    #sppb-addon-506b5e23-3c5b-4534-a628-7cb1e5dd009c #rsepro-upcoming-module ul.rsepro_upcoming li a {
         flex: 1 !important;
         text-align: left !important;
         padding-left: 10px !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
     }
     #rsepro-upcoming-module .reg-closed-badge {
         display: inline-flex !important;

@@ -1,6 +1,6 @@
 <?php
 /**
-* @package RSEvents!Pro — Template override AF Kunming
+* @package RSEvents!Pro — Template override AF Kunming — v20260517
 * Suppression de la date redondante entre parenthèses
 * Lien événement → formulaire pré-rempli (type examen + date session)
 */
@@ -115,9 +115,13 @@ if (!function_exists('afk_upcoming_localize_date')) {
 
 		// Nom traduit
 		$_event_name = afk_upcoming_translate($event->id, 'name', $event->name, $_lang);
+		// Localisation date (EN/ZH)
+		$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
 		// Tiret classique : —/– → -
 		$_event_name = str_replace(['—', '–', '—', '–'], '-', $_event_name);
-		// Conversion date texte → DD/MM/YY (toutes langues)
+		// Version desktop : nom complet
+		$_event_name_desktop = $_event_name;
+		// Version mobile : date → DD/MM/YY (toutes langues)
 		$_event_name = preg_replace_callback(
 		    '/(\d{1,2})\s+(' .
 		    'janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre|' .
@@ -142,6 +146,7 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		    },
 		    $_event_name
 		);
+		$_event_name_mobile = $_event_name;
 
 		// URL : formulaire pré-rempli si type d'examen reconnu, sinon lien RSEvents standard
 		$_exam_type = afk_exam_type_from_name(afk_event_name_fr($event->id)); // toujours depuis nom FR DB
@@ -158,7 +163,10 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		$_badge_closed = strpos($_lang,'zh')!==false ? '报名已截止' : (strpos($_lang,'en')!==false ? 'Registration closed' : 'Inscriptions fermées');
 		?>
 		<li class="<?php echo RSEventsproAdapterGrid::column(12 / $columns); ?><?php echo $_regClosed ? ' reg-closed-item' : ''; ?>">
-			<a <?php echo $open; ?> href="<?php echo htmlspecialchars($_href); ?>"><?php echo $_event_name; ?></a><?php if ($_regClosed): ?><span class="reg-closed-badge"><?php echo $_badge_closed; ?></span><?php endif; ?> <?php if ($event->published == 3) { ?><small class="text-error">(<?php echo Text::_('MOD_RSEVENTSPRO_UPCOMING_CANCELED'); ?>)</small><?php } ?>
+			<a <?php echo $open; ?> href="<?php echo htmlspecialchars($_href); ?>">
+					<span class="d-none d-lg-inline"><?php echo $_event_name_desktop; ?></span>
+					<span class="d-lg-none"><?php echo $_event_name_mobile; ?></span>
+				</a><?php if ($_regClosed): ?><span class="reg-closed-badge"><?php echo $_badge_closed; ?></span><?php endif; ?> <?php if ($event->published == 3) { ?><small class="text-error">(<?php echo Text::_('MOD_RSEVENTSPRO_UPCOMING_CANCELED'); ?>)</small><?php } ?>
 		</li>
 		<?php } ?>
 	</ul>
