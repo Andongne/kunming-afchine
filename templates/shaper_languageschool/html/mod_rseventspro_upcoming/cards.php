@@ -26,18 +26,16 @@ function afk_cards_fmt($start, $end, $lang) {
     if (strpos($lang,'zh') !== false) {
         $d = $dt_s->format('Y').'年'.(int)$dt_s->format('n').'月'.(int)$dt_s->format('j').'日';
         $h = $dt_s->format('G:i').($dt_e ? '–'.$dt_e->format('G:i') : '');
-        return $d . '<br><span style="opacity:.8">' . $h . '</span>';
-    }
-    if (strpos($lang,'en') !== false) {
+    } elseif (strpos($lang,'en') !== false) {
         $m = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
         $d = $m[(int)$dt_s->format('n')].' '.$dt_s->format('j, Y');
         $h = $dt_s->format('g:ia').($dt_e ? '–'.$dt_e->format('g:ia') : '');
-        return $d . '<br><span style="opacity:.8">' . $h . '</span>';
+    } else {
+        $m = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+        $d = (int)$dt_s->format('j').' '.$m[(int)$dt_s->format('n')].' '.$dt_s->format('Y');
+        $h = $dt_s->format('G\\hi').($dt_e ? '–'.$dt_e->format('G\\hi') : '');
     }
-    $m = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-    $d = (int)$dt_s->format('j').' '.$m[(int)$dt_s->format('n')].' '.$dt_s->format('Y');
-    $h = $dt_s->format('G\\hi').($dt_e ? '–'.$dt_e->format('G\\hi') : '');
-    return $d . '<br><span style="opacity:.8">' . $h . '</span>';
+    return ['date' => $d, 'time' => $h];
 }
 
 $base_img = Uri::root(true).'/components/com_rseventspro/assets/images/events/';
@@ -66,7 +64,9 @@ if (strpos($_lang,'zh') !== false) {
 .afk-upcoming-item__meta { font-size:.75rem; color:#5a5a5a; display:flex; flex-direction:column; gap:3px; margin:4px 0 0; }
 .afk-upcoming-item__meta-row { display:flex; align-items:flex-start; gap:4px; line-height:1.35; }
 .afk-upcoming-item__meta-row svg { flex-shrink:0; margin-top:2px; }
-.afk-upcoming-item__date { word-break:break-word; }
+.afk-upcoming-item__meta-datetime { display:flex; flex-direction:column; gap:2px; padding:0; align-items:flex-start !important; text-align:left !important; }
+.afk-dt-date { color:#5a5a5a; white-space:nowrap; text-align:left !important; display:block; }
+.afk-dt-time { color:rgba(192,57,90,0.85); font-weight:600; white-space:nowrap; text-align:left !important; display:block; }
 .afk-upcoming-item__cal { flex-shrink:0; width:52px; background:rgba(192,57,90,0.06); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 4px; gap:0; border-left:1px solid rgba(192,57,90,0.15); }
 .afk-upcoming-item__cal-month { font-size:.62rem; font-weight:700; text-transform:uppercase; color:rgba(192,57,90,0.9); letter-spacing:.04em; }
 .afk-upcoming-item__cal-day { font-size:1.5rem; font-weight:800; color:#1a171b; line-height:1; }
@@ -80,7 +80,9 @@ if (strpos($_lang,'zh') !== false) {
         $ev = $details['event'];
 
         $img_url  = $ev->icon ? $base_img . htmlspecialchars($ev->icon) : null;
-        $date_str = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
+        $_fmt     = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
+        $_date_str = $_fmt['date'];
+        $_time_str = $_fmt['time'];
         $loc      = htmlspecialchars(trim($_loc_map[intval($ev->location)] ?? ''));
         // Icône calendrier en heure Kunming
         $_tz_km = new DateTimeZone('Asia/Shanghai');
@@ -106,15 +108,12 @@ if (strpos($_lang,'zh') !== false) {
     <div class="afk-upcoming-item__body">
         <p class="afk-upcoming-item__title"><?= htmlspecialchars($ev->name) ?></p>
         <ul class="afk-upcoming-item__meta">
-            <li class="afk-upcoming-item__meta-row">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,90,0.8)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <?= $date_str ?>
+            <li class="afk-upcoming-item__meta-datetime">
+                <span class="afk-dt-date"><?= $_date_str ?></span>
+                <span class="afk-dt-time"><?= $_time_str ?></span>
             </li>
             <?php if ($loc) : ?>
-            <li class="afk-upcoming-item__meta-row">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,90,0.8)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <?= $loc ?>
-            </li>
+            <li class="afk-upcoming-item__meta-row" style="color:#5a5a5a;"><?= $loc ?></li>
             <?php endif; ?>
         </ul>
     </div>
