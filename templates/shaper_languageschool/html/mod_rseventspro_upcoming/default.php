@@ -113,13 +113,35 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		$_endReg   = $event->end_registration ?? '';
 		$_regClosed = (!empty($_endReg) && $_endReg !== '0000-00-00 00:00:00' && strtotime($_endReg) < time());
 
-		// Nom traduit + localisation date
+		// Nom traduit
 		$_event_name = afk_upcoming_translate($event->id, 'name', $event->name, $_lang);
-		$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
-		// Abréger l'année sur mobile : 2026 → 26
-		$_event_name = preg_replace('/\b(20)(\d{2})\b/', '$2', $_event_name);
-		// Tiret classique : — → -
-		$_event_name = str_replace(['—', '–'], '-', $_event_name);
+		// Tiret classique : —/– → -
+		$_event_name = str_replace(['—', '–', '—', '–'], '-', $_event_name);
+		// Conversion date texte → DD/MM/YY (toutes langues)
+		$_event_name = preg_replace_callback(
+		    '/(\d{1,2})\s+(' .
+		    'janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre|' .
+		    'january|february|march|april|may|june|july|august|september|october|november|december|' .
+		    '1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月' .
+		    ')\s+(\d{2,4})/iu',
+		    function($m) {
+		        $months = [
+		            'janvier'=>'01','février'=>'02','fevrier'=>'02','mars'=>'03','avril'=>'04',
+		            'mai'=>'05','juin'=>'06','juillet'=>'07','août'=>'08','aout'=>'08',
+		            'septembre'=>'09','octobre'=>'10','novembre'=>'11','décembre'=>'12','decembre'=>'12',
+		            'january'=>'01','february'=>'02','march'=>'03','april'=>'04',
+		            'may'=>'05','june'=>'06','july'=>'07','august'=>'08',
+		            'september'=>'09','october'=>'10','november'=>'11','december'=>'12',
+		            '1月'=>'01','2月'=>'02','3月'=>'03','4月'=>'04','5月'=>'05','6月'=>'06',
+		            '7月'=>'07','8月'=>'08','9月'=>'09','10月'=>'10','11月'=>'11','12月'=>'12',
+		        ];
+		        $day   = str_pad(trim($m[1]), 2, '0', STR_PAD_LEFT);
+		        $month = $months[mb_strtolower(trim($m[2]))] ?? '??';
+		        $year  = strlen($m[3]) === 4 ? substr($m[3], 2) : $m[3];
+		        return $day . '/' . $month . '/' . $year;
+		    },
+		    $_event_name
+		);
 
 		// URL : formulaire pré-rempli si type d'examen reconnu, sinon lien RSEvents standard
 		$_exam_type = afk_exam_type_from_name(afk_event_name_fr($event->id)); // toujours depuis nom FR DB
