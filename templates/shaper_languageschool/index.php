@@ -138,7 +138,7 @@ if ($custom_js = $this->params->get('custom_js'))
 
 <!doctype html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260515c">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/mobile_cards.css?v=20260517r">
   <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -567,7 +567,7 @@ if ($custom_js = $this->params->get('custom_js'))
 <script defer src="<?php echo $this->baseurl ?>/templates/shaper_languageschool/js/calendar-i18n.js?v=20260505q"></script>
   <link rel="stylesheet" href="/components/com_sppagebuilder/assets/css/font-awesome-6.min.css">
   <link rel="stylesheet" href="/components/com_sppagebuilder/assets/css/font-awesome-v4-shims.css">
-  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=20260514g">
+  <link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/shaper_languageschool/css/afk-styles.css?v=20260517q">
 <?php if (isset($isHome) && $isHome) : ?>
   <link rel="preload" as="image" href="<?php echo $this->baseurl ?>/images/2026/04/24/background_header_2.webp" fetchpriority="high">
 <?php endif; ?>

@@ -296,22 +296,41 @@
     text-align: center !important;
   }
 
-  /* === MODULE RSEVENT UPCOMING EVENTS === */
+  /* === MODULE RSEVENT UPCOMING EVENTS (module 246) === */
+
+  /* Colonne conteneur : carte rose arrondie */
   #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 {
     border: 1px solid rgba(218,0,46,0.22) !important;
     border-radius: 12px !important;
     background: #ffffff !important;
-    padding: 10px 16px 14px !important;
+    padding: 10px 14px 12px !important;
     box-shadow: 0 1px 8px rgba(218,0,46,0.06) !important;
   }
 
-  /* Titre : bleu nuit bold */
+  /* Supprimer les marges/padding SP Builder par défaut dans cette colonne */
+  #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 .sppb-column-addons {
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+  #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 .sppb-addon-wrapper {
+    margin-bottom: 0 !important;
+  }
+  #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 .sppb-addon {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 .clearfix {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Titre section : bleu nuit bold, centré, avec séparateur discret */
   #sppb-addon-149a2c58-166b-4568-b0c1-f1a0ee2f4dba .sppb-addon-title {
     font-size: 1rem !important;
     font-weight: 700 !important;
     color: #1a2744 !important;
     text-align: center !important;
-    margin: 0 0 10px 0 !important;
+    margin: 4px 0 36px !important;
     letter-spacing: 0 !important;
     border-bottom: none !important;
     padding-bottom: 0 !important;
@@ -325,38 +344,50 @@
   }
 
   #rsepro-upcoming-module ul.rsepro_upcoming li {
-    padding: 9px 0 !important;
+    padding: 7px 4px !important;
     margin: 0 !important;
     border-bottom: 1px solid rgba(218,0,46,0.10) !important;
-    text-align: center !important;
-    line-height: 1.4 !important;
+    line-height: 1.45 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
 
   #rsepro-upcoming-module ul.rsepro_upcoming li:last-child {
     border-bottom: none !important;
-    padding-bottom: 4px !important;
+    padding-bottom: 2px !important;
   }
 
   #rsepro-upcoming-module ul.rsepro_upcoming li a {
-    font-size: 0.95rem !important;
-    font-weight: 700 !important;
+    font-size: 0.67rem !important;
+    font-weight: 600 !important;
     color: #1a1a1a !important;
     text-decoration: none !important;
-    display: inline !important;
-    line-height: 1.4 !important;
+    display: block !important;
+    line-height: 1.3 !important;
+    flex: 1 !important;
+    text-align: left !important;
   }
 
+  /* Badge à gauche, date à droite */
   #rsepro-upcoming-module .reg-closed-badge {
-    display: inline-block !important;
-    margin-left: 6px !important;
-    vertical-align: middle !important;
-    font-size: 0.7rem !important;
-    padding: 2px 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    margin-left: 8px !important;
+    font-size: 0.62rem !important;
+    padding: 2px 5px !important;
+    white-space: normal !important;
+    max-width: 76px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
   }
 
-  /* Bouton : style par défaut SP Builder (ne pas surcharger) */
+  /* Bouton CTA : espace réduit au-dessus */
   #sppb-addon-83c93e81-0676-4d7e-bf40-0d51726f07b6 .sppb-button-wrapper {
-    margin-top: 12px !important;
+    margin-top: 8px !important;
+    margin-bottom: 2px !important;
   }
   /* ============================================================
      PAGES INTERNES : espacement uniforme des cards sur mobile

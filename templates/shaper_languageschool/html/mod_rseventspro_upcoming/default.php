@@ -102,7 +102,7 @@ if (!function_exists('afk_upcoming_localize_date')) {
 } ?>
 
 <?php if ($items) { ?>
-<style>#rsepro-upcoming-module ul.rsepro_upcoming{margin-bottom:10px!important}#rsepro-upcoming-module ul.rsepro_upcoming li a{font-size:1.05rem!important;line-height:1.6}#rsepro-upcoming-module .reg-closed-badge{display:inline-block;margin-left:6px;padding:1px 7px;background:#da002e;color:#fff;border-radius:3px;font-size:0.75rem;font-weight:600;vertical-align:middle;white-space:nowrap}#rsepro-upcoming-module .reg-closed-item{opacity:.55;pointer-events:none;cursor:default}</style>
+<style>#rsepro-upcoming-module ul.rsepro_upcoming{margin-bottom:10px!important}#rsepro-upcoming-module .reg-closed-badge{background:#da002e;color:#fff;border-radius:3px;font-weight:600}#rsepro-upcoming-module .reg-closed-item{opacity:.55;pointer-events:none;cursor:default}</style>
 <div id="rsepro-upcoming-module">
 	<?php foreach ($items as $block => $events) { ?>
 	<ul class="rsepro_upcoming<?php echo $suffix; ?> <?php echo RSEventsproAdapterGrid::row(); ?>">
@@ -116,6 +116,10 @@ if (!function_exists('afk_upcoming_localize_date')) {
 		// Nom traduit + localisation date
 		$_event_name = afk_upcoming_translate($event->id, 'name', $event->name, $_lang);
 		$_event_name = afk_upcoming_localize_date($_event_name, $_lang);
+		// Abréger l'année sur mobile : 2026 → 26
+		$_event_name = preg_replace('/\b(20)(\d{2})\b/', '$2', $_event_name);
+		// Tiret classique : — → -
+		$_event_name = str_replace(['—', '–'], '-', $_event_name);
 
 		// URL : formulaire pré-rempli si type d'examen reconnu, sinon lien RSEvents standard
 		$_exam_type = afk_exam_type_from_name(afk_event_name_fr($event->id)); // toujours depuis nom FR DB

@@ -427,21 +427,28 @@ img.logo-image {
 }
 
 @media (max-width: 767.98px) {
-    /* Centrage module upcoming events */
-    #rsepro-upcoming-module {
-        text-align: center !important;
-    }
-    #rsepro-upcoming-module ul.rsepro_upcoming {
-        justify-content: center !important;
-    }
+    /* Module upcoming events examens — badge gauche, date droite */
     #rsepro-upcoming-module ul.rsepro_upcoming li {
-        display: block;
-        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li a {
+        flex: 1 !important;
+        text-align: left !important;
+        padding-left: 10px !important;
     }
     #rsepro-upcoming-module .reg-closed-badge {
-        display: block !important;
-        margin: 4px auto 0 !important;
-        width: fit-content;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        margin-left: 8px !important;
+        margin-right: 10px !important;
+        white-space: normal !important;
+        max-width: 76px !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
     }
 }
 
