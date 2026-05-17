@@ -79,7 +79,15 @@ if (strpos($_lang,'zh') !== false) {
         if (empty($details['event'])) continue;
         $ev = $details['event'];
 
-        $img_url  = $ev->icon ? $base_img . htmlspecialchars($ev->icon) : null;
+        // Préférer .webp si disponible (même nom, extension remplacée)
+        $_icon_raw = $ev->icon ? htmlspecialchars($ev->icon) : null;
+        if ($_icon_raw) {
+            $_webp = preg_replace('/\.(png|jpe?g|gif)$/i', '.webp', $_icon_raw);
+            $_webp_path = JPATH_SITE . '/components/com_rseventspro/assets/images/events/' . $_webp;
+            $img_url = $base_img . (file_exists($_webp_path) ? $_webp : $_icon_raw);
+        } else {
+            $img_url = null;
+        }
         $_fmt     = afk_cards_fmt($ev->start, $ev->end ?? '', $_lang);
         $_date_str = $_fmt['date'];
         $_time_str = $_fmt['time'];
