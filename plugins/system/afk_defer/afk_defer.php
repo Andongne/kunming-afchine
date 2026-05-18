@@ -34,7 +34,7 @@ class PlgSystemAfk_defer extends CMSPlugin
 {
     /** Map menuId → liste ordonnée d'IDs de modules sidebar */
     private $afkSidebarModules = [
-        742 => [293, 294, 295, 288, 289, 290],
+        742 => [293, 294, 295, 296, 288, 289, 290],  // 296 = Formation en français (mod 112 dup)
     ];
 
     /** HTML pré-rendu de la sidebar, calculé dans onBeforeRender */
