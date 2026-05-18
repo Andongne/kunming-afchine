@@ -29,9 +29,11 @@ use Joomla\CMS\Cache\CacheControllerFactoryInterface;
 
 class PlgSystemAfk_defer extends CMSPlugin
 {
-    /** Map menuId → liste ordonnée d'IDs de modules sidebar */
+    /**
+     * Map menuId → liste ordonnée d'IDs de modules sidebar.
+     * TCF Canada (389) retiré du test — layout cassé, à corriger avant réactivation.
+     */
     private $afkSidebarModules = [
-        389 => [288, 289, 290, 291, 292],
         742 => [293, 294, 295, 288, 289, 290],
     ];
 
