@@ -833,14 +833,17 @@ html[lang^="zh"] .com-rseventspro .rsepro-calendar thead th:nth-child(8) .hidden
     }
 }
 
-/* ── Masquer la colonne sidebar SP Builder quand la sidebar native est active ── */
-/* Niveau A1 — colonne SP Builder #2 (column-id-2e122ab6) */
-.rse-with-sidebar #column-id-2e122ab6-7a1d-4fc1-87ca-78745b6a5ef1 {
-    display: none !important;
-}
-/* Supprimer aussi le gap col-md vide qui resterait */
+/* ── Niveau A1 : masquer colonne sidebar SP Builder + étirer contenu ───────── */
+/* Colonne sidebar SP Builder (col #2) */
+.rse-with-sidebar #column-id-2e122ab6-7a1d-4fc1-87ca-78745b6a5ef1,
 .rse-with-sidebar #column-wrap-id-2e122ab6-7a1d-4fc1-87ca-78745b6a5ef1 {
     display: none !important;
+}
+/* Colonne contenu (col #1) — étirer à 100% maintenant que la sidebar SP Builder est masquée */
+.rse-with-sidebar #column-wrap-id-bb8f2785-00b7-4130-8521-ccaee7ac2ffd {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
 }
 
 /* ── Sidebar native : titre avec lien (a dans afk-sidebar-title) ── */
