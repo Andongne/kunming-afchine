@@ -826,6 +826,26 @@ html[lang^="zh"] .com-rseventspro .rsepro-calendar thead th:nth-child(8) .hidden
 }
 .afk-sidebar-links li a:hover { opacity: 0.75 !important; background: none !important; }
 
+/* ── Masquer la colonne sidebar SP Builder quand la sidebar native est active ── */
+/* Niveau A1 — colonne SP Builder #2 (column-id-2e122ab6) */
+.rse-with-sidebar #column-id-2e122ab6-7a1d-4fc1-87ca-78745b6a5ef1 {
+    display: none !important;
+}
+/* Supprimer aussi le gap col-md vide qui resterait */
+.rse-with-sidebar #column-wrap-id-2e122ab6-7a1d-4fc1-87ca-78745b6a5ef1 {
+    display: none !important;
+}
+
+/* ── Sidebar native : titre avec lien (a dans afk-sidebar-title) ── */
+.afk-sidebar-title a {
+    color: #1a171b !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+}
+.afk-sidebar-title a:hover {
+    color: #da002e !important;
+}
+
 
 /* ── Sous-titre page calendrier ────────────────────────────────── */
 .com-rseventspro .rse-page-subtitle {
