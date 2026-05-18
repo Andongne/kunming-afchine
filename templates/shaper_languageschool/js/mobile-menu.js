@@ -59,14 +59,15 @@
     grid.style.cssText = 'display:flex;flex-wrap:wrap;padding:3px 10px;background:transparent;';
 
     // Insérer avant la première card et déplacer toutes les cards dedans
+    // Supporte section-id-* (UUID) ET admin_label IDs (section.sppb-section)
     var firstCol = cardCols[0];
-    var firstSection = firstCol.closest('[id^="section-id-"]');
+    var firstSection = firstCol.closest('[id^="section-id-"], section.sppb-section, .sppb-section');
     if (firstSection) firstSection.parentNode.insertBefore(grid, firstSection);
     else firstCol.parentNode.insertBefore(grid, firstCol);
 
     var sectionsToHide = new Set();
     cardCols.forEach(function (col) {
-      var sec = col.closest('[id^="section-id-"]');
+      var sec = col.closest('[id^="section-id-"], section.sppb-section, .sppb-section');
       if (sec) sectionsToHide.add(sec);
       grid.appendChild(col);
     });
