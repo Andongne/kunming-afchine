@@ -1532,3 +1532,13 @@ img.filtered-logo {
 .itemid-565 .article-list.articles-leading .article-body {
   flex: 1;
 }
+
+/* Blog 2x2 — 1 colonne en mobile */
+@media (max-width: 767px) {
+  .itemid-115 .article-list.articles-leading,
+  .itemid-712 .article-list.articles-leading,
+  .itemid-713 .article-list.articles-leading,
+  .itemid-565 .article-list.articles-leading {
+    grid-template-columns: 1fr;
+  }
+}
