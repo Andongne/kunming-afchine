@@ -1498,9 +1498,10 @@ img.filtered-logo {
 }
 
 /* ============================================================
-   Blog layout 2×2 — itemid-115, 713, 565
+   Blog layout 2×2 — itemid-115, 712, 713, 565
    ============================================================ */
 .itemid-115 .article-list.articles-leading,
+.itemid-712 .article-list.articles-leading,
 .itemid-713 .article-list.articles-leading,
 .itemid-565 .article-list.articles-leading {
   display: grid !important;
@@ -1508,6 +1509,7 @@ img.filtered-logo {
   gap: 1.5rem;
 }
 .itemid-115 .article-list.articles-leading .article,
+.itemid-712 .article-list.articles-leading .article,
 .itemid-713 .article-list.articles-leading .article,
 .itemid-565 .article-list.articles-leading .article {
   width: 100% !important;
@@ -1516,6 +1518,7 @@ img.filtered-logo {
   flex-direction: column;
 }
 .itemid-115 .article-list.articles-leading .article-intro-image img,
+.itemid-712 .article-list.articles-leading .article-intro-image img,
 .itemid-713 .article-list.articles-leading .article-intro-image img,
 .itemid-565 .article-list.articles-leading .article-intro-image img {
   width: 100%;
@@ -1524,6 +1527,7 @@ img.filtered-logo {
   display: block;
 }
 .itemid-115 .article-list.articles-leading .article-body,
+.itemid-712 .article-list.articles-leading .article-body,
 .itemid-713 .article-list.articles-leading .article-body,
 .itemid-565 .article-list.articles-leading .article-body {
   flex: 1;
