@@ -192,8 +192,14 @@ if ($custom_js = $this->params->get('custom_js'))
             $isHome = ($currentPath === '' || $currentPath === 'index.php');
         }
 
-        // Utiliser l'image OG définie dans SP Builder page 173 (drone photo 3840x2160)
-        $ogImage = $siteRoot . '/images/2025/07/07/dji_20250621193255_0052_d.jpeg';
+        // Image OG par page — carré 1200x1200 pour les pages clés, drone en fallback
+        $ogImageMap = [
+            'tcf-canada'         => '/images/og/tcf_canada_og.jpg',
+            'tcf-quebec'         => '/images/og/tcf_canada_og.jpg',
+            'tout-savoir-sur-le-tcf-canada' => '/images/og/tcf_canada_og.jpg',
+        ];
+        $ogImagePath = $ogImageMap[$currentPath] ?? '/images/2025/07/07/dji_20250621193255_0052_d.jpeg';
+        $ogImage = $siteRoot . $ogImagePath;
 
         // Forcer le titre de la page (court) — écrase le titre long hérité
         // On force toujours : si trop long, on le raccourcit
@@ -245,9 +251,10 @@ if ($custom_js = $this->params->get('custom_js'))
         $document->addCustomTag('<meta property="og:url" content="' . htmlspecialchars($canonicalUrl, ENT_QUOTES) . '" />');
         $document->addCustomTag('<meta property="og:title" content="' . htmlspecialchars($ogTitle, ENT_QUOTES) . '" />');
         $document->addCustomTag('<meta property="og:description" content="' . htmlspecialchars($ogDesc, ENT_QUOTES) . '" />');
+        $ogIsSquare = isset($ogImageMap[$currentPath]);
         $document->addCustomTag('<meta property="og:image" content="' . $ogImage . '" />');
         $document->addCustomTag('<meta property="og:image:width" content="1200" />');
-        $document->addCustomTag('<meta property="og:image:height" content="800" />');
+        $document->addCustomTag('<meta property="og:image:height" content="' . ($ogIsSquare ? '1200' : '800') . '" />');
         $document->addCustomTag('<meta property="og:type" content="' . ($isHome ? 'website' : 'article') . '" />');
         $langTag = $app->getLanguage()->getTag(); // ex: fr-FR ou zh-CN
         if (strpos($langTag, 'zh') === 0) {
