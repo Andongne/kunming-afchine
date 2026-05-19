@@ -1496,3 +1496,35 @@ img.filtered-logo {
 #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-row {
   align-items: stretch;
 }
+
+/* ============================================================
+   Blog layout 2×2 — itemid-115, 713, 565
+   ============================================================ */
+.itemid-115 .article-list.articles-leading,
+.itemid-713 .article-list.articles-leading,
+.itemid-565 .article-list.articles-leading {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.itemid-115 .article-list.articles-leading .article,
+.itemid-713 .article-list.articles-leading .article,
+.itemid-565 .article-list.articles-leading .article {
+  width: 100% !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.itemid-115 .article-list.articles-leading .article-intro-image img,
+.itemid-713 .article-list.articles-leading .article-intro-image img,
+.itemid-565 .article-list.articles-leading .article-intro-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.itemid-115 .article-list.articles-leading .article-body,
+.itemid-713 .article-list.articles-leading .article-body,
+.itemid-565 .article-list.articles-leading .article-body {
+  flex: 1;
+}
