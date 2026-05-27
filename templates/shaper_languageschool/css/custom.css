@@ -1,319 +1,913 @@
-/* ==========================================================================
-   TCF - Cartes interactives
-   ========================================================================== */
-.tcf-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  font-family: sans-serif;
-  font-size: 14px;
+html body #sp-header {
+  height: 140px !important;
+  overflow: visible !important;
+  border-bottom: 1px solid #eaeaea; /* Pour u00e9viter la ligne qui du00e9passe */
 }
 
-.tcf-card {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #da002e;
-  border-radius: 5px;
-  padding: 15px;
-  background-color: #fbe6ea;
-  min-height: 180px;
-  box-sizing: border-box;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.3s;
-}
-
-.tcf-card.alt {
-  background-color: #fff5f6;
-}
-
-.tcf-card:hover {
-  background-color: #f6d7de;
-}
-
-.tcf-card.alt:hover {
-  background-color: #f2cfd8;
-}
-
-.tcf-card-header {
+/* Logo centru00e9 verticalement */
+html body #sp-header .logo {
+  height: 140px !important;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
 }
 
-.tcf-card-header i {
-  font-size: 26px;
-  color: #da002e;
-  margin-right: 10px;
+/* Image dans le logo */
+html body #sp-header .logo img {
+  max-height: 100%;
+  height: auto;
 }
 
-.tcf-card-header span {
-  font-weight: bold;
-  font-size: 16px;
-  color: #000;
+/* Toggler mobile */
+html body #offcanvas-toggler {
+  height: 140px !important;
+  line-height: 140px !important;
 }
 
-.tcf-card-content {
-  flex-grow: 1;
-  margin-top: 5px;
+/* Menu principal centru00e9 verticalement */
+#sp-menu {
+  height: 140px;
+  display: flex;
+  align-items: center;
 }
 
-.tcf-card-content strong {
+/* Liens de menu */
+#sp-menu .sp-megamenu-parent > li > a {
+  padding: 0 15px;
   display: inline-block;
-  min-width: 90px;
+  line-height: normal;
 }
 
-.tcf-link {
-  margin-top: auto;
-  font-size: 14px;
-  font-weight: 500;
-  color: #da002e;
-  text-align: right;
+/* Menu du00e9roulant */
+.sp-dropdown {
+  max-width: 600px;
+  min-width: 180px;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
-.tcf-card:hover .tcf-link,
-.tcf-card.alt:hover .tcf-link {
-  text-decoration: underline;
+/* --- Responsive : hauteur ru00e9duite sur mobile u00e0 80px --- */
+@media (max-width: 768px) {
+  /* Logo : taille raisonnable */
+  html body #sp-header .logo img {
+    max-width: 200px !important;
+    height: auto !important;
+  }
+  html body #sp-header {
+    height: 80px !important;
+  }
+  html body #sp-header .logo {
+    height: 80px !important;
+    display: flex;
+    align-items: center;
+  }
+  /* Hamburger : couleur visible */
+  html body #offcanvas-toggler {
+    color: #DA002E !important;
+    height: 80px !important;
+    line-height: 80px !important;
+  }
 }
 
-/* ==========================================================================
-   Section des partenaires
-   ========================================================================== */
-.partners-section {
+/* === RSEvents Pro u2014 Vue liste u2014 Mobile === */
+@media (max-width: 767px) {
+  /* Masquer image par du00e9faut (vide) sur mobile */
+  .rs_event_image { display: none !important; }
+
+  /* Du00e9tails pleine largeur */
+  .rs_event_details {
+    width: 100% !important;
+    padding-left: 0 !important;
+  }
+
+  /* Carte u00e9vu00e9nement : layout vertical, padding confortable */
+  .rs_event_detail {
+    display: block !important;
+    padding: 14px 12px !important;
+    border-bottom: 1px solid #e8e8e8;
+    background: #fff;
+    margin-bottom: 8px !important;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+
+  /* Titre u00e9vu00e9nement */
+  .rsepro-title-block a {
+    font-size: 1rem !important;
+    font-weight: 700;
+    line-height: 1.35;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Infos date / lieu u2014 plus lisibles */
+  .rs_event_details .rs_event_date,
+  .rs_event_details .rsepro-date-block,
+  .rs_event_details .rsepro-location-block,
+  .rs_event_details .rs_event_location {
+    font-size: .9rem !important;
+    margin-bottom: 4px;
+  }
+
+  /* Bouton / lien d'inscription */
+  .rs_event_details .rsform-submit-btn,
+  .rs_event_details a.btn {
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* Conteneur liste */
+  .rsepro-events-list-container ul {
+    padding-left: 0 !important;
+    list-style: none;
+  }
+}
+
+
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSForm Pro u2014 Responsive petit u00e9cran (iPhone 15 etc. u2264 650px)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
+@media screen and (max-width: 650px) {
+
+  /* Ru00e9duction padding conteneur */
+  .rsform .formContainer {
+    padding: 18px 14px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Label au-dessus du champ (empilage vertical) */
+  .formResponsive .formHorizontal .formControlLabel {
+    float: none !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding-top: 0 !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+  }
+
+  /* Zone input : supprimer la marge gauche liu00e9e au float du label */
+  .formResponsive .formHorizontal .formControls {
+    margin-left: 0 !important;
+  }
+
+  /* Inputs, selects, textarea : pleine largeur */
+  .formResponsive input[type="text"],
+  .formResponsive input[type="email"],
+  .formResponsive input[type="tel"],
+  .formResponsive input[type="password"],
+  .formResponsive input[type="number"],
+  .formResponsive textarea,
+  .formResponsive select,
+  .formResponsive .rsform-input-box,
+  .formResponsive .rsform-select-box {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Colonnes SPPB (formSpan) : toujours pleine largeur */
+  .formResponsive .formRow [class*="formSpan"] {
+    width: 100% !important;
+    margin-left: 0 !important;
+    float: none !important;
+  }
+
+  /* Bloc date de naissance : selects cu00f4te u00e0 cu00f4te mais adaptu00e9s */
+  .rsform-block-birth-date .rsform-select-box-small {
+    width: 30% !important;
+    min-width: 70px !important;
+    margin-right: 2% !important;
+  }
+
+  /* Upload fichier : mise en page compacte */
+  .rsform-type-fileupload .formBody {
+    font-size: 0.88rem !important;
+  }
+
+  /* Bloc bouton soumettre : centru00e9, pleine largeur */
+  .rsform-block-soumettre .formBody {
     text-align: center;
-    padding: 20px;
-    overflow-x: visible;
-    white-space: normal;
+  }
+  .rsform-block-soumettre .formBody input[type="submit"],
+  .rsform-block-soumettre .formBody button {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    font-size: 1rem !important;
+  }
+
+  /* Description / aide : lu00e9gu00e8rement ru00e9duite */
+  .rsform .formDescription {
+    font-size: 0.8rem !important;
+  }
+
+  /* Blocs RSForm : espacement plus compact */
+  .rsform .rsform-block {
+    margin-bottom: 14px !important;
+  }
+}
+/* ============================================================
+   ESPACEMENTS PAGE D'ACCUEIL u2014 via custom_css (prioritaire sur SP Builder)
+   ============================================================ */
+
+/* Hero */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c {
+  padding-top: 70px !important;
+  padding-bottom: 30px !important;
 }
 
-.partners-logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+/* Subtitle "Apprendre, progresser, certifier" */
+#section-id-7b135ebc-3dec-40c3-a895-768fefceb723 {
+  padding-top: 70px !important;
+  padding-bottom: 10px !important;
+}
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h1,
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h2,
+#sppb-addon-effb6d7d-9ce8-4367-aee3-057d1060fd25 h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-.partners-logos a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1 1 120px;
+/* TCF Canada + Cours */
+#section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 {
+  padding-top: 25px !important;
+  padding-bottom: 20px !important;
 }
 
-.partners-logos img {
-    width: 100px;
-    height: auto;
-    transition: opacity 0.3s ease-in-out;
+/* Mu00e9thode + Offre */
+#section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 {
+  padding-top: 15px !important;
+  padding-bottom: 20px !important;
 }
 
-/* Appliquer un filtre blanc à tous les logos sauf celui de l’Ambassade */
-.partners-logos img.filtered-logo {
-    filter: brightness(0) invert(1);
+/* Brochure */
+#section-id-57fab408-2f51-45ae-8949-8c19a6485f01 {
+  padding-top: 25px !important;
 }
 
-.partners-logos .ambassade-logo {
-    filter: none !important;
+/* Actualitu00e9s & u00c9vu00e9nements */
+#section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062 {
+  padding-bottom: 0px !important;
+}
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h1,
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h2,
+#sppb-addon-6426ef61-81fa-45ea-be8f-32f5f14911eb h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-.partners-logos a:hover img {
-    opacity: 0.7;
+/* Nos Tests de langues u2014 titre */
+#section-id-807fb343-9377-4821-8c30-95c0c194541d {
+  padding-top: 10px !important;
+  padding-bottom: 0px !important;
+  min-height: 0 !important;
+}
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h1,
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h2,
+#sppb-addon-77f1e416-8865-4cca-9fc5-256643839b53 h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-/* Responsive : multi-lignes sur mobile */
-@media screen and (max-width: 768px) {
-    .partners-logos a {
-        flex: 1 1 30%;
-        max-width: 33%;
-        padding: 10px 0;
-    }
-
-    .partners-logos img {
-        width: 80px;
-    }
+/* TEF Canada + TCF Quu00e9bec */
+#section-id-73084a51-9be6-4f44-83ed-415ecddc194e {
+  padding-top: 5px !important;
+  padding-bottom: 20px !important;
 }
 
-/* ==========================================================================
-   RSForm!Pro - Mise en forme globale des champs
-   ========================================================================== */
-.rsform-block {
-    margin-bottom: 1.5rem;
-    padding: 0.5rem 1rem;
-    /*color: #f9f9f9;*/    
-    border-radius: 8px;
+/* Ev@lang + DFP */
+#section-id-3c5f74e8-345c-4f8d-b473-58a361ae5012 {
+  padding-bottom: 40px !important;
 }
+
+/* S'entrau00eener u00e0 un test de langue u2014 titre */
+#section-id-80e216e1-3493-4773-887f-e6e68f7f211d {
+  padding-bottom: 0px !important;
+  min-height: 0 !important;
+}
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h1,
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h2,
+#sppb-addon-8b90c581-2210-4d95-9cdf-6e8e5b4bc5dc h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Section apru00e8s S'entrau00eener */
+#section-id-6f2911e6-2809-43b0-8ed3-51ec77bac1cf {
+  padding-top: 5px !important;
+}
+/* Hero u2014 centrage du titre */
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h1,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h2,
+#sppb-addon-3ed67ee5-e1ec-49cc-b4bb-afe6d993ef05 h3 {
+  text-align: left !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Hero u2014 section contenu (Bienvenue + Sessions) */
+body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
+.sp-page-builder #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+  padding-top: 30px !important;
+  padding-bottom: 160px !important;
+  margin-bottom: 40px !important;
+}
+/* ============================================================
+   Hu00c9RO u2014 titre et layout
+   ============================================================ */
+
+/* Section titre */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c {
+  padding-top: 70px !important;
+  padding-bottom: 30px !important;
+}
+
+/* Titre H1 u2014 centru00e9, grande taille, police du site */
+#section-id-841459e1-9e39-4805-8992-b77a8178447c h1.sppb-addon-title {
+  font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+  font-weight: 700;
+  text-align: center;
+  color: #DA002E;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Section contenu */
+body #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230,
+.sp-page-builder #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+  padding-top: 30px !important;
+  padding-bottom: 160px !important;
+  margin-bottom: 40px !important;
+}
+
+/* Colonne gauche u2014 alignement gauche */
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f,
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f * {
+  text-align: left !important;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f {
+  padding-right: 2.5rem;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f h2.sppb-addon-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #DA002E;
+  margin-bottom: 2px;
+}
+#column-wrap-id-cd1500fc-aca1-4e1e-8a87-c60edb81a37f h3.sppb-addon-title {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #444;
+  margin-bottom: 14px;
+}
+
+/* Colonne droite u2014 carte Sessions */
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee .sppb-column {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  padding: 28px 24px 22px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee *,
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee h3.sppb-addon-title {
+  text-align: left !important;
+}
+#column-wrap-id-0fc12c11-c57d-4861-8f2c-1bdf0f5687ee h3.sppb-addon-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #DA002E;
+  margin-bottom: 14px;
+}
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSEvents Pro u2014 Cartes u00e9vu00e9nements : style calendrier
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
+
+/* Fix overflow description hors carte */
+li.rs_event_detail { overflow: hidden; }
+li.rs_event_detail .rs_event_details { overflow: hidden; }
+
+/* Badge inscriptions fermu00e9es */
+.rsepro-reg-closed {
+  vertical-align: middle;
+  color: #ffffff !important;
+  background: #DA002E !important;
+  display: inline-block !important;
+  padding: 3px 10px !important;
+  border-radius: 3px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+}
+
+/* Deadline u2014 style discret */
+.rsepro-reg-deadline {
+  display: block;
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* Carte u00e9vu00e9nement */
+ul.rs_events_container li.rs_event_detail {
+  background: #fff5f6 !important;
+  border-radius: 8px !important;
+  padding: 18px 20px 18px 16px !important;
+  margin-bottom: 12px !important;
+  border: 1px solid #f0cdd2 !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+ul.rs_events_container li.rs_event_detail:hover {
+  background: #ffe8ec !important;
+}
+
+/* Image */
+ul.rs_events_container .rs_event_image {
+  float: left;
+  margin-right: 20px;
+  padding: 0;
+  width: 100px;
+  flex-shrink: 0;
+}
+ul.rs_events_container .rs_event_image img {
+  width: 100px !important;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Bloc du00e9tails */
+ul.rs_events_container .rs_event_details {
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+/* Titre */
+ul.rs_events_container .rsepro-title-block {
+  font-size: 1.25rem !important;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+ul.rs_events_container .rsepro-title-block a {
+  color: #DA002E !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+ul.rs_events_container .rsepro-title-block a:hover { text-decoration: underline; }
+
+/* Date */
+ul.rs_events_container .rsepro-date-block { font-size: 1.05rem; margin-bottom: 2px; }
+ul.rs_events_container .rsepro-date-block b { font-size: 1.1rem; }
+
+/* Lieu */
+ul.rs_events_container .rsepro-event-location-block {
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 2px;
+}
+ul.rs_events_container .rsepro-event-location-block a {
+  color: #DA002E !important;
+  text-decoration: none;
+}
+ul.rs_events_container .rsepro-event-location-block a:hover { text-decoration: underline; }
+
+/* Description courte */
+ul.rs_events_container .rsepro-small-description-block {
+  font-size: 0.97rem;
+  color: #555;
+  margin-top: 3px;
+  text-align: left !important;
+}
+
+/* Deadline / inscription fermu00e9e */
+ul.rs_events_container .rsepro-reg-deadline {
+  font-size: 0.88rem !important;
+  color: #888 !important;
+  display: block !important;
+  margin-top: 0 !important;
+  margin-bottom: 4px;
+}
+
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   RSForm Pro u2014 Formulaire inscription tests de langue
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
+
+/* Conteneur principal */
+.rsform .formContainer {
+  background: #fff5f6 !important;
+  border: 1.5px solid #f0cdd2 !important;
+  border-radius: 10px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 12px rgba(218,0,46,.06) !important;
+}
+
+/* Blocs de champ */
+.rsform .rsform-block { margin-bottom: 18px; }
 
 /* Labels */
-.rsform-block label.formControlLabel,
-.rsform-block span.formControlLabel {
-    font-weight: 600;
-    color: #333;
-    display: block;
-    margin-bottom: 0.3rem;
+.rsform .formControlLabel {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin-bottom: 5px !important;
+  display: block;
+  letter-spacing: .01em;
 }
 
-/* Champs : input, select, textarea */
-.rsform-block .formBody select,
-.rsform-block .formBody input[type="text"],
-.rsform-block .formBody input[type="email"],
-.rsform-block .formBody textarea {
-    width: 100%;
-    padding: 0.45rem 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 0.95rem;
-    transition: border-color 0.2s ease;
+/* u00c9toile requis */
+.rsform .formRequired { color: #DA002E !important; font-weight: 700; margin-left: 2px; }
+
+/* Inputs texte */
+.rsform .rsform-input-box,
+.rsform textarea.rsform-input-box {
+  background: #ffffff !important;
+  border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important;
+  padding: 9px 12px !important;
+  font-size: 0.95rem !important;
+  color: #222 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.05);
+}
+.rsform .rsform-input-box:focus,
+.rsform textarea.rsform-input-box:focus {
+  border-color: #DA002E !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(218,0,46,.12), inset 0 1px 3px rgba(0,0,0,.04) !important;
 }
 
-.rsform-block .formBody input:focus,
-.rsform-block .formBody select:focus {
-    border-color: #da002e;
-    outline: none;
+/* Selects */
+.rsform .rsform-select-box {
+  background: #ffffff !important;
+  border: 1.5px solid #d8b4bb !important;
+  border-radius: 6px !important;
+  padding: 9px 12px !important;
+  font-size: 0.95rem !important;
+  color: #222 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.rsform .rsform-select-box:focus {
+  border-color: #DA002E !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(218,0,46,.12) !important;
+}
+.rsform .rsform-select-box:hover { border-color: #b8808a !important; }
+
+/* Checkbox */
+.rsform input[type="checkbox"] {
+  accent-color: #DA002E;
+  width: 16px; height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
-/* Description et messages d'erreur */
-.rsform-block .formDescription {
-    font-size: 0.8rem;
-    color: #777;
-    margin-top: 0.3rem;
+/* Texte d'aide */
+.rsform .formDescription,
+.rsform small {
+  font-size: 0.82rem !important;
+  color: #888 !important;
+  margin-top: 4px;
+  display: block;
 }
 
-.rsform-block .formValidation {
-    color: #d9534f;
-    font-size: 0.85rem;
+/* Erreurs */
+.rsform .rsform-error,
+.rsform .formError {
+  color: #DA002E !important;
+  font-size: 0.83rem !important;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
 }
 
-
-/* ==========================================================================
-   RSForm!Pro - Grille responsive
-   ========================================================================== */
-.formRow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+/* Bouton soumettre */
+.rsform-block-soumettre .formBody input[type="submit"],
+.rsform-block-soumettre .formBody button {
+  background: #DA002E !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 12px 36px !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .03em;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
 }
-
-.formSpan6,
-.formSpan12 {
-    flex: 1 1 100%;
-}
-
-@media (min-width: 768px) {
-    .formSpan6 {
-        flex: 1 1 calc(50% - 10px);
-    }
-
-    .formSpan12 {
-        flex: 1 1 100%;
-    }
-}
-
-
-/* ==========================================================================
-   RSForm!Pro - Bouton de soumission
-   ========================================================================== */
-.rsform-block-soumettre .formBody button,
-.rsform-block-soumettre .formBody input[type="submit"] {
-    background-color: #da002e;
-    color: #fff;
-    padding: 0.6rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
+.rsform-block-soumettre .formBody input[type="submit"]:hover,
 .rsform-block-soumettre .formBody button:hover {
-    background-color: #98111f;
+  background: #b5001f !important;
+  transform: translateY(-1px);
 }
 
+/* u2500u2500 Hover images SP Builder u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500 */
+.sp-page-builder .page-content a img {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.sp-page-builder .page-content a:hover img {
+  transform: scale(1.03);
+  opacity: 0.88;
+}
+
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   Hu00c9RO u2014 Responsive mobile (u2264 767px)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
+@media (max-width: 767px) {
+
+  /* Sections hu00e9ro : image couvre bien, hauteur min, pas de fixed */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c,
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-attachment: scroll !important;
+    min-height: 0 !important;
+  }
+
+  /* Section titre */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c {
+    padding-top: 30px !important;
+    padding-bottom: 10px !important;
+  }
+
+  /* H1 u2014 ru00e9duction forte + pas de du00e9bordement */
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c .sppb-addon-title,
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c h1,
+  #section-id-841459e1-9e39-4805-8992-b77a8178447c h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Section contenu Bienvenue+Sessions */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 {
+    padding-top: 20px !important;
+    padding-bottom: 30px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Titres Bienvenue */
+  #section-id-703bef53-e1cb-41b4-ba99-3efc3ce94230 .sppb-addon-title {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550
+   CARTES u2014 Boutons centru00e9s + blocs Retour/Presse/Blog (mobile)
+   u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550u2550 */
+@media (max-width: 767px) {
+
+  /* Cartes article (Retour en images / On parle de nous / Blog TCF) */
+  .sppb-addon-content .sppb-addon-title,
+  .sppb-addon-header .sppb-addon-title {
+    font-size: 1.05rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Section Retour en images */
+  #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-col-md-4,
+  #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-col-sm-4 {
+    margin-bottom: 24px !important;
+  }
+
+  /* Section Blog TCF Canada (mobile uniquement) */
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-col-md-4,
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-col-sm-4 {
+    margin-bottom: 24px !important;
+  }
+  #section-id-3e12485e-3429-4d4b-9ac6-1841b58378ea .sppb-addon-title {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+  }
+
+  /* Texte date / mu00e9ta des articles */
+  .sppb-article-date,
+  .sppb-article-meta,
+  .sppb-addon-content small {
+    font-size: 0.82rem !important;
+    color: #888 !important;
+  }
+
+  /* Intro text des cartes u2014 espacement et lisibilitu00e9 */
+  .sppb-addon-content .sppb-addon-text p,
+  .sppb-addon-text p {
+    font-size: 0.92rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 10px !important;
+  }
+}
 
 /* ==========================================================================
-   MOBILE — Corrections ergonomie page d'accueil (max 767px)
+   MOBILE - Corrections ergonomie page d'accueil (max 767px)
    ========================================================================== */
 
 @media (max-width: 767.98px) {
 
-    /* 1. Réduction du vide en haut (S01 hero masqué = gap résiduel) */
+    /* 1. Espacement uniforme entre toutes les sections */
+    .sp-page-builder .page-content .sppb-section {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    /* min-height reset uniquement sur homepage (évite d'écraser les pages intérieures) */
+    .page-173 .sppb-section {
+        min-height: 0 !important;
+    }
+
+    /* 2. Hero masque - aucun espace residuel */
     #section-id-841459e1-9e39-4805-8992-b77a8178447c {
         padding-top: 0 !important;
-        min-height: 0 !important;
+        padding-bottom: 0 !important;
     }
 
-    /* 2. min-height excessif sur les sections de cours/tests — désactivé sur mobile */
-    .sp-page-builder .page-content .sppb-section[style*="min-height"] {
-        min-height: 0 !important;
-    }
-    #section-id-57fab408-2f51-45ae-8949-8c19a6485f01,
-    #section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062,
-    #section-id-45e37eda-23f3-4410-8b19-0829a003133d,
-    #section-id-807fb343-9377-4821-8c30-95c0c194541d,
-    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e,
-    #section-id-80e216e1-3493-4773-887f-e6e68f7f211d,
-    #section-id-6f2911e6-2809-43b0-8ed3-51ec77bac1cf,
-    #section-id-9f710dbf-7478-4c48-bfeb-b40c46ea831a,
-    #section-id-f63fb252-d7b0-4573-be48-80453135c132,
-    #section-id-1548239284438 {
-        min-height: 0 !important;
+    /* 3. Colonnes stackees - espacement interne reduit */
+    .sp-page-builder .page-content .sppb-section .sppb-column {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
     }
 
-    /* 3. Bordures pointillées rouges — remplacées par un encadré discret sur mobile */
+    /* 4. Centrage contenu cards cours */
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-column,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-column,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-column,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-column,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-column,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-column {
+        text-align: center !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-title,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-title,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-title,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-title,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-title,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-title,
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-text,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-text,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-text,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-text,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-text,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-text {
+        text-align: center !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-addon-btn-container,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-addon-btn-container,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-addon-btn-container,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-addon-btn-container,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-addon-btn-container,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-addon-btn-container {
+        text-align: center !important;
+        display: block !important;
+    }
+    #section-id-113b9392-0de7-4ad3-acfd-d47455b7e771 .sppb-btn,
+    #section-id-681188c7-eb59-4b2f-8e7b-766b19bcda47 .sppb-btn,
+    #section-id-73084a51-9be6-4f44-83ed-415ecddc194e .sppb-btn,
+    #section-id-f63fb252-d7b0-4573-be48-80453135c132 .sppb-btn,
+    #section-id-45e37eda-23f3-4410-8b19-0829a003133d .sppb-btn,
+    #section-id-807fb343-9377-4821-8c30-95c0c194541d .sppb-btn {
+        display: inline-block !important;
+        margin: 8px auto 0 !important;
+        padding: 8px 24px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* 5. Images banniere cours - hauteur fixe 150px */
+    #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container,
+    #sppb-addon-wrapper-f02a29b8-e323-4c80-9b8d-4e287d17be80 .sppb-addon-single-image-container {
+        height: 150px !important;
+        overflow: hidden !important;
+        border-radius: 6px !important;
+    }
+    #sppb-addon-wrapper-e9ff34c0-da45-414c-b721-8552fdd55f55 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-65f9b697-6c97-476a-93aa-6fffe45d4113 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-880781b3-f4f1-4a7d-9c9a-533687a27eee .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-8306e0fc-34c1-4147-8ea0-d73efafc5287 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-ec3bbcac-7e20-4382-bb64-bfe1b5114092 .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-b30cd32b-fd23-4ae8-b512-f91c7b1f581e .sppb-addon-single-image-container img,
+    #sppb-addon-wrapper-f02a29b8-e323-4c80-9b8d-4e287d17be80 .sppb-addon-single-image-container img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+
+    /* 6. Bordures pointillees -> filet discret */
     #column-id-8055dcc0-a558-40b3-b1ce-a2c212bb8c84 {
         border: 1px solid rgba(218, 0, 46, 0.25) !important;
         border-radius: 8px !important;
     }
     #sppb-addon-372ee672-8d53-4130-bf4d-2856bc80c7f6,
     #sppb-addon-2bd64cca-e4da-437b-83cc-4e4b3cda50c1,
-    #sppb-addon-28f8d766-e88a-4e01-b519-0c47eea5127b {
+    #sppb-addon-28f8d766-e88a-4e01-b519-0c47eea5127b,
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 {
+        background: #ffffff !important;
         border: 1px solid rgba(218, 0, 46, 0.2) !important;
         border-radius: 8px !important;
         padding: 24px 20px !important;
     }
 
-    /* 4. Padding interne des colonnes de cours réduit sur mobile */
-    #column-id-affe6879-bb8c-4bac-a08b-d3b512522792,
-    #column-id-565f3eed-2863-4ce7-86e0-cea2668e2ba4,
-    #column-id-70cec1ba-4ceb-4bb7-ae49-ceeb1ad6bdce,
-    #column-id-cd615081-6fdd-4160-a9b1-ade5aa075d74,
-    #column-id-b888fa89-1f49-4d72-a3ac-91e58ee8e3f9,
-    #column-id-c7e198df-7fef-46f9-b891-50b8f03a7f03,
-    #column-id-b578938e-0c14-4391-a0e6-bd09349e9fe4,
-    #column-id-3fe8fda6-f8f6-4f67-8686-d8d1247f859e,
-    #column-id-ceb29ed8-a190-46b6-8233-2fd0e6416d7c {
-        padding: 24px 20px !important;
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn),
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):link,
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):visited {
+        color: #1a2744 !important;
+    }
+    #sppb-addon-c750c6f6-0461-4dba-ae0b-a0ca3fb0bc66 a:not(.sppb-btn):hover {
+        color: #DA002E !important;
     }
 
-    /* 5. Session column — padding interne réduit */
+    /* 7. Upcoming module - centrage */
     #sppb-addon-506b5e23-3c5b-4534-a628-7cb1e5dd009c {
         padding-left: 0 !important;
+        text-align: center !important;
     }
-
-    /* 6. Sections margin-bottom négatif désactivé sur mobile */
-    #section-id-57fab408-2f51-45ae-8949-8c19a6485f01,
-    #section-id-ff4e459b-7494-4681-86ea-ea0eea8d4062 {
-        margin-bottom: 0 !important;
-    }
-
-}
-
-@media (max-width: 767.98px) {
-    /* Centrage module upcoming events */
     #rsepro-upcoming-module {
         text-align: center !important;
     }
     #rsepro-upcoming-module ul.rsepro_upcoming {
-        justify-content: center !important;
+        padding-left: 0 !important;
     }
     #rsepro-upcoming-module ul.rsepro_upcoming li {
-        display: block;
+        text-align: center !important;
+        padding: 8px 0 !important;
+    }
+    #rsepro-upcoming-module ul.rsepro_upcoming li a {
+        display: block !important;
         text-align: center !important;
     }
     #rsepro-upcoming-module .reg-closed-badge {
         display: block !important;
         margin: 4px auto 0 !important;
-        width: fit-content;
+        width: fit-content !important;
     }
+
 }
+/* === Contact mobile footer === */
+#contact-mobile-footer-wrap {
+  padding: 24px 16px 16px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+#contact-mobile-footer-wrap .sp-module-title {
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+#contact-mobile-footer-wrap a,
+#contact-mobile-footer-wrap li {
+  color: rgba(255,255,255,0.85) !important;
+  text-decoration: none !important;
+  list-style: none !important;
+  padding: 3px 0 !important;
+}
+#contact-mobile-footer-wrap img {
+  max-width: 140px !important;
+  margin-top: 12px !important;
+  opacity: 0.95;
+}
+}
+
+/* === PAGE CERTIFICATIONS (page-40) : fix mobile complet === */
+@media (max-width: 767px) {
+  .sp-page-builder.page-40 .page-content,
+  .sp-page-builder.page-40 .page-content .sppb-section,
+  .sp-page-builder.page-40 .page-content .sppb-row-container,
+  .sp-page-builder.page-40 .page-content .sppb-row,
+  .sp-page-builder.page-40 .page-content .sppb-row-column,
+  .sp-page-builder.page-40 .page-content .sppb-column,
+  .sp-page-builder.page-40 .page-content .sppb-column-addons,
+  .sp-page-builder.page-40 .page-content .sppb-addon-wrapper,
+  .sp-page-builder.page-40 .page-content [id^="sppb-addon"],
+  .sp-page-builder.page-40 .page-content .sppb-addon-content,
+  .sp-page-builder.page-40 .page-content .clearfix {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    clip: auto !important;
+    clip-path: none !important;
+  }
+}
+
+/* test */
