@@ -1498,19 +1498,23 @@ img.filtered-logo {
 }
 
 /* ============================================================
-   Blog layout 2×2 — itemid-115, 712, 713, 565
+   Blog layout 2×2 — itemid-115, 663, 712, 713, 821, 565
    ============================================================ */
 .itemid-115 .article-list.articles-leading,
+.itemid-663 .article-list.articles-leading,
 .itemid-712 .article-list.articles-leading,
 .itemid-713 .article-list.articles-leading,
+.itemid-821 .article-list.articles-leading,
 .itemid-565 .article-list.articles-leading {
   display: grid !important;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
 .itemid-115 .article-list.articles-leading .article,
+.itemid-663 .article-list.articles-leading .article,
 .itemid-712 .article-list.articles-leading .article,
 .itemid-713 .article-list.articles-leading .article,
+.itemid-821 .article-list.articles-leading .article,
 .itemid-565 .article-list.articles-leading .article {
   width: 100% !important;
   box-sizing: border-box;
@@ -1518,8 +1522,10 @@ img.filtered-logo {
   flex-direction: column;
 }
 .itemid-115 .article-list.articles-leading .article-intro-image img,
+.itemid-663 .article-list.articles-leading .article-intro-image img,
 .itemid-712 .article-list.articles-leading .article-intro-image img,
 .itemid-713 .article-list.articles-leading .article-intro-image img,
+.itemid-821 .article-list.articles-leading .article-intro-image img,
 .itemid-565 .article-list.articles-leading .article-intro-image img {
   width: 100%;
   height: 220px;
@@ -1527,8 +1533,10 @@ img.filtered-logo {
   display: block;
 }
 .itemid-115 .article-list.articles-leading .article-body,
+.itemid-663 .article-list.articles-leading .article-body,
 .itemid-712 .article-list.articles-leading .article-body,
 .itemid-713 .article-list.articles-leading .article-body,
+.itemid-821 .article-list.articles-leading .article-body,
 .itemid-565 .article-list.articles-leading .article-body {
   flex: 1;
 }
@@ -1536,9 +1544,889 @@ img.filtered-logo {
 /* Blog 2x2 — 1 colonne en mobile */
 @media (max-width: 767px) {
   .itemid-115 .article-list.articles-leading,
+  .itemid-663 .article-list.articles-leading,
   .itemid-712 .article-list.articles-leading,
   .itemid-713 .article-list.articles-leading,
+  .itemid-821 .article-list.articles-leading,
   .itemid-565 .article-list.articles-leading {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== CB Login dropdown ===== */
+/* Masquer bouton passkey/WebAuthn */
+.nav-login-dropdown .plg_system_webauthn_login_button {
+    display: none !important;
+}
+
+/* ===== CB Profile — mise en page & design ===== */
+
+/* ── Conteneur principal ─────────────────────── */
+.cb_template {
+    font-family: inherit;
+    color: #333;
+}
+
+/* Supprimer la bannière vide */
+.cbCanvasOtherLayout .cbCanvasLayoutTop,
+.cbCanvasHomeLayout  .cbCanvasLayoutTop {
+    min-height: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* Carte principale : fond blanc, bordure légère, radius 8px, ombre subtile */
+.cbCanvasLayout {
+    background: #fff !important;
+    border: 1px solid #eaeaea !important;
+    border-bottom: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
+    overflow: visible !important;
+}
+
+/* Zone avatar + nom */
+.cbCanvasLayout .cbCanvasLayoutBottom {
+    padding: 20px 20px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    min-height: 0 !important;
+    background: #fff !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* Avatar réduit à 80px, sans décalage absolu */
+.cbCanvasLayoutPhoto {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+}
+.cbCanvasLayoutPhoto .cbImgPict,
+.cbCanvasLayoutPhoto .cbImgPictInitial {
+    width: 80px !important;
+    height: 80px !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
+    border-radius: 50% !important;
+    border: 2px solid #eaeaea !important;
+    box-shadow: none !important;
+}
+
+/* Nom utilisateur */
+.cbCanvasLayout .cbUserName,
+.cbCanvasLayout .cbUserName a {
+    color: #DA002E !important;
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+.cbCanvasLayout .cbUserName a:hover { color: #98111f !important; }
+
+/* Compteurs (vues, etc.) */
+.cbCanvasLayout .cbUserStatus,
+.cbCanvasLayout .cbViewCount {
+    color: #888 !important;
+    font-size: 0.82rem !important;
+}
+
+/* ── Barre grise (onglets / actions) ──────────── */
+.cbPosTabMain > nav {
+    background: #f9f9f9 !important;
+    border: 1px solid #eaeaea !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+    padding: 0 8px !important;
+    box-shadow: none !important;
+}
+.cbTabsNav {
+    min-height: 40px;
+}
+
+/* Actions injectées via JS */
+.cbTabsNav .cb-action-link {
+    padding: 0.4rem 0.8rem !important;
+    color: #555 !important;
+    font-size: 0.82rem !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.3rem !important;
+    white-space: nowrap !important;
+    border-radius: 4px !important;
+    transition: color .15s, background .15s;
+}
+.cbTabsNav .cb-action-link:hover {
+    color: #DA002E !important;
+    background: #fff5f6 !important;
+}
+.cbTabsNav .cb-sticky-injected {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 4px !important;
+}
+.cbTabsNav .cb-sticky-injected a {
+    color: #888 !important;
+    padding: 0.4rem 0.6rem !important;
+    border-radius: 4px !important;
+    transition: color .15s;
+}
+.cbTabsNav .cb-sticky-injected a:hover { color: #DA002E !important; }
+
+/* Masquer le bouton More (overflow) si peu d'items */
+.cbTabsNav .cbNavBarOverflow { display: none !important; }
+
+/* ── Masquer barre menu CB originale ─────────── */
+.cbPosCanvasMenu { display: none !important; }
+
+/* ── Zone de contenu (infos profil) ──────────── */
+.cbPosTabMain .tab-content,
+.cbPosTabMain .cb_tab_content {
+    padding: 20px 0 8px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* ── Bloc latéral (Member Since, Last Online) ── */
+.cbCanvasMainRight,
+.cbCanvasMain .cbMainRight,
+[class*="canvas_main_right"] {
+    font-size: 0.82rem !important;
+    color: #888 !important;
+    text-align: right !important;
+}
+.cbCanvasMainRight strong,
+[class*="canvas_main_right"] strong { color: #555 !important; }
+
+/* ── Connexions ──────────────────────────────── */
+.cbConnections,
+.cbConnectionsEmpty {
+    color: #888 !important;
+    font-size: 0.85rem !important;
+}
+
+/* ── Footer CB (Powered by) ─────────────────── */
+.cbPoweredBy, .cbPoweredBy a {
+    color: #ccc !important;
+    font-size: 0.75rem !important;
+}
+
+/* ===== CB Profile — champs & contenu ===== */
+
+/* Masquer le label "Contact Info" dans la barre — vue profil uniquement */
+li#cbtabnav11.cbTabNav {
+    display: none !important;
+}
+
+/* Table des champs : supprimer le hover Bootstrap, fond transparent */
+.cbFieldsContentsTab.cbFields {
+    border: none !important;
+    background: transparent !important;
+    margin-bottom: 0 !important;
+}
+.cbFieldsContentsTab.cbFields > tbody > tr {
+    background: transparent !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+.cbFieldsContentsTab.cbFields > tbody > tr:last-child {
+    border-bottom: none !important;
+}
+.cbFieldsContentsTab.cbFields > tbody > tr:hover td {
+    background: #fff9f9 !important;
+}
+
+/* Cellules */
+.cbFieldsContentsTab.cbFields td {
+    padding: 8px 16px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    font-size: 0.875rem !important;
+    color: #444 !important;
+    line-height: 1.5 !important;
+}
+
+/* Colonne label (1ère colonne) */
+.cbFieldsContentsTab.cbFields td:first-child {
+    color: #888 !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+    width: 200px !important;
+    font-weight: 500 !important;
+}
+
+/* Valeur vide "-" */
+.cbFieldsContentsTab.cbFields td:last-child {
+    color: #333 !important;
+}
+
+/* Liens dans les champs (Send Email) */
+.cbFieldsContentsTab.cbFields td a {
+    color: #DA002E !important;
+    text-decoration: none !important;
+}
+.cbFieldsContentsTab.cbFields td a:hover {
+    text-decoration: underline !important;
+}
+
+/* Bloc droit : Member Since, Last Online ─────── */
+.cbCanvasMainRight,
+.cb_template [class*="canvas_main_right"] .cbFieldsContentsTab {
+    font-size: 0.8rem !important;
+    text-align: right !important;
+}
+.cbCanvasMainRight td:first-child,
+.cb_template [class*="canvas_main_right"] td:first-child {
+    color: #aaa !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+}
+.cbCanvasMainRight td:last-child,
+.cb_template [class*="canvas_main_right"] td:last-child {
+    color: #555 !important;
+    font-size: 0.82rem !important;
+    text-align: right !important;
+}
+
+/* Powered by CB */
+.cb_template .cbPoweredBy {
+    text-align: center !important;
+    padding: 12px 0 4px !important;
+    color: #ccc !important;
+    font-size: 0.72rem !important;
+}
+.cb_template .cbPoweredBy a { color: #ccc !important; }
+
+/* ===== CB Profile — formulaire d'édition ===== */
+
+/* Table globale : supprimer le hover Bootstrap */
+.cbFields.cbFieldsContentsTab > tbody > tr {
+    border-bottom: 1px solid #f0f0f0 !important;
+    background: transparent !important;
+    transition: background .1s;
+}
+.cbFields.cbFieldsContentsTab > tbody > tr:last-child { border-bottom: none !important; }
+.cbFields.cbFieldsContentsTab > tbody > tr:hover { background: #fafafa !important; }
+
+/* Cellule label */
+.cbFields.cbFieldsContentsTab td:first-child {
+    padding: 10px 16px 10px 0 !important;
+    color: #777 !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    width: 220px !important;
+    border: none !important;
+}
+
+/* Cellule champ */
+.cbFields.cbFieldsContentsTab td:not(:first-child) {
+    padding: 8px 8px 8px 0 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+/* Inputs & selects */
+.cb_template input.form-control,
+.cb_template input[type="text"],
+.cb_template input[type="email"],
+.cb_template input[type="password"],
+.cb_template textarea.form-control,
+.cb_template select.form-select,
+.cb_template select.form-control {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+    padding: 6px 10px !important;
+    font-size: 0.875rem !important;
+    color: #333 !important;
+    background: #fff !important;
+    transition: border-color .15s !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+.cb_template input.form-control:focus,
+.cb_template select.form-select:focus,
+.cb_template textarea.form-control:focus {
+    border-color: #DA002E !important;
+    box-shadow: 0 0 0 2px rgba(218,0,46,.08) !important;
+    outline: none !important;
+}
+
+/* Icônes visibilité/requis — discrètes */
+.cbFieldIcons {
+    opacity: 0.35 !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+}
+.cbFieldIcons:hover { opacity: 0.7 !important; }
+
+/* Bouton "Show" (mot de passe) */
+.cb_template .input-group-text,
+.cb_template .cbShowPasswordButton {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 0 4px 4px 0 !important;
+    background: #f9f9f9 !important;
+    color: #888 !important;
+    font-size: 0.82rem !important;
+    padding: 6px 10px !important;
+}
+
+/* Choix2 (select fancy) */
+.cb_template .choices {
+    font-size: 0.875rem !important;
+}
+.cb_template .choices__inner {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    min-height: 34px !important;
+    padding: 4px 8px !important;
+    background: #fff !important;
+}
+
+/* Boutons Update / Cancel */
+.cb_template input[type="submit"].btn-primary,
+.cb_template button[type="submit"].btn-primary,
+.cb_template .cbBtnPrimary {
+    background: #DA002E !important;
+    border-color: #DA002E !important;
+    border-radius: 4px !important;
+    font-size: 0.875rem !important;
+    padding: 7px 20px !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+    font-weight: 600 !important;
+}
+.cb_template input[type="submit"].btn-primary:hover,
+.cb_template .cbBtnPrimary:hover {
+    background: #b8001f !important;
+    border-color: #b8001f !important;
+}
+.cb_template input[type="submit"].btn-secondary,
+.cb_template button.btn-secondary {
+    background: #6c757d !important;
+    border-color: #6c757d !important;
+    border-radius: 4px !important;
+    font-size: 0.875rem !important;
+    padding: 7px 20px !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+/* Titre "Edit Your Details" */
+.cb_template h3.cb_template_title,
+.cb_template h2.cbEditTitle,
+.cb_template .cbEditProfile h3 {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1.2rem !important;
+    color: #333 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #f0f0f0 !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Section token Joomla — atténuée */
+.cb_template .joomla-token-section,
+.cb_template [class*="token"] {
+    font-size: 0.82rem !important;
+    color: #888 !important;
+}
+
+/* CB profil — titre nom en rouge AF */
+.cb_template .cbProfileTitle,
+.cb_template h3.cbProfileTitle,
+.cb_template .cbProfileTitleName,
+.cb_template .cb_profile_header_name,
+.cbProfileTitle a,
+.cb_template h3.cb_username { color: #da002e !important; }
+
+/* Supprime la ligne grise qui apparaît juste sous le titre de page */
+.cb_template > hr:first-of-type,
+#cb-profile-edit > hr:first-child { display: none !important; }
+
+/* Légère ligne séparatrice discrète entre champs */
+.cb_template .cbTableLine + .cbTableLine td,
+.cb_template tr.cbTableLine + tr.cbTableLine td {
+    border-top: 1px solid #f0f0f0 !important;
+}
+/* Labels bien alignés */
+.cb_template .cbTableLine td:first-child,
+.cb_template td.cbLabelCell {
+    padding-right: 20px !important;
+    font-size: 0.9rem;
+    color: #444;
+    vertical-align: middle !important;
+}
+/* Inputs */
+.cb_template .cbTableLine input[type="text"],
+.cb_template .cbTableLine input[type="email"],
+.cb_template .cbTableLine input[type="password"],
+.cb_template .cbTableLine textarea,
+.cb_template .cbTableLine select {
+    margin-bottom: 0 !important;
+}
+
+/* ── CB formulaire édition ─────────────────────────────────── */
+
+/* 1. Titre : garder la ligne Bootstrap (border-bottom), augmenter l'espace en dessous */
+.cb_template .cb-page-header.border-bottom { padding-bottom: 10px !important; margin-bottom: 24px !important; }
+
+/* 2. Masquer le nav des onglets (1 seul onglet inutile) — élimine la 2e ligne */
+.cb_template .cbTabsNav.nav-tabs { display: none !important; }
+.cb_template .cbTabsContent.tab-content { padding-top: 0 !important; border: none !important; }
+
+/* 3. Espacement cohérent entre chaque ligne de champ (structure réelle CB) */
+.cb_template .cb_form_line.form-group {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    align-items: center !important;
+}
+.cb_template .cbFieldsContentsTab .cb_form_line:last-child {
+    border-bottom: none !important;
+}
+
+/* 4. Label */
+.cb_template .cb_form_line .col-form-label.col-sm-3 {
+    font-size: 0.88rem !important;
+    color: #444 !important;
+    padding-right: 20px !important;
+}
+
+/* 5. Inputs : pas de margin parasite */
+.cb_template .cb_form_line .cb_field input[type="text"],
+.cb_template .cb_form_line .cb_field input[type="email"],
+.cb_template .cb_form_line .cb_field input[type="password"],
+.cb_template .cb_form_line .cb_field select,
+.cb_template .cb_form_line .cb_field textarea { margin-bottom: 0 !important; }
+
+/* 6. Titre profil rouge AF */
+.cb_template .cbProfileTitle,
+.cb_template .cbProfileTitleName,
+.cbProfileTitle a { color: #da002e !important; }
+/* Espace avant les boutons Modifier/Annuler */
+/* Espacement boutons : toutes les pages CB */
+.cb_template .cbProfileEditButtons,
+.cb_template .cbRegistrationButtons,
+.cb_template .cbResetPasswordButtons,
+.cb_template .cbActivateButtons,
+.cb_template [class$="Buttons"][class*="cb"] { margin-top: 28px !important; }
+
+/* Page inscription : même style que page édition */
+.cb_template .cbRegistration .form-group {
+    margin-bottom: 0;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid #f3f3f3;
+    align-items: center;
+}
+.cb_template .cbRegistration .form-group:last-child { border-bottom: none; }
+.cb_template .cbRegistration .sectiontableentry1 { background-color: #fff; }
+.cb_template .cbRegistration .sectiontableentry2 { background-color: #fafafa; }
+.cb_template .cbRegistration .col-form-label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 13px !important;
+}
+
+/* ── fin CB formulaire ────────────────────────────────────────── */
+
+/* ── CB page profil (vue) ────────────────────────────────────── */
+
+/* 1. Navbar Edit haut */
+.cb_template .cbMenuNavBar {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    margin-bottom: 6px !important;
+}
+/* 2. Navbar tabs/actions — réduit l'espace avec le canvas */
+.cb_template .cbTabsMenuNavBar {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    margin-bottom: 16px !important;
+}
+/* Liens navbars */
+.cb_template .cbNavBarMenu .nav-link,
+.cb_template .cbNavBarMenu .cbNavBarLink {
+    color: #444 !important;
+    font-size: 0.88rem;
+    padding: 4px 10px !important;
+}
+.cb_template .cbNavBarMenu .nav-link:hover,
+.cb_template .cbNavBarMenu .cbNavBarLink:hover { color: #da002e !important; }
+.cb_template .cb-action-link,
+.cb_template .cbMenu_UE_UPDATEPROFILE a,
+.cb_template .cbMenu_UE_MENU_EDIT .dropdown-item { color: #da002e !important; font-weight: 600; }
+.cb_template .cbNavBarSticky a,
+.cb_template .cb-sticky-injected a { color: #888 !important; }
+.cb_template .cbNavBarOverflow { display: none !important; }
+
+/* 3. Canvas : réduire le gap sous la card */
+.cb_template .cbPosCanvas.cbCanvasLayout {
+    background: #fafafa;
+    border: 1px solid #eee !important;
+    border-radius: 0 0 6px 6px !important;
+}
+.cb_template .cbCanvasLayoutBottom { padding: 12px 16px !important; }
+
+/* 4. Avatar */
+.cb_template .cbImgAvatar {
+    width: 80px !important;
+    height: 80px !important;
+    border: 3px solid #fff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15) !important;
+}
+
+/* 5. Titre profil */
+.cb_template .cbProfileTitle.cb-page-header {
+    border-bottom: none !important;
+    margin-bottom: 4px !important;
+    padding-bottom: 0 !important;
+}
+.cb_template .cbProfileTitle h3 { font-size: 1.3rem !important; }
+
+/* 6. Statut */
+.cb_template .cb_offline { font-size: 0.78rem; color: #999 !important; }
+.cb_template .cb_online  { font-size: 0.78rem; color: #2a7a2a !important; }
+
+/* 7. Stats vues */
+.cb_template #cb_tabid_6 .cb_form_line label { font-size: 0.75rem !important; color: #aaa !important; }
+
+/* 8. Alignement colonnes gauche/droite — même padding-top */
+.cb_template .cbTabsMenuMain.row { align-items: flex-start !important; }
+.cb_template .cbTabsContent.tab-content,
+.cb_template .cbTabsMenuRight { padding-top: 0 !important; }
+
+/* 9. Champs gauche (lecture) */
+.cb_template .cbProfile .cb_form_line.form-group {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    align-items: center !important;
+}
+.cb_template .cbProfile .cbFieldsContentsTab .cb_form_line:last-child { border-bottom: none !important; }
+.cb_template .cbProfile .col-form-label.col-sm-3 { font-size: 0.88rem !important; color: #666 !important; }
+/* ── Vue Profil : alignement visuel sur la page d'édition ──────── */
+
+/* Valeurs en lecture seule : même apparence que les inputs du formulaire edit */
+.cb_template .cbProfile .form-control-plaintext {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem !important;
+    min-height: calc(1.5em + 0.75rem + 2px);
+    display: block;
+    width: 100%;
+    font-size: 13px !important;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Labels : même style que page edit */
+.cb_template .cbProfile .col-form-label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 13px !important;
+    padding-top: 0.5rem;
+}
+
+/* Lignes de champs : espacement et séparateur */
+.cb_template .cbProfile .cbFieldsContentsTab .form-group {
+    margin-bottom: 0;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid #f3f3f3;
+    align-items: center;
+}
+.cb_template .cbProfile .cbFieldsContentsTab .form-group:last-child {
+    border-bottom: none;
+}
+
+/* Alternance douce */
+.cb_template .cbProfile .sectiontableentry1 { background-color: #fff; }
+.cb_template .cbProfile .sectiontableentry2 { background-color: #fafafa; }
+
+/* 10. Sidebar droite — alignée à gauche, même hauteur de ligne */
+.cb_template .cbTabsMenuRight {
+    padding-left: 20px !important;
+    text-align: left !important;
+    border-left: 1px solid #f0f0f0;
+}
+.cb_template .cbTabsMenuRight .cb_form_line {
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+}
+.cb_template .cbTabsMenuRight .cb_form_line:last-child { border-bottom: none !important; }
+.cb_template .cbTabsMenuRight .col-form-label {
+    font-size: 0.78rem !important;
+    color: #aaa !important;
+    padding-bottom: 2px !important;
+    display: block;
+}
+.cb_template .cbTabsMenuRight .cb_field {
+    font-size: 0.88rem;
+    color: #444;
+    text-align: left !important;
+}
+
+/* 11. Masquer "Powered by Community Builder" */
+.cb_template .cbPoweredBy { display: none !important; }
+
+
+/* Canvas CB : supprimer bordures Bootstrap */
+.cb_template .cbPosCanvas.border,
+.cb_template .cbCanvasLayout.border {
+    border: none !important;
+}
+
+/* RSEvents : style cohérent profil */
+.cb_template .rsepro_events_container { padding: 0; }
+.cb_template .rsepro_events_container h3 {
+    font-size: 0.92rem !important; font-weight: 600 !important;
+    color: #495057 !important; border-bottom: 1px solid #f0f0f0 !important;
+    margin: 0.5rem 0 0.25rem !important; padding: 0.4rem 0 !important; background: none !important;
+}
+.cb_template .rsepro_events_container h4.rsepro_cat_title {
+    font-size: 0.82rem !important; font-weight: 600 !important;
+    color: #da002e !important; margin: 0.6rem 0 0.2rem !important;
+    padding: 0 !important; background: none !important;
+    border: none !important; border-bottom: 1px solid #e8eef8 !important;
+}
+.cb_template .rsepro_events { list-style: none !important; margin: 0 !important; padding: 0 !important; }
+.cb_template .rsepro_events li {
+    padding: 0.3rem 0 !important; border-bottom: 1px solid #f5f5f5 !important;
+    font-size: 13px !important; color: #333 !important;
+}
+.cb_template .rsepro_events li:last-child { border-bottom: none !important; }
+.cb_template .rsepro_events li a { color: #da002e !important; text-decoration: none !important; }
+.cb_template .rsepro_events li a:hover { color: #da002e !important; }
+
+
+
+/* Layout colonne unique dans cbPosCanvasMain */
+.view-userprofile .cbPosCanvasMain {
+  display: block;
+}
+.view-userprofile .cbTabs { width: 100%; }
+.view-userprofile .cbTabsMenu { width: 100%; }
+
+/* Header profil */
+.view-userprofile .cbCanvasLayoutBottom {
+  background: #fff;
+  border-radius: 12px;
+  border: none;
+  padding: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.view-userprofile .cbCanvasLayoutPhoto .cbImgPict {
+  width: 72px !important;
+  height: 72px !important;
+  font-size: 1.6rem !important;
+  background: #da002e !important;
+}
+.view-userprofile .cbProfileTitle h3 {
+  color: #1a171b;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem 0;
+}
+/* Statut compte actif + rôle */
+.view-userprofile .cbCanvasLayoutCounters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.82rem;
+}
+/* Bouton modifier profil (dans cbTabs) */
+.view-userprofile .cb-action-link {
+  margin-left: auto;
+  border: 1.5px solid #da002e;
+  color: #da002e;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.view-userprofile .cb-action-link:hover {
+  background: #da002e;
+  color: #fff;
+}
+
+/* Panel RSEvents — carte principale */
+.view-userprofile .cbTabs .cbTabsNav {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.view-userprofile .cbTabs .cbTabNavLink {
+  color: #da002e;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.view-userprofile .cbTabs .cbTabNavLink.active {
+  border-bottom: 2px solid #DA002E;
+  color: #DA002E;
+}
+
+/* Panel infos personnelles */
+.view-userprofile .cbTabsMenu .tab-content {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  padding: 1.25rem;
+}
+.view-userprofile .cbTabsMenu .cbFieldsContentsTab .form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid #f5f5f5;
+  margin: 0;
+}
+.view-userprofile .cbTabsMenu .col-form-label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.82rem;
+  width: auto;
+  flex: 0 0 auto;
+}
+.view-userprofile .cbTabsMenu .form-control-plaintext {
+  background: transparent !important;
+  border: none !important;
+  font-size: 0.82rem;
+  color: #666;
+  text-align: right;
+  padding: 0 !important;
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .view-userprofile .cbPosCanvasMain {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  }
+}
+
+/* Accès rapides */
+.rsepro-quicklinks { margin-top: 0; padding-top: 1.25rem; }
+.rsepro-quicklinks-title {
+  font-size: 1rem; font-weight: 700; color: #222;
+  padding-top: 1.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #DA002E;
+  display: block;
+}
+.rsepro-quicklinks-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+}
+.rsepro-quicklink {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.4rem; padding: 0.75rem 0.5rem;
+  background: #fff5f5; border: 1px solid #f5d0d0; border-radius: 10px;
+  color: #da002e; font-size: 0.78rem; font-weight: 500; text-align: center;
+  text-decoration: none; transition: background .2s, border-color .2s;
+}
+.rsepro-quicklink .fa { font-size: 1.3rem; }
+.rsepro-quicklink:hover { background: #da002e; color: #fff; border-color: #da002e; }
+@media (max-width: 576px) {
+  .rsepro-quicklinks-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* Nav onglets */
+.view-userprofile .cbTabNavLink { color: #495057; font-weight: 600; }
+.view-userprofile .cbTabNavLink.active { color: #da002e !important; border-bottom-color: #da002e !important; }
+
+/* Titres sections */
+.view-userprofile .rsepro-section-title,
+.view-userprofile .rsepro-events-container h3 {
+    font-size: 1rem !important; font-weight: 700 !important;
+    color: #1a171b !important; margin: 0 0 1rem 0 !important;
+    padding-top: 2rem !important;
+    padding-bottom: 0.5rem !important; border-bottom: 2px solid #da002e !important;
+    display: block !important; background: none !important;
+}
+
+/* Cartes RSEvents style AF */
+.rsepro-card {
+    display: flex; align-items: stretch;
+    background: #fff; border: 1px solid #e8edf3; border-radius: 10px;
+    overflow: hidden; margin-bottom: 0.85rem;
+    transition: box-shadow .2s, border-color .2s;
+}
+.rsepro-card:hover { box-shadow: 0 3px 12px rgba(218,0,46,.08); border-color: #f5d0d0; }
+.rsepro-card-img { width: 110px; min-width: 110px; overflow: hidden; background: #fff5f5; }
+.rsepro-card-img img { width: 110px; height: 100%; object-fit: cover; display: block; }
+.rsepro-card-img-placeholder {
+    width: 110px; height: 100%; min-height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff5f5; color: #da002e; font-size: 1.8rem;
+}
+.rsepro-card-body { flex: 1; padding: 0.85rem 1rem; min-width: 0; }
+.rsepro-badge-cat {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: #da002e; margin-bottom: 0.35rem;
+}
+.rsepro-card-title {
+    font-size: 0.95rem; font-weight: 700; color: #1a171b;
+    margin-bottom: 0.35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rsepro-card-meta { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: #6c757d; margin-bottom: 0.4rem; }
+.rsepro-card-meta .fa { color: #da002e; margin-right: 3px; }
+.rsepro-card-time-val { color: #da002e; font-weight: 500; }
+.rsepro-card-link { font-size: 0.8rem; font-weight: 500; color: #da002e; text-decoration: none; }
+.rsepro-card-link:hover { color: #da002e; }
+.rsepro-card-date-badge {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 1.1rem; min-width: 64px; border-left: 1px solid #fde8ec; background: #fff5f5;
+}
+.rsepro-card-date-month { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #da002e; line-height: 1; }
+.rsepro-card-date-day { font-size: 2rem; font-weight: 800; color: #1a171b; line-height: 1.1; }
+
+/* Acces rapides */
+.rsepro-quicklinks { margin-top: 0; padding-top: 1.25rem; }
+.rsepro-quicklinks-title { font-size: 1rem; font-weight: 700; color: #1a171b; margin-bottom: 0.85rem; padding-bottom: 0.4rem; border-bottom: 2px solid #da002e; display: inline-block; }
+.rsepro-quicklinks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+
+
+/* Panel Informations personnelles (bloc sous inscriptions) */
+.view-userprofile .cbTabsMenu { margin-top: 1.5rem; background: #fff; border: 1px solid #e8edf3; border-radius: 10px; overflow: hidden; }
+.view-userprofile .cbTabsMenu::before { content: "Informations personnelles"; display: block; font-size: 1rem; font-weight: 700; color: #1a171b; padding: 1.25rem 1.25rem 0.5rem; border-bottom: 2px solid #da002e; margin: 0; }
+.view-userprofile .cbTabsMenu .cbTabsMenuContent,
+.view-userprofile .cbTabsMenu .tab-content { padding: 0 1.25rem 0.5rem; background: transparent; border: none; border-radius: 0; }
+.view-userprofile .cbTabsMenu .cbFieldsContentsTab .form-group { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0 1rem; padding: 0.5rem 0 !important; border-bottom: 1px solid #f5f5f5 !important; margin: 0 !important; align-items: center; }
+.view-userprofile .cbTabsMenu .cbFieldsContentsTab .form-group:last-child { border-bottom: none !important; }
+.view-userprofile .cbTabsMenu .col-form-label { font-size: 0.82rem !important; font-weight: 500; color: #495057; padding: 0 !important; }
+.view-userprofile .cbTabsMenu .form-control-plaintext { font-size: 0.82rem !important; color: #1a171b; background: transparent !important; border: none !important; padding: 0 !important; text-align: right; min-height: unset !important; }
+.view-userprofile .cbTabsMenu .sectiontableentry1,
+.view-userprofile .cbTabsMenu .sectiontableentry2 { background: transparent !important; }
+
+/* Mobile */
+@media (max-width: 576px) {
+    .rsepro-quicklinks-grid { grid-template-columns: repeat(2, 1fr); }
+    .rsepro-card-img, .rsepro-card-img img, .rsepro-card-img-placeholder { width: 80px; min-width: 80px; }
+    .rsepro-card-date-badge { min-width: 50px; padding: 0 0.6rem; }
+    .rsepro-card-date-day { font-size: 1.5rem; }
+    .view-userprofile .cbTabsMenu .cbFieldsContentsTab .form-group { grid-template-columns: 1fr !important; }
+}
+
+/* ── fin CB page profil ────────────────────────────────────────── */
+
+/* ── CB profile : masquer navbar onglets + canvas bottom ─────────── */
+.cbNavBar.cbTabsMenuNavBar { display: none !important; }
+
