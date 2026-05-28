@@ -2405,8 +2405,14 @@ li#cbtabnav11.cbTabNav {
 
 
 /* Panel Informations personnelles (bloc sous inscriptions) */
-.view-userprofile .cbTabsMenu { margin-top: 1.5rem; background: #fff; border: 1px solid #e8edf3; border-radius: 10px; overflow: hidden; }
-.view-userprofile .cbTabsMenu::before { content: "Informations personnelles"; display: block; font-size: 1rem; font-weight: 700; color: #1a171b; padding: 1.25rem 1.25rem 0.5rem; border-bottom: 2px solid #da002e; margin: 0; }
+.view-userprofile .cbTabsMenu { margin-top: 0; background: #fff; border: 1px solid #e8edf3; border-radius: 10px; overflow: hidden; }
+.view-userprofile .rsepro-contact-title { padding-top: 0.75rem !important; padding-bottom: 0.4rem !important; margin: 0.75rem 0 0 0 !important; }
+.view-userprofile .cbTabsMenu { margin-top: 0 !important; }
+.view-userprofile .cbTabsMenu .tab-content { padding: 0 !important; }
+.view-userprofile .cbTabsMenu .tab-pane { padding: 0 !important; margin: 0 !important; }
+.view-userprofile .rsepro-events-container { padding-bottom: 0 !important; margin-bottom: 0 !important; }
+/* titre Informations personnelles injecté en PHP (rsepro-contact-title) */
+.view-userprofile .cb_tab_content.cb_tab_menu { border: none !important; box-shadow: none !important; }
 .view-userprofile .cbTabsMenu .cbTabsMenuContent,
 .view-userprofile .cbTabsMenu .tab-content { padding: 0 1.25rem 0.5rem; background: transparent; border: none; border-radius: 0; }
 .view-userprofile .cbTabsMenu .cbFieldsContentsTab .form-group { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0 1rem; padding: 0.5rem 0 !important; border-bottom: 1px solid #f5f5f5 !important; margin: 0 !important; align-items: center; }
@@ -2581,18 +2587,18 @@ li#cbtabnav11.cbTabNav {
     padding-top: 24px;
 }
 
-/* ── CB profil — espace entre Mes inscriptions et Informations personnelles ── */
+/* ── CB profil — espace géré par rsepro-contact-title (padding-top) ── */
 .view-userprofile .rsepro-events-container {
-    margin-bottom: 3.5rem !important;
+    margin-bottom: 0 !important;
 }
 
 /* ── sp-right : même style que afk-sidebar-card ─────────────────── */
 #sp-right .sp-module {
-    padding: 1.75rem !important;
+    padding: 25px 28px !important;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
     background: #fff !important;
-    border: 1px solid #F3F3F3 !important;
-    border-radius: 3px !important;
+    border: none !important;
+    border-radius: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 1.875rem !important;
 }
@@ -2605,8 +2611,8 @@ li#cbtabnav11.cbTabNav {
     color: #1a171b !important;
     text-align: center !important;
     margin: 0 0 1rem 0 !important;
-    padding-bottom: 0.75rem !important;
-    border-bottom: 2px solid #da002e !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
 }
 
 /* ── sp-right afk-sidebar-card : titre cohérent avec .afk-sidebar-title ── */
@@ -2616,8 +2622,8 @@ li#cbtabnav11.cbTabNav {
     color: #1a171b !important;
     text-align: center !important;
     margin: 0 0 1rem 0 !important;
-    padding-bottom: 0.75rem !important;
-    border-bottom: 2px solid #da002e !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
     background: none !important;
 }
 
