@@ -1,10 +1,11 @@
 <?php
 /**
  * @package     plg_system_afkexamreg
- * @description Après soumission du formulaire d'examen (Form 4 RSForm Pro),
- *              crée automatiquement une inscription dans rseventspro_users
- *              afin que l'événement apparaisse dans l'espace inscrit CB.
- * @version     1.0.0
+ * @description Après soumission du formulaire d'examen (Form 4) ou du formulaire
+ *              de cours (Form 6) RSForm Pro, crée automatiquement une inscription
+ *              dans rseventspro_users afin que l'événement apparaisse dans
+ *              l'espace inscrit CB.
+ * @version     1.1.0
  */
 defined('_JEXEC') or die;
 
@@ -13,57 +14,46 @@ use Joomla\CMS\Plugin\CMSPlugin;
 
 class PlgSystemAfkexamreg extends CMSPlugin
 {
-    /** ID du formulaire RSForm Pro d'inscription aux examens */
-    const FORM_ID = 4;
+    const FORM_EXAM   = 4;
+    const FORM_COURS  = 6;
 
-    /**
-     * Déclenché après sauvegarde d'une soumission RSForm Pro.
-     * Crée une inscription RSEvents Pro si le formulaire est Form 4.
-     */
     public function onRsformFrontendAfterStoreSubmissions(array $args): void
     {
         $formId       = (int) ($args['formId'] ?? 0);
         $submissionId = (int) ($args['SubmissionId'] ?? 0);
 
-        if ($formId !== self::FORM_ID || !$submissionId) {
+        if (!$submissionId) {
             return;
         }
 
+        if ($formId === self::FORM_EXAM) {
+            $this->handleExam($submissionId);
+        } elseif ($formId === self::FORM_COURS) {
+            $this->handleCours($submissionId);
+        }
+    }
+
+    // ── Form 4 : examens ────────────────────────────────────────────────────
+
+    private function handleExam(int $submissionId): void
+    {
         $db = Factory::getDbo();
 
-        // ── 1. Récupérer les champs Session, Choix_exam et Email ──────────────
-        $query = $db->getQuery(true)
-            ->select([$db->qn('FieldName'), $db->qn('FieldValue')])
-            ->from($db->qn('#__rsform_submission_values'))
-            ->where($db->qn('SubmissionId') . ' = ' . $submissionId)
-            ->where($db->qn('FieldName') . ' IN (' .
-                $db->q('Session') . ', ' .
-                $db->q('Choix_exam') . ', ' .
-                $db->q('Email') .
-            ')');
-        $db->setQuery($query);
-        $rows = $db->loadObjectList('FieldName');
+        $rows = $this->getFields($submissionId, ['Session', 'Choix_exam', 'Email']);
 
-        $sessionRaw = trim((string) ($rows['Session']->FieldValue ?? ''));
-        $examType   = trim((string) ($rows['Choix_exam']->FieldValue ?? ''));
-        $email      = trim((string) ($rows['Email']->FieldValue ?? ''));
+        $sessionRaw = trim((string) ($rows['Session'] ?? ''));
+        $examType   = trim((string) ($rows['Choix_exam'] ?? ''));
+        $email      = trim((string) ($rows['Email'] ?? ''));
 
         if (!$sessionRaw || !$examType || !$email) {
             return;
         }
 
-        // ── 2. Convertir la date dd/mm/yyyy → yyyy-mm-dd (heure locale Kunming) ─
-        //   RSEvents Pro stocke l'heure de début en UTC.
-        //   L'examen à Kunming (UTC+8) → start UTC = date_locale - 8h
-        //   Ex : 07/07/2026 à 00:00 locale = 06/07/2026 16:00 UTC
-        $parts = explode('/', $sessionRaw);
-        if (count($parts) !== 3) {
+        $localDate = $this->parseDate($sessionRaw);
+        if (!$localDate) {
             return;
         }
-        $localDate = sprintf('%04d-%02d-%02d', (int)$parts[2], (int)$parts[1], (int)$parts[0]);
 
-        // ── 3. Trouver l'event RSEvents Pro (nom contient type d'examen + date locale) ─
-        //   On cherche par nom (LIKE) ET date locale (CONVERT_TZ UTC→+08:00)
         $examKeyword = str_replace(['TCF Québec', 'TCF Quebec'], 'TCF Qu', $examType);
         $query = $db->getQuery(true)
             ->select($db->qn('id'))
@@ -81,8 +71,141 @@ class PlgSystemAfkexamreg extends CMSPlugin
             return;
         }
 
-        // ── 4. Récupérer l'ID utilisateur Joomla ─────────────────────────────
-        //   Priorité : utilisateur connecté ; sinon chercher par email.
+        $this->insertRegistration($eventId, $email);
+    }
+
+    // ── Form 6 : cours ──────────────────────────────────────────────────────
+
+    private function handleCours(int $submissionId): void
+    {
+        $db = Factory::getDbo();
+
+        $rows = $this->getFields($submissionId, ['Session', 'Format_cours', 'Niveau', 'Email']);
+
+        $sessionRaw = trim((string) ($rows['Session'] ?? ''));
+        $format     = trim((string) ($rows['Format_cours'] ?? ''));
+        $niveau     = trim((string) ($rows['Niveau'] ?? ''));
+        $email      = trim((string) ($rows['Email'] ?? ''));
+
+        if (!$sessionRaw || !$email) {
+            return;
+        }
+
+        $localDate = $this->parseDate($sessionRaw);
+        if (!$localDate) {
+            return;
+        }
+
+        // Mapper Format_cours → ID de catégorie RSEvents Pro
+        $catId = $this->formatToCatId($format);
+
+        // Chercher l'event par date + catégorie (+ niveau en hint si plusieurs résultats)
+        $query = $db->getQuery(true)
+            ->select(['e.' . $db->qn('id'), 'e.' . $db->qn('name')])
+            ->from($db->qn('#__rseventspro_events', 'e'))
+            ->join('INNER', $db->qn('#__rseventspro_taxonomy', 't') .
+                ' ON ' . $db->qn('t.ide') . ' = ' . $db->qn('e.id') .
+                ' AND ' . $db->qn('t.type') . ' = ' . $db->q('category'))
+            ->where($db->qn('e.published') . ' = 1')
+            ->where(
+                'DATE(CONVERT_TZ(' . $db->qn('e.start') . ", '+00:00', '+08:00')) = " .
+                $db->q($localDate)
+            );
+
+        if ($catId) {
+            $query->where($db->qn('t.id') . ' = ' . $catId);
+        }
+
+        $db->setQuery($query);
+        $candidates = $db->loadObjectList();
+
+        if (empty($candidates)) {
+            return;
+        }
+
+        // Si plusieurs événements ce jour-là, tenter de matcher par niveau
+        $eventId = 0;
+        if (count($candidates) === 1) {
+            $eventId = (int) $candidates[0]->id;
+        } elseif ($niveau) {
+            // Extraire le code de niveau (ex: "C1 Avance" → "C1", "B2" → "B2")
+            $niveauCode = preg_match('/\b([A-C][12](?:\.\d)?)\b/i', $niveau, $m) ? strtoupper($m[1]) : '';
+            foreach ($candidates as $c) {
+                if ($niveauCode && stripos($c->name, $niveauCode) !== false) {
+                    $eventId = (int) $c->id;
+                    break;
+                }
+            }
+            // Fallback : premier candidat
+            if (!$eventId) {
+                $eventId = (int) $candidates[0]->id;
+            }
+        } else {
+            $eventId = (int) $candidates[0]->id;
+        }
+
+        if (!$eventId) {
+            return;
+        }
+
+        $this->insertRegistration($eventId, $email);
+    }
+
+    // ── Helpers ─────────────────────────────────────────────────────────────
+
+    /**
+     * Retourne un tableau FieldName → FieldValue pour les champs demandés.
+     */
+    private function getFields(int $submissionId, array $fieldNames): array
+    {
+        $db = Factory::getDbo();
+        $quoted = array_map([$db, 'q'], $fieldNames);
+        $query = $db->getQuery(true)
+            ->select([$db->qn('FieldName'), $db->qn('FieldValue')])
+            ->from($db->qn('#__rsform_submission_values'))
+            ->where($db->qn('SubmissionId') . ' = ' . $submissionId)
+            ->where($db->qn('FieldName') . ' IN (' . implode(',', $quoted) . ')');
+        $db->setQuery($query);
+        $result = [];
+        foreach ($db->loadObjectList() ?? [] as $row) {
+            $result[$row->FieldName] = $row->FieldValue;
+        }
+        return $result;
+    }
+
+    /**
+     * Convertit dd/mm/yyyy → yyyy-mm-dd. Retourne '' si invalide.
+     */
+    private function parseDate(string $raw): string
+    {
+        $parts = explode('/', $raw);
+        if (count($parts) !== 3) {
+            return '';
+        }
+        return sprintf('%04d-%02d-%02d', (int)$parts[2], (int)$parts[1], (int)$parts[0]);
+    }
+
+    /**
+     * Mappe la valeur du champ Format_cours à l'ID de catégorie RSEvents Pro.
+     * Retourne 0 si non reconnu (pas de filtre catégorie).
+     */
+    private function formatToCatId(string $format): int
+    {
+        $f = strtolower($format);
+        if (strpos($f, 'essai') !== false)                        return 51;
+        if (strpos($f, 'vip') !== false)                          return 52;
+        if (strpos($f, 'petit') !== false)                        return 53;
+        if (strpos($f, 'groupe') !== false)                       return 50;
+        return 0;
+    }
+
+    /**
+     * Vérifie doublon et insère l'inscription RSEvents Pro.
+     */
+    private function insertRegistration(int $eventId, string $email): void
+    {
+        $db = Factory::getDbo();
+
         $userId = (int) Factory::getUser()->id;
         if (!$userId) {
             $q = $db->getQuery(true)
@@ -93,7 +216,7 @@ class PlgSystemAfkexamreg extends CMSPlugin
             $userId = (int) $db->loadResult();
         }
 
-        // ── 5. Vérifier doublon ───────────────────────────────────────────────
+        // Vérifier doublon
         $check = $db->getQuery(true)
             ->select('COUNT(*)')
             ->from($db->qn('#__rseventspro_users'))
@@ -109,7 +232,6 @@ class PlgSystemAfkexamreg extends CMSPlugin
             return;
         }
 
-        // ── 6. Insérer l'inscription RSEvents Pro ─────────────────────────────
         $query = $db->getQuery(true)
             ->insert($db->qn('#__rseventspro_users'))
             ->columns([
@@ -126,8 +248,8 @@ class PlgSystemAfkexamreg extends CMSPlugin
                 $eventId,
                 $userId,
                 $db->q($email),
-                1,   // state = inscrit
-                0,   // confirmed = 0 (pré-inscription, en attente de paiement)
+                1,
+                0,
                 $db->q(date('Y-m-d H:i:s')),
                 1,
                 $db->q(Factory::getApplication()->getLanguage()->getTag()),
