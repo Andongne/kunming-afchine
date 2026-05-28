@@ -2556,3 +2556,55 @@ li#cbtabnav11.cbTabNav {
 #sp-component .com-users-remind .control-group {
     margin-bottom: 1rem;
 }
+
+/* ── CB profil — masquer le bloc canvas bottom (avatar + nom) ── */
+.cbPosCanvasBottom { display: none !important; }
+
+/* ── CB profil — harmonisation espacements entre les 3 blocs ─────── */
+/* Mes inscriptions (RSEvents) */
+.view-userprofile .cbPosCanvasMain > .cb_tab_content:first-child,
+.view-userprofile .cbPosTabMain > .cb_tab_content:first-child {
+    margin-bottom: 2rem;
+}
+/* Accès rapides → Mes inscriptions */
+.view-userprofile .rsepro-quicklinks {
+    margin-bottom: 1rem !important;
+    padding-top: 0 !important;
+}
+/* Informations personnelles : pas de marge parasite en haut */
+.view-userprofile .cbTabsMenu {
+    margin-top: 0 !important;
+}
+
+/* ── CB pages — réduire l'espace entre le titre Helix et le contenu ── */
+.com-comprofiler #sp-main-body {
+    padding-top: 24px;
+}
+
+/* ── CB profil — espace entre Mes inscriptions et Informations personnelles ── */
+.view-userprofile .rsepro-events-container {
+    margin-bottom: 3.5rem !important;
+}
+
+/* ── sp-right : même style que afk-sidebar-card ─────────────────── */
+#sp-right .sp-module {
+    padding: 1.75rem !important;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
+    background: #fff !important;
+    border: 1px solid #F3F3F3 !important;
+    border-radius: 3px !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.875rem !important;
+}
+#sp-right .sp-column > .sp-module:first-child {
+    margin-top: 0 !important;
+}
+#sp-right .sp-module-title {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1a171b !important;
+    text-align: center !important;
+    margin: 0 0 1rem 0 !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 2px solid #da002e !important;
+}
