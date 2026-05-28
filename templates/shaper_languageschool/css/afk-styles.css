@@ -2599,7 +2599,7 @@ li#cbtabnav11.cbTabNav {
 #sp-right .sp-column > .sp-module:first-child {
     margin-top: 0 !important;
 }
-#sp-right .sp-module-title {
+#sp-right .sp-module .sp-module-title {
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     color: #1a171b !important;
@@ -2607,4 +2607,30 @@ li#cbtabnav11.cbTabNav {
     margin: 0 0 1rem 0 !important;
     padding-bottom: 0.75rem !important;
     border-bottom: 2px solid #da002e !important;
+}
+
+/* ── sp-right afk-sidebar-card : titre cohérent avec .afk-sidebar-title ── */
+#sp-right .afk-sidebar-card .sp-module-title {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1a171b !important;
+    text-align: center !important;
+    margin: 0 0 1rem 0 !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 2px solid #da002e !important;
+    background: none !important;
+}
+
+/* ── CB pages — sidebar col-lg-3 (25%) comme page examens ────────── */
+@media (min-width: 992px) {
+    .com-comprofiler #sp-component {
+        flex: 0 0 auto;
+        width: 75% !important;
+        max-width: 75% !important;
+    }
+    .com-comprofiler #sp-right {
+        flex: 0 0 auto;
+        width: 25% !important;
+        max-width: 25% !important;
+    }
 }
