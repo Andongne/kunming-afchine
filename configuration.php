@@ -61,7 +61,7 @@ class JConfig {
 	public $offline = false;
 	public $offline_image = '';
 	public $offline_message = 'Ce site est en maintenance.<br />Merci de revenir ultérieurement.';
-	public $offset = 'Asia/Shanghai';
+	public $offset = 'UTC';
 	public $password = 'Igouzing831917';
 	public $proxy_enable = false;
 	public $proxy_host = '';
