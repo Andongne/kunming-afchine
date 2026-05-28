@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade">
+    <name>plg_system_afkexamreg</name>
+    <author>Alliance Française de Kunming</author>
+    <version>1.0.0</version>
+    <description>Crée une inscription RSEvents Pro après soumission du formulaire d'examen (Form 4).</description>
+    <files>
+        <filename plugin="afkexamreg">afkexamreg.php</filename>
+    </files>
+</extension>
