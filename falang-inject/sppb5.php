@@ -175,6 +175,19 @@ if ($action === 'select_query') {
 }
 
 
+if ($action === 'update_query') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $sql = $body['sql'] ?? '';
+    if (!$sql || !preg_match('/^\s*(UPDATE|INSERT|DELETE)/i', $sql)) { echo json_encode(['error'=>'UPDATE/INSERT/DELETE only']); exit; }
+    $sql = str_replace('##', $pfx, $sql);
+    $stmt = $pdo->prepare($sql);
+    $params = $body['params'] ?? [];
+    $stmt->execute($params);
+    echo json_encode(['ok'=>true,'rows'=>$stmt->rowCount()], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 if ($action === 'update_jmap_source') {
     $id = (int)($_GET['id'] ?? 0);
     $published = (int)($_GET['published'] ?? 0);
@@ -1165,4 +1178,65 @@ if ($action === 'sppb_version_set') {
     } catch(Throwable $e) { echo json_encode(['error'=>$e->getMessage()]); }
     exit;
 }
+if ($action === 'mark_overrides_verified') {
+    $ids = isset($_GET['ids']) ? array_map('intval', explode(',', $_GET['ids'])) : [];
+    if (empty($ids)) { echo json_encode(['error'=>'ids required']); exit; }
+    $placeholders = implode(',', $ids);
+    $sql = "UPDATE {$pfx}template_overrides SET state=1 WHERE id IN ($placeholders)";
+    $pdo->exec($sql);
+    echo json_encode(['ok'=>true, 'affected'=>$pdo->query("SELECT ROW_COUNT()")->fetchColumn(), 'ids'=>$ids]);
+    exit;
+}
+
+if ($action === 'update_rsepro_config') {
+    $name = preg_replace('/[^a-z_]/', '', $_GET['name'] ?? '');
+    $value = $pdo->quote($_GET['value'] ?? '');
+    if (!$name) { echo json_encode(['error'=>'name required']); exit; }
+    $pdo->exec("UPDATE {$pfx}rseventspro_config SET value=$value WHERE name='$name'");
+    echo json_encode(['ok'=>true, 'name'=>$name, 'value'=>$_GET['value']]);
+    exit;
+}
+
+if ($action === 'cb_config_search') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    $keys = $body['keys'] ?? [];
+    $stmt = $pdo->query("SELECT params FROM {$pfx}comprofiler_plugin WHERE id=1");
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) { echo json_encode(['error'=>'no row']); exit; }
+    $params = json_decode($row['params'], true);
+    if (!$params) { echo json_encode(['error'=>'params parse failed']); exit; }
+    $result = [];
+    foreach ($params as $k => $v) {
+        if (empty($keys)) { $result[$k] = $v; continue; }
+        foreach ($keys as $kw) {
+            if (stripos($k, $kw) !== false) { $result[$k] = $v; break; }
+        }
+    }
+    echo json_encode(['ok'=>true,'count'=>count($result),'params'=>$result], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// ─── db_exec : requête paramétrée SELECT ou UPDATE/INSERT/DELETE ─────────────
+if ($action === 'db_exec') {
+    $body = json_decode(file_get_contents('php://input'), true);
+    $sql = $body['sql'] ?? '';
+    $params = $body['params'] ?? [];
+    if (!$sql) { echo json_encode(['error'=>'sql required']); exit; }
+    $sql = str_replace('##', $pfx, $sql);
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        if (preg_match('/^\s*SELECT/i', $sql)) {
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(['ok'=>true,'rows'=>$rows], JSON_UNESCAPED_UNICODE);
+        } else {
+            echo json_encode(['ok'=>true,'affected'=>$stmt->rowCount()]);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['error'=>$e->getMessage()]);
+    }
+    exit;
+}
+
 echo json_encode(['error'=>'unknown action']);
