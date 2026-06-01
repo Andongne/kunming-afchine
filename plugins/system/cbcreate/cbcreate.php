@@ -1,11 +1,10 @@
 <?php
 /**
  * @package     plg_system_cbcreate
- * @description Après soumission du formulaire d'inscription aux cours (Form 6),
- *              crée ou met à jour le compte Joomla et le profil Community Builder
- *              de l'apprenant (firstname, lastname, cb_telephone, cb_wechat,
- *              cb_niveau, cb_type_cours).
- * @version     1.0.0
+ * @description Après soumission du formulaire d'inscription aux cours (Form 6)
+ *              ou aux examens (Form 4) RSForm Pro, crée automatiquement un compte
+ *              Joomla et un profil Community Builder.
+ * @version     1.1.0
  * @author      Alliance Française de Kunming
  */
 defined('_JEXEC') or die;
@@ -16,10 +15,8 @@ use Joomla\CMS\User\UserHelper;
 
 class PlgSystemCbcreate extends CMSPlugin
 {
-    // ID du formulaire d'inscription aux cours
-    const FORM_COURS = 6;
-
-    // Groupe Joomla attribué aux nouveaux inscrits (2 = Registered)
+    const FORM_COURS   = 6;
+    const FORM_EXAMENS = 4;
     const GROUP_REGISTERED = 2;
 
     // ── Point d'entrée ──────────────────────────────────────────────────────
@@ -29,14 +26,18 @@ class PlgSystemCbcreate extends CMSPlugin
         $formId       = (int) ($args['formId'] ?? 0);
         $submissionId = (int) ($args['SubmissionId'] ?? 0);
 
-        if ($formId !== self::FORM_COURS || !$submissionId) {
+        if (!$submissionId) {
             return;
         }
 
-        $this->handleCours($submissionId);
+        if ($formId === self::FORM_COURS) {
+            $this->handleCours($submissionId);
+        } elseif ($formId === self::FORM_EXAMENS) {
+            $this->handleExamens($submissionId);
+        }
     }
 
-    // ── Traitement principal ─────────────────────────────────────────────────
+    // ── Form 6 — cours ──────────────────────────────────────────────────────
 
     private function handleCours(int $submissionId): void
     {
@@ -44,37 +45,33 @@ class PlgSystemCbcreate extends CMSPlugin
             'Nom', 'Prenom', 'Email', 'WeChat_ID', 'Format_cours', 'Niveau',
         ]);
 
-        $email     = trim((string) ($fields['Email']       ?? ''));
-        $lastname  = trim((string) ($fields['Nom']         ?? ''));
-        $firstname = trim((string) ($fields['Prenom']      ?? ''));
-        $wechat    = trim((string) ($fields['WeChat_ID']   ?? ''));
+        $email     = trim((string) ($fields['Email']        ?? ''));
+        $lastname  = trim((string) ($fields['Nom']          ?? ''));
+        $firstname = trim((string) ($fields['Prenom']       ?? ''));
+        $wechat    = trim((string) ($fields['WeChat_ID']    ?? ''));
         $format    = trim((string) ($fields['Format_cours'] ?? ''));
-        $niveau    = trim((string) ($fields['Niveau']      ?? ''));
+        $niveau    = trim((string) ($fields['Niveau']       ?? ''));
 
         if (!$email) {
             $this->log('error', '', null, 'Missing required field: email', self::FORM_COURS, $submissionId);
             return;
         }
 
-        // Normaliser les valeurs pour CB
         $cbNiveau    = $this->normalizeNiveau($niveau);
         $cbTypeCours = $this->normalizeTypeCours($format);
 
-        $db = Factory::getDbo();
-
-        // ── Chercher si l'utilisateur existe déjà par email ─────────────────
+        $db     = Factory::getDbo();
         $userId = $this->findUserByEmail($db, $email);
 
         if (!$userId) {
-            // ── Créer le compte Joomla ───────────────────────────────────────
             $userId = $this->createJoomlaUser($db, $email, $firstname, $lastname);
             if (!$userId) {
                 $this->log('error', $email, null, 'DB error on users insert', self::FORM_COURS, $submissionId);
                 return;
             }
 
-            // ── Créer l'entrée CB ────────────────────────────────────────────
-            $ok = $this->createCbProfile($db, $userId, $firstname, $lastname, $wechat, $cbNiveau, $cbTypeCours);
+            $ok = $this->createCbProfile($db, $userId, $firstname, $lastname,
+                $wechat, $cbNiveau, $cbTypeCours);
             if (!$ok) {
                 $this->log('error', $email, $userId, 'DB error on comprofiler insert', self::FORM_COURS, $submissionId);
                 return;
@@ -83,14 +80,67 @@ class PlgSystemCbcreate extends CMSPlugin
             $this->log('created', $email, $userId, 'OK — account and CB profile created', self::FORM_COURS, $submissionId);
 
         } else {
-            // ── Mettre à jour les champs CB si le compte existe déjà ─────────
-            $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname, $wechat, $cbNiveau, $cbTypeCours);
+            $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname,
+                $wechat, $cbNiveau, $cbTypeCours);
 
-            if ($updated) {
-                $this->log('updated', $email, $userId, 'email already exists, CB fields updated', self::FORM_COURS, $submissionId);
-            } else {
-                $this->log('skipped', $email, $userId, 'email already exists, no changes needed', self::FORM_COURS, $submissionId);
+            $msg = $updated
+                ? 'email already exists, CB fields updated'
+                : 'email already exists, no changes needed';
+            $this->log($updated ? 'updated' : 'skipped', $email, $userId, $msg, self::FORM_COURS, $submissionId);
+        }
+    }
+
+    // ── Form 4 — examens ────────────────────────────────────────────────────
+
+    private function handleExamens(int $submissionId): void
+    {
+        $fields = $this->getFields($submissionId, [
+            'Name', 'Prenom', 'Email', 'Tel', 'Genre', 'Birth_date', 'Pays',
+        ]);
+
+        $email     = trim((string) ($fields['Email']      ?? ''));
+        $lastname  = trim((string) ($fields['Name']       ?? ''));
+        $firstname = trim((string) ($fields['Prenom']     ?? ''));
+        $telephone = trim((string) ($fields['Tel']        ?? ''));
+        $sexe      = trim((string) ($fields['Genre']      ?? ''));
+        $pays      = trim((string) ($fields['Pays']       ?? ''));
+        $birthRaw  = trim((string) ($fields['Birth_date'] ?? ''));
+
+        if (!$email) {
+            $this->log('error', '', null, 'Missing required field: email', self::FORM_EXAMENS, $submissionId);
+            return;
+        }
+
+        $cbSexe      = $this->normalizeSexe($sexe);
+        $cbNaissance = $this->normalizeBirthdate($birthRaw);
+
+        $db     = Factory::getDbo();
+        $userId = $this->findUserByEmail($db, $email);
+
+        if (!$userId) {
+            $userId = $this->createJoomlaUser($db, $email, $firstname, $lastname);
+            if (!$userId) {
+                $this->log('error', $email, null, 'DB error on users insert', self::FORM_EXAMENS, $submissionId);
+                return;
             }
+
+            $ok = $this->createCbProfile($db, $userId, $firstname, $lastname,
+                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays);
+            if (!$ok) {
+                $this->log('error', $email, $userId, 'DB error on comprofiler insert', self::FORM_EXAMENS, $submissionId);
+                return;
+            }
+
+            $this->log('created', $email, $userId, 'OK — account and CB profile created (exam)', self::FORM_EXAMENS, $submissionId);
+
+        } else {
+            $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname,
+                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays);
+
+            $msg = $updated
+                ? 'email already exists, CB fields updated (exam)'
+                : 'email already exists, no changes needed (exam)';
+            $this->log($updated ? 'updated' : 'skipped', $email, $userId, $msg, self::FORM_EXAMENS, $submissionId);
         }
     }
 
@@ -145,7 +195,6 @@ class PlgSystemCbcreate extends CMSPlugin
             return 0;
         }
 
-        // Assigner au groupe Registered
         try {
             $q = $db->getQuery(true)
                 ->insert($db->qn('#__user_usergroup_map'))
@@ -154,16 +203,12 @@ class PlgSystemCbcreate extends CMSPlugin
             $db->setQuery($q);
             $db->execute();
         } catch (\Exception $e) {
-            // Non bloquant : le compte existe, le groupe peut être ajouté manuellement
+            // Non bloquant
         }
 
         return $userId;
     }
 
-    /**
-     * Génère un username unique à partir du prénom+nom ou de l'email.
-     * Format : "prenomnom" en minuscules sans accents, suffixe numérique si doublon.
-     */
     private function generateUsername(\Joomla\Database\DatabaseInterface $db, string $email, string $firstname, string $lastname): string
     {
         $base = strtolower($this->removeAccents(trim($firstname . $lastname)));
@@ -197,12 +242,16 @@ class PlgSystemCbcreate extends CMSPlugin
 
     private function createCbProfile(
         \Joomla\Database\DatabaseInterface $db,
-        int $userId,
-        string $firstname,
-        string $lastname,
-        string $wechat,
-        string $niveau,
-        string $typeCours
+        int    $userId,
+        string $firstname = '',
+        string $lastname  = '',
+        string $wechat    = '',
+        string $niveau    = '',
+        string $typeCours = '',
+        string $telephone = '',
+        string $sexe      = '',
+        string $naissance = '',
+        string $pays      = ''
     ): bool {
         try {
             $now = Factory::getDate()->toSql();
@@ -230,29 +279,37 @@ class PlgSystemCbcreate extends CMSPlugin
                     $db->qn('cb_wechat'),
                     $db->qn('cb_niveau'),
                     $db->qn('cb_type_cours'),
+                    $db->qn('cb_telephone'),
+                    $db->qn('cb_sexe'),
+                    $db->qn('cb_datenaissance'),
+                    $db->qn('cb_pays'),
                 ])
                 ->values(implode(', ', [
                     $userId,
                     $userId,
                     $db->q($firstname),
                     $db->q($lastname),
-                    1,                                   // approved
-                    1,                                   // confirmed
-                    $db->q($now),                        // lastupdatedate
-                    $db->q(''),                          // registeripaddr
-                    $db->q(''),                          // cbactivation
-                    0,                                   // hits
-                    $db->q('1970-01-01 00:00:00'),       // message_last_sent
-                    0,                                   // message_number_sent
-                    1,                                   // avatarapproved
-                    1,                                   // canvasapproved
-                    50,                                  // canvasposition
-                    0,                                   // banned
-                    0,                                   // acceptedterms
-                    $db->q('1970-01-01 00:00:00'),       // acceptedtermsconsent
+                    1,
+                    1,
+                    $db->q($now),
+                    $db->q(''),
+                    $db->q(''),
+                    0,
+                    $db->q('1970-01-01 00:00:00'),
+                    0,
+                    1,
+                    1,
+                    50,
+                    0,
+                    0,
+                    $db->q('1970-01-01 00:00:00'),
                     $db->q($wechat),
                     $db->q($niveau),
                     $db->q($typeCours),
+                    $db->q($telephone),
+                    $db->q($sexe),
+                    $naissance ? $db->q($naissance) : 'NULL',
+                    $db->q($pays),
                 ]));
             $db->setQuery($q);
             $db->execute();
@@ -264,14 +321,17 @@ class PlgSystemCbcreate extends CMSPlugin
 
     private function updateCbProfile(
         \Joomla\Database\DatabaseInterface $db,
-        int $userId,
-        string $firstname,
-        string $lastname,
-        string $wechat,
-        string $niveau,
-        string $typeCours
+        int    $userId,
+        string $firstname = '',
+        string $lastname  = '',
+        string $wechat    = '',
+        string $niveau    = '',
+        string $typeCours = '',
+        string $telephone = '',
+        string $sexe      = '',
+        string $naissance = '',
+        string $pays      = ''
     ): bool {
-        // Lire les valeurs actuelles pour détecter un vrai changement
         $q = $db->getQuery(true)
             ->select([
                 $db->qn('firstname'),
@@ -279,27 +339,33 @@ class PlgSystemCbcreate extends CMSPlugin
                 $db->qn('cb_wechat'),
                 $db->qn('cb_niveau'),
                 $db->qn('cb_type_cours'),
+                $db->qn('cb_telephone'),
+                $db->qn('cb_sexe'),
+                $db->qn('cb_datenaissance'),
+                $db->qn('cb_pays'),
             ])
             ->from($db->qn('#__comprofiler'))
             ->where($db->qn('id') . ' = ' . $userId);
         $db->setQuery($q);
         $current = $db->loadAssoc();
 
-        // Si l'entrée CB n'existe pas encore, on la crée
         if (!$current) {
-            return $this->createCbProfile($db, $userId, $firstname, $lastname, $wechat, $niveau, $typeCours);
+            return $this->createCbProfile($db, $userId, $firstname, $lastname,
+                $wechat, $niveau, $typeCours, $telephone, $sexe, $naissance, $pays);
         }
 
-        // Construire le SET uniquement sur les champs non vides et différents
         $set = [];
         $now = Factory::getDate()->toSql();
 
         $map = [
-            'firstname'    => $firstname,
-            'lastname'     => $lastname,
-            'cb_wechat'    => $wechat,
-            'cb_niveau'    => $niveau,
+            'firstname'     => $firstname,
+            'lastname'      => $lastname,
+            'cb_wechat'     => $wechat,
+            'cb_niveau'     => $niveau,
             'cb_type_cours' => $typeCours,
+            'cb_telephone'  => $telephone,
+            'cb_sexe'       => $sexe,
+            'cb_pays'       => $pays,
         ];
 
         foreach ($map as $col => $val) {
@@ -308,8 +374,13 @@ class PlgSystemCbcreate extends CMSPlugin
             }
         }
 
+        // cb_datenaissance : traitement séparé (type DATE)
+        if ($naissance !== '' && (string)($current['cb_datenaissance'] ?? '') !== $naissance) {
+            $set[] = $db->qn('cb_datenaissance') . ' = ' . $db->q($naissance);
+        }
+
         if (empty($set)) {
-            return false; // Rien à mettre à jour
+            return false;
         }
 
         $set[] = $db->qn('lastupdatedate') . ' = ' . $db->q($now);
@@ -330,8 +401,7 @@ class PlgSystemCbcreate extends CMSPlugin
     // ── Normalisation des valeurs RSForm → CB ────────────────────────────────
 
     /**
-     * "C1 Avance" → "C1", "B2 Intermediaire" → "B2", etc.
-     * Conserve la valeur brute si le pattern ne correspond pas.
+     * "C1 Avance" → "C1", "B2 Intermediaire" → "B2"
      */
     private function normalizeNiveau(string $raw): string
     {
@@ -342,10 +412,7 @@ class PlgSystemCbcreate extends CMSPlugin
     }
 
     /**
-     * "Groupes (de 6 à 12 personnes)" → "Cours groupes"
-     * "Cours d'essai" → "Cours d'essai"
-     * "Cours VIP" → "Cours VIP"
-     * "Petits groupes" → "Petits groupes"
+     * "Groupes (de 6 à 12 personnes)" → "Cours groupes", etc.
      */
     private function normalizeTypeCours(string $raw): string
     {
@@ -357,11 +424,34 @@ class PlgSystemCbcreate extends CMSPlugin
         return $raw;
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
+    /**
+     * "Madame" → "F", "Monsieur" → "M"
+     */
+    private function normalizeSexe(string $raw): string
+    {
+        $f = strtolower($this->removeAccents($raw));
+        if (strpos($f, 'madame') !== false || strpos($f, 'dame') !== false) return 'F';
+        if (strpos($f, 'monsieur') !== false)                                return 'M';
+        return $raw;
+    }
 
     /**
-     * Lecture des champs d'une soumission RSForm.
+     * "6 / 5 / 1972" ou "06/05/1972" → "1972-05-06" (yyyy-mm-dd)
+     * Retourne '' si invalide.
      */
+    private function normalizeBirthdate(string $raw): string
+    {
+        $clean = preg_replace('/\s*\/\s*/', '/', trim($raw));
+        $parts = explode('/', $clean);
+        if (count($parts) !== 3) return '';
+        [$d, $m, $y] = $parts;
+        $d = (int)$d; $m = (int)$m; $y = (int)$y;
+        if ($d < 1 || $d > 31 || $m < 1 || $m > 12 || $y < 1900 || $y > 2100) return '';
+        return sprintf('%04d-%02d-%02d', $y, $m, $d);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
     private function getFields(int $submissionId, array $fieldNames): array
     {
         $db     = Factory::getDbo();
@@ -379,9 +469,6 @@ class PlgSystemCbcreate extends CMSPlugin
         return $result;
     }
 
-    /**
-     * Supprime les accents (translittération basique UTF-8 → ASCII).
-     */
     private function removeAccents(string $str): string
     {
         $from = ['à','á','â','ã','ä','å','æ','ç','è','é','ê','ë',
@@ -397,9 +484,6 @@ class PlgSystemCbcreate extends CMSPlugin
         return str_replace($from, $to, $str);
     }
 
-    /**
-     * Écrit une ligne de log JSON dans logs/cbcreate.log.
-     */
     private function log(
         string $action,
         string $email,
