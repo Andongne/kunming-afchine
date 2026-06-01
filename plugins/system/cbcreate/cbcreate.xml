@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade">
+    <name>plg_system_cbcreate</name>
+    <author>Alliance Française de Kunming</author>
+    <version>1.0.0</version>
+    <creationDate>2026-06-01</creationDate>
+    <description>
+        Après soumission du formulaire d'inscription aux cours (Form 6 RSForm Pro),
+        crée automatiquement un compte Joomla et un profil Community Builder
+        (firstname, lastname, cb_wechat, cb_niveau, cb_type_cours).
+        Gère les doublons : mise à jour silencieuse si l'email existe déjà.
+        Log JSON dans logs/cbcreate.log.
+    </description>
+    <files>
+        <filename plugin="cbcreate">cbcreate.php</filename>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="form_id"
+                    type="number"
+                    default="6"
+                    label="ID du formulaire RSForm"
+                    description="ID du formulaire d'inscription aux cours (défaut : 6)."
+                />
+                <field
+                    name="group_id"
+                    type="number"
+                    default="2"
+                    label="ID groupe Joomla"
+                    description="Groupe attribué aux nouveaux comptes (2 = Registered)."
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>
