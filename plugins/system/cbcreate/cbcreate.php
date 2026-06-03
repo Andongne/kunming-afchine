@@ -4,7 +4,7 @@
  * @description Après soumission du formulaire d'inscription aux cours (Form 6)
  *              ou aux examens (Form 4) RSForm Pro, crée automatiquement un compte
  *              Joomla et un profil Community Builder.
- * @version     1.1.0
+ * @version     1.2.0
  * @author      Alliance Française de Kunming
  */
 defined('_JEXEC') or die;
@@ -95,16 +95,18 @@ class PlgSystemCbcreate extends CMSPlugin
     private function handleExamens(int $submissionId): void
     {
         $fields = $this->getFields($submissionId, [
-            'Name', 'Prenom', 'Email', 'Tel', 'Genre', 'Birth_date', 'Pays',
+            'Name', 'Prenom', 'Email', 'Tel', 'Genre', 'Birth_date', 'Pays', 'Nationality', 'Language',
         ]);
 
-        $email     = trim((string) ($fields['Email']      ?? ''));
-        $lastname  = trim((string) ($fields['Name']       ?? ''));
-        $firstname = trim((string) ($fields['Prenom']     ?? ''));
-        $telephone = trim((string) ($fields['Tel']        ?? ''));
-        $sexe      = trim((string) ($fields['Genre']      ?? ''));
-        $pays      = trim((string) ($fields['Pays']       ?? ''));
-        $birthRaw  = trim((string) ($fields['Birth_date'] ?? ''));
+        $email       = trim((string) ($fields['Email']       ?? ''));
+        $lastname    = trim((string) ($fields['Name']        ?? ''));
+        $firstname   = trim((string) ($fields['Prenom']      ?? ''));
+        $telephone   = trim((string) ($fields['Tel']         ?? ''));
+        $sexe        = trim((string) ($fields['Genre']       ?? ''));
+        $pays        = trim((string) ($fields['Pays']        ?? ''));
+        $birthRaw    = trim((string) ($fields['Birth_date']  ?? ''));
+        $nationalite = trim((string) ($fields['Nationality'] ?? ''));
+        $langue      = trim((string) ($fields['Language']    ?? ''));
 
         if (!$email) {
             $this->log('error', '', null, 'Missing required field: email', self::FORM_EXAMENS, $submissionId);
@@ -125,7 +127,7 @@ class PlgSystemCbcreate extends CMSPlugin
             }
 
             $ok = $this->createCbProfile($db, $userId, $firstname, $lastname,
-                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays);
+                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays, $nationalite, $langue);
             if (!$ok) {
                 $this->log('error', $email, $userId, 'DB error on comprofiler insert', self::FORM_EXAMENS, $submissionId);
                 return;
@@ -135,7 +137,7 @@ class PlgSystemCbcreate extends CMSPlugin
 
         } else {
             $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname,
-                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays);
+                '', '', '', $telephone, $cbSexe, $cbNaissance, $pays, $nationalite, $langue);
 
             $msg = $updated
                 ? 'email already exists, CB fields updated (exam)'
@@ -243,15 +245,17 @@ class PlgSystemCbcreate extends CMSPlugin
     private function createCbProfile(
         \Joomla\Database\DatabaseInterface $db,
         int    $userId,
-        string $firstname = '',
-        string $lastname  = '',
-        string $wechat    = '',
-        string $niveau    = '',
-        string $typeCours = '',
-        string $telephone = '',
-        string $sexe      = '',
-        string $naissance = '',
-        string $pays      = ''
+        string $firstname   = '',
+        string $lastname    = '',
+        string $wechat      = '',
+        string $niveau      = '',
+        string $typeCours   = '',
+        string $telephone   = '',
+        string $sexe        = '',
+        string $naissance   = '',
+        string $pays        = '',
+        string $nationalite = '',
+        string $langue      = ''
     ): bool {
         try {
             $now = Factory::getDate()->toSql();
@@ -283,6 +287,8 @@ class PlgSystemCbcreate extends CMSPlugin
                     $db->qn('cb_sexe'),
                     $db->qn('cb_datenaissance'),
                     $db->qn('cb_pays'),
+                    $db->qn('cb_nationalite'),
+                    $db->qn('cb_langue_maternelle'),
                 ])
                 ->values(implode(', ', [
                     $userId,
@@ -310,6 +316,8 @@ class PlgSystemCbcreate extends CMSPlugin
                     $db->q($sexe),
                     $naissance ? $db->q($naissance) : 'NULL',
                     $db->q($pays),
+                    $db->q($nationalite),
+                    $db->q($langue),
                 ]));
             $db->setQuery($q);
             $db->execute();
@@ -322,15 +330,17 @@ class PlgSystemCbcreate extends CMSPlugin
     private function updateCbProfile(
         \Joomla\Database\DatabaseInterface $db,
         int    $userId,
-        string $firstname = '',
-        string $lastname  = '',
-        string $wechat    = '',
-        string $niveau    = '',
-        string $typeCours = '',
-        string $telephone = '',
-        string $sexe      = '',
-        string $naissance = '',
-        string $pays      = ''
+        string $firstname   = '',
+        string $lastname    = '',
+        string $wechat      = '',
+        string $niveau      = '',
+        string $typeCours   = '',
+        string $telephone   = '',
+        string $sexe        = '',
+        string $naissance   = '',
+        string $pays        = '',
+        string $nationalite = '',
+        string $langue      = ''
     ): bool {
         $q = $db->getQuery(true)
             ->select([
@@ -343,6 +353,8 @@ class PlgSystemCbcreate extends CMSPlugin
                 $db->qn('cb_sexe'),
                 $db->qn('cb_datenaissance'),
                 $db->qn('cb_pays'),
+                $db->qn('cb_nationalite'),
+                $db->qn('cb_langue_maternelle'),
             ])
             ->from($db->qn('#__comprofiler'))
             ->where($db->qn('id') . ' = ' . $userId);
@@ -351,7 +363,7 @@ class PlgSystemCbcreate extends CMSPlugin
 
         if (!$current) {
             return $this->createCbProfile($db, $userId, $firstname, $lastname,
-                $wechat, $niveau, $typeCours, $telephone, $sexe, $naissance, $pays);
+                $wechat, $niveau, $typeCours, $telephone, $sexe, $naissance, $pays, $nationalite, $langue);
         }
 
         $set = [];
@@ -364,8 +376,10 @@ class PlgSystemCbcreate extends CMSPlugin
             'cb_niveau'     => $niveau,
             'cb_type_cours' => $typeCours,
             'cb_telephone'  => $telephone,
-            'cb_sexe'       => $sexe,
-            'cb_pays'       => $pays,
+            'cb_sexe'              => $sexe,
+            'cb_pays'              => $pays,
+            'cb_nationalite'       => $nationalite,
+            'cb_langue_maternelle' => $langue,
         ];
 
         foreach ($map as $col => $val) {
