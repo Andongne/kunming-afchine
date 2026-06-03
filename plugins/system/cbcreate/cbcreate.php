@@ -4,13 +4,14 @@
  * @description Après soumission du formulaire d'inscription aux cours (Form 6)
  *              ou aux examens (Form 4) RSForm Pro, crée automatiquement un compte
  *              Joomla et un profil Community Builder.
- * @version     1.2.0
+ * @version     1.3.0
  * @author      Alliance Française de Kunming
  */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\UserHelper;
 
 class PlgSystemCbcreate extends CMSPlugin
@@ -78,6 +79,7 @@ class PlgSystemCbcreate extends CMSPlugin
             }
 
             $this->log('created', $email, $userId, 'OK — account and CB profile created', self::FORM_COURS, $submissionId);
+            $this->sendWelcomeEmail($userId, $email, $firstname, $lastname, self::FORM_COURS);
 
         } else {
             $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname,
@@ -134,6 +136,7 @@ class PlgSystemCbcreate extends CMSPlugin
             }
 
             $this->log('created', $email, $userId, 'OK — account and CB profile created (exam)', self::FORM_EXAMENS, $submissionId);
+            $this->sendWelcomeEmail($userId, $email, $firstname, $lastname, self::FORM_EXAMENS);
 
         } else {
             $updated = $this->updateCbProfile($db, $userId, $firstname, $lastname,
@@ -143,6 +146,70 @@ class PlgSystemCbcreate extends CMSPlugin
                 ? 'email already exists, CB fields updated (exam)'
                 : 'email already exists, no changes needed (exam)';
             $this->log($updated ? 'updated' : 'skipped', $email, $userId, $msg, self::FORM_EXAMENS, $submissionId);
+        }
+    }
+
+    // ── Email de bienvenue ────────────────────────────────────────────────────
+
+    private function sendWelcomeEmail(int $userId, string $email, string $firstname, string $lastname, int $formId): void
+    {
+        $db = Factory::getDbo();
+
+        // Générer un mot de passe temporaire lisible
+        $tempPassword  = UserHelper::genRandomPassword(10);
+        $hashedPassword = UserHelper::hashPassword($tempPassword);
+
+        // Mettre à jour le mot de passe en base
+        try {
+            $q = $db->getQuery(true)
+                ->update($db->qn('#__users'))
+                ->set($db->qn('password') . ' = ' . $db->q($hashedPassword))
+                ->where($db->qn('id') . ' = ' . $userId);
+            $db->setQuery($q);
+            $db->execute();
+        } catch (\Exception $e) {
+            $this->log('error', $email, $userId, 'sendWelcomeEmail: DB password update failed', $formId, 0);
+            return;
+        }
+
+        $fullname = trim($firstname . ' ' . $lastname) ?: $email;
+        $loginUrl = rtrim(Uri::root(), '/') . '/espace-inscrit';
+
+        if ($formId === self::FORM_COURS) {
+            $subject = 'Votre espace personnel — Alliance Française de Kunming';
+            $context = "Votre inscription aux cours a bien été reçue.";
+        } else {
+            $subject = 'Votre espace personnel — Alliance Française de Kunming';
+            $context = "Votre inscription aux examens a bien été reçue.";
+        }
+
+        $body = "Bonjour $fullname,\n\n"
+            . "$context\n"
+            . "Un espace personnel vous a été créé sur le site de l'Alliance Française de Kunming.\n\n"
+            . "Vos identifiants de connexion :\n"
+            . "  Email    : $email\n"
+            . "  Mot de passe : $tempPassword\n\n"
+            . "Connectez-vous ici : $loginUrl\n\n"
+            . "Nous vous recommandons de modifier votre mot de passe après votre première connexion\n"
+            . "(Profil → Modifier mes informations).\n\n"
+            . "L'équipe de l'Alliance Française de Kunming\n"
+            . "https://kunming-afchine.org";
+
+        try {
+            $mailer = Factory::getMailer();
+            $mailer->addRecipient($email, $fullname);
+            $mailer->setSubject($subject);
+            $mailer->setBody($body);
+            $mailer->isHtml(false);
+            $result = $mailer->Send();
+
+            if ($result === true) {
+                $this->log('email_sent', $email, $userId, 'Welcome email sent', $formId, 0);
+            } else {
+                $this->log('error', $email, $userId, 'sendWelcomeEmail: mailer error', $formId, 0);
+            }
+        } catch (\Exception $e) {
+            $this->log('error', $email, $userId, 'sendWelcomeEmail: ' . $e->getMessage(), $formId, 0);
         }
     }
 
