@@ -34,4 +34,7 @@ Disallow: /libraries/
 Disallow: /logs/
 Disallow: /tmp/
 
+# Anciens événements de cours (expiré, redirigent vers /component/rsform/ bloqué)
+Disallow: /cours-de-francais/inscription-cours-de-francais/calendrier-des-cours/event/
+
 Sitemap: https://kunming-afchine.org/sitemap.xml

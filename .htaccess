@@ -133,6 +133,10 @@ Options -Indexes
 
     ## SEF Frontend
 
+    # AFK SEO: Rediriger les URLs internes /component/rseventspro/event/ vers l'URL SEF canonique
+    # Évite le problème "indexed though blocked by robots.txt" (canonical auto-référençant sur URL bloquée)
+    RewriteRule ^component/rseventspro/event/(.+)$ /evenements/actualites-evenements/event/$1 [R=301,L,QSD]
+
     # AFK: Rediriger les vues RSEvents Pro jour/semaine vers le calendrier de base
     # FR : /calendrier-sessions/jour/... → /calendrier-sessions/
     RewriteRule ^(.*calendrier-sessions)/(jour|semaine|ann[eé]e|day|week|year|COM_RSEVENTSPRO_CALENDAR_[A-Z_]+_SEF)(/.*)? $1/ [R=302,L]
