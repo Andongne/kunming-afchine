@@ -133,6 +133,11 @@ Options -Indexes
 
     ## SEF Frontend
 
+    # AFK SEO: Redirections 301 pour pages dépubliées (SP Builder pages 64, 239 — menu items orphelins)
+    RewriteRule ^calendrier-des-sessions(/.*)?$ /certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions [R=301,L]
+    RewriteRule ^calendrier-des-tests(/.*)?$ /certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions [R=301,L]
+    RewriteRule ^inscription-aux-tests-de-langue(/.*)?$ /certifications-et-diplomes/inscription-aux-tests-et-certifications [R=301,L]
+
     # AFK SEO: Rediriger les URLs internes /component/rseventspro/event/ vers l'URL SEF canonique
     # Évite le problème "indexed though blocked by robots.txt" (canonical auto-référençant sur URL bloquée)
     RewriteRule ^component/rseventspro/event/(.+)$ /evenements/actualites-evenements/event/$1 [R=301,L,QSD]
