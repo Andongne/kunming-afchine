@@ -68,6 +68,13 @@ $unsubscribeURL	= $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route
 $reportURL		= $modal == 1 ? 'javascript:void(0);' : rseventsproHelper::route('index.php?option=com_rseventspro&layout=report&tmpl=component&id='.rseventsproHelper::sef($event->id,$event->name));
 $imageURL		= $modal == 1 ? 'javascript:void(0);' : $details['image'];
 
+// AFK fix: structured data — si location null, fallback AFK pour éviter "name: null" (Search Console)
+if (empty($details['event']->location)) {
+	$details['event']->location = 'Alliance Française de Kunming';
+	if (empty($details['event']->address)) {
+		$details['event']->address = 'Yunnan Province, Kunming City, Cuihu North Road No. 2, Yunnan University, Donglu Campus, Nanxue Building, 1st Floor';
+	}
+}
 rseventsproHelper::richSnippet($details); ?>
 
 <?php if (!empty($this->options['show_counter'])) { ?>
