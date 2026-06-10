@@ -133,6 +133,10 @@ Options -Indexes
 
     ## SEF Frontend
 
+    # AFK SEO: Redirections 301 pour pages dépubliées (offres pourvues)
+    RewriteRule ^offres-demploi/responsable-communication-marketing-et-evenementiel(/.*)?$ /decouvrir/qui-sommes-nous/nous-rejoindre [R=301,L]
+    RewriteRule ^offres-demploi/stagiaire-communication(/.*)?$ /decouvrir/qui-sommes-nous/nous-rejoindre [R=301,L]
+
     # AFK SEO: Redirections 301 pour pages dépubliées (SP Builder pages 64, 239 — menu items orphelins)
     RewriteRule ^calendrier-des-sessions(/.*)?$ /certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions [R=301,L]
     RewriteRule ^calendrier-des-tests(/.*)?$ /certifications-et-diplomes/inscription-aux-tests-et-certifications/calendrier-sessions [R=301,L]
