@@ -1,0 +1,33 @@
+.rsepro_events {
+    list-style: none outside none !important;
+    margin: 10px 0 !important;
+    padding: 0 !important;
+}
+.rsepro_events_container {
+    width: 100%;
+}
+.rsepro_events_container h3 {
+    border-bottom: 1px solid #DDDDDD;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    padding: 0 0 4px 0;
+    font-size: 1rem;
+    color: #333;
+}
+.rsepro_events_container h4.rsepro_cat_title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a6bbf;
+    margin: 12px 0 4px 0;
+    padding: 4px 0 4px 8px;
+    border-left: 3px solid #1a6bbf;
+    background: #f5f8ff;
+}
+.rsepro_events li {
+    padding: 3px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 0.88rem;
+}
+.rsepro_events li:last-child { border-bottom: none; }
+.rsepro_events li a { color: #1a6bbf; text-decoration: none; }
+.rsepro_events li a:hover { color: #da002e; }

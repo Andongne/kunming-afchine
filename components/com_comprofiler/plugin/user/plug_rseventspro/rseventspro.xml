@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cbinstall version="1.0" type="plugin" group="user">
+	<name>RSEventsPro</name>
+	<author>RSJoomla!</author>
+	<creationDate>May 2020</creationDate>
+	<copyright>(C) 2016 rsjoomla.com</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>support@rsjoomla.com</authorEmail>
+	<authorUrl>http://www.rsjoomla.com</authorUrl>
+	<version>2.0.2</version>
+	<description>Display events in Community Builder</description>
+	<files>
+		<filename plugin="rseventspro">rseventspro.php</filename>
+		<filename>index.html</filename>
+		<filename>style.css</filename>
+	</files>
+
+	<params>
+		<param name="limit" type="text" default="5" size="4" label="Nr. of events" description="Nr. of events to display" />
+		<param name="itemid" type="text" default="" size="4" label="Itemid" description="Overwrite the event Itemid." />
+		<param name="ordering" type="list" default="ASC" label="Ordering" description="Select ordering type">
+			<option value="ASC">Ascending</option>
+			<option value="DESC">Descending</option>
+		</param>
+		<param name="target" type="list" default="1" label="Open links in" description="Open links in a new page or in the current page">
+			<option value="0">New page</option>
+			<option value="1">Current page</option>
+		</param>
+	 </params>
+	
+    <tabs>
+		<tab name="RSEvents!Pro" description="Shows the list of created events" class="getRseproTab" fields="0" position="cb_main" displaytype="tab"></tab>
+	</tabs>
+	<fieldtypes>
+		<field type="rseprostatus" label="RSEvents!Pro" unique="true">
+			<database version="1">
+				<table name="#__comprofiler" class="moscomprofiler" strict="false" drop="never" shared="true">
+					<columns>
+					</columns>
+				</table>
+			</database>
+			<params>
+			</params>
+		</field>
+	</fieldtypes>
+</cbinstall>
